@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Atelier R - Brows Expert & Visagiste</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'serif': ['Playfair Display', 'serif'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'neutral-50': '#fafafa',
+                        'neutral-100': '#f5f5f5',
+                        'neutral-900': '#171717',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.8s ease-out forwards',
+                        'slide-up': 'slideUp 0.6s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(40px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        body.loaded {
+            opacity: 1;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .logo-ar {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            letter-spacing: -0.05em;
+        }
+
+        .minimal-hover {
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .minimal-hover:hover {
+            transform: translateY(-2px);
+        }
+
+        .line-through-center {
+            position: relative;
+        }
+
+        .line-through-center::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e5e5e5;
+            z-index: 0;
+        }
+
+        .line-through-center span {
+            background: white;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+
+<body class="bg-white text-neutral-900">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 transition-all duration-500" id="navbar">
+        <div class="bg-white/95 backdrop-blur-sm border-b border-neutral-100">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                <div class="flex justify-between items-center py-6">
+                    <!-- Logo simplifié -->
+                    <div class="flex items-center space-x-4">
+                        <div class="logo-ar text-4xl text-black">AR</div>
+                        <div class="border-l border-neutral-200 pl-4">
+                            <h1 class="text-lg font-light tracking-[0.2em] text-black">L'ATELIER R</h1>
+                            <p class="text-xs text-neutral-500 tracking-[0.3em] font-light">BROWS EXPERT • VISAGISTE</p>
+                        </div>
+                    </div>
+
+                    <!-- Menu épuré -->
+                    <div class="hidden lg:flex space-x-12">
+                        <a href="#accueil"
+                            class="text-sm font-light text-black hover:text-neutral-600 transition-colors duration-300 tracking-wide">Accueil</a>
+                        <a href="#expertise"
+                            class="text-sm font-light text-black hover:text-neutral-600 transition-colors duration-300 tracking-wide">Expertise</a>
+                        <a href="/arpropos.html"
+                            class="text-sm font-light text-black hover:text-neutral-600 transition-colors duration-300 tracking-wide">À
+                            propos</a>
+                        <a href="#services"
+                            class="text-sm font-light text-black hover:text-neutral-600 transition-colors duration-300 tracking-wide">Blog</a>
+                        <a href="/arcontact.html"
+                            class="text-sm font-light text-black hover:text-neutral-600 transition-colors duration-300 tracking-wide">Contact</a>
+                    </div>
+
+                    <!-- Bouton mobile -->
+                    <button class="lg:hidden" id="mobile-menu-button">
+                        <svg class="w-6 h-6 transition-transform duration-300" id="menu-icon" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M4 6h16M4 12h16M4 18h16" id="hamburger"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M6 18L18 6M6 6l12 12" id="close" class="hidden"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Menu mobile déroulant -->
+            <div class="lg:hidden bg-white border-t border-neutral-100 hidden" id="mobile-menu">
+                <div class="px-6 py-4 space-y-4">
+                    <a href="#accueil"
+                        class="block text-black font-light tracking-wide py-3 border-b border-neutral-100 hover:text-neutral-600 transition-colors duration-300">Accueil</a>
+                    <a href="#expertise"
+                        class="block text-black font-light tracking-wide py-3 border-b border-neutral-100 hover:text-neutral-600 transition-colors duration-300">Expertise</a>
+                    <a href="/arpropos.html"
+                        class="block text-black font-light tracking-wide py-3 border-b border-neutral-100 hover:text-neutral-600 transition-colors duration-300">À
+                        propos</a>
+                    <a href="#services"
+                        class="block text-black font-light tracking-wide py-3 border-b border-neutral-100 hover:text-neutral-600 transition-colors duration-300">Blog</a>
+                    <a href="/arcontact.html"
+                        class="block text-black font-light tracking-wide py-3 hover:text-neutral-600 transition-colors duration-300">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <script>
+        // Menu mobile toggle
+        document.addEventListener('DOMContentLoaded', function () {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const hamburgerIcon = document.getElementById('hamburger');
+            const closeIcon = document.getElementById('close');
+
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function () {
+                    // Toggle menu visibility
+                    mobileMenu.classList.toggle('hidden');
+
+                    // Toggle icons
+                    hamburgerIcon.classList.toggle('hidden');
+                    closeIcon.classList.toggle('hidden');
+                });
+
+                // Fermer le menu si on clique sur un lien
+                const mobileLinks = mobileMenu.querySelectorAll('a');
+                mobileLinks.forEach(link => {
+                    link.addEventListener('click', function () {
+                        mobileMenu.classList.add('hidden');
+                        hamburgerIcon.classList.remove('hidden');
+                        closeIcon.classList.add('hidden');
+                    });
+                });
+
+                // Fermer le menu si on clique ailleurs
+                document.addEventListener('click', function (e) {
+                    if (!mobileMenuButton.contains(e.target) && !mobileMenu.contains(e.target)) {
+                        mobileMenu.classList.add('hidden');
+                        hamburgerIcon.classList.remove('hidden');
+                        closeIcon.classList.add('hidden');
+                    }
+                });
+            }
+        });
+    </script>
+
+    <!-- Hero Section -->
+    <section id="accueil" class="pt-32 pb-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-20 items-center min-h-[70vh]">
+                <!-- Contenu principal -->
+                <div class="space-y-8">
+                    <div class="reveal">
+                        <p class="text-sm font-light text-neutral-500 tracking-[0.3em] mb-8">EXCELLENCE & PRÉCISION</p>
+                        <h1 class="font-serif text-6xl lg:text-7xl font-light text-black leading-[0.9] mb-8">
+                            L'art de<br>
+                            <span class="italic">sublimer</span><br>
+                            votre regard
+                        </h1>
+                        <p class="text-lg font-light text-neutral-600 leading-relaxed max-w-lg">
+                            Spécialisées dans l'art du sourcil et la visagisme, nous révélons
+                            la beauté naturelle de votre visage avec précision et élégance.
+                        </p>
+                    </div>
+
+                    <div class="reveal flex space-x-6 pt-8">
+                        <button
+                            class="bg-black text-white px-8 py-3 text-sm font-light tracking-wide hover:bg-neutral-800 transition-colors duration-300">
+                            Prendre rendez-vous
+                        </button>
+                        <button
+                            class="border border-black text-black px-8 py-3 text-sm font-light tracking-wide hover:bg-black hover:text-white transition-all duration-300">
+                            Nos services
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Image minimaliste -->
+                <div class="reveal">
+                    <div class="relative">
+                        <div class="aspect-[4/5] bg-neutral-100 overflow-hidden">
+                            <img src="/img/ar.jpg" alt="L'Atelier R" class="w-full h-full object-cover">
+                        </div>
+                        <!-- Stats épurées -->
+                        <div class="absolute -bottom-8 -left-8 bg-white p-6 shadow-sm border border-neutral-100">
+                            <div class="grid grid-cols-2 gap-6 text-center">
+                                <div>
+                                    <div class="text-2xl font-light text-black">100+</div>
+                                    <p class="text-xs text-neutral-500 tracking-wider">CLIENTES</p>
+                                </div>
+                                <div>
+                                    <div class="text-2xl font-light text-black">3+</div>
+                                    <p class="text-xs text-neutral-500 tracking-wider">ANNÉES</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Expertise -->
+    <section id="expertise" class="py-24 bg-neutral-50">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-20 items-center">
+                <!-- Image première -->
+                <div class="reveal order-2 lg:order-1">
+                    <div class="aspect-[4/5] bg-white overflow-hidden shadow-sm">
+                        <img src="/img/ar2.jpg" alt="Expertise" class="w-full h-full object-cover">
+                    </div>
+                </div>
+
+                <!-- Contenu -->
+                <div class="reveal order-1 lg:order-2 space-y-8">
+                    <div>
+                        <p class="text-sm font-light text-neutral-500 tracking-[0.3em] mb-8">NOTRE PHILOSOPHIE</p>
+                        <h2 class="font-serif text-5xl lg:text-6xl font-light text-black leading-tight mb-8">
+                            Précision &<br>
+                            <span class="italic">harmonie</span>
+                        </h2>
+                        <p class="text-lg font-light text-neutral-600 leading-relaxed mb-8">
+                            Chez L’Atelier R Studio, chaque regard raconte une histoire.
+                            Nous sculptons le vôtre avec exigence et sensibilité, en révélant la beauté naturelle de
+                            votre visage.
+
+                        </p>
+                        <p>
+                            Notre approche repose sur trois piliers :
+
+                        </p>
+                    </div>
+
+                    <!-- Avantages minimalistes -->
+                    <div class="space-y-6">
+                        <div class="border-l-2 border-black pl-6">
+                            <h4 class="font-medium text-black mb-2">Analyse morphologique</h4>
+                            <p class="text-neutral-600 font-light">Une étude personnalisée de votre visage pour créer
+                                l’équilibre parfait.
+                            </p>
+                        </div>
+                        <div class="border-l-2 border-neutral-200 pl-6">
+                            <h4 class="font-medium text-black mb-2">Techniques avancées</h4>
+                            <p class="text-neutral-600 font-light">Une maîtrise des méthodes les plus récentes pour un
+                                résultat subtil, élégant et naturel.
+                            </p>
+                        </div>
+                        <div class="border-l-2 border-neutral-200 pl-6">
+                            <h4 class="font-medium text-black mb-2">Suivi personnalisé</h4>
+                            <p class="text-neutral-600 font-light">Un accompagnement sur mesure, dans un cadre
+                                intime et raffiné.</p>
+                        </div>
+                        <div class="flex items-center justify-center">
+                            <a href="/arcontact.html"
+                                class="bg-black text-white px-8 py-3 text-sm font-light tracking-wide hover:bg-neutral-800 transition-colors duration-300">
+                                <span class="relative z-10">Réservez un appel</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Section Services Détaillés -->
+    <section class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <!-- En-tête -->
+            <div class="text-center mb-20">
+                <p class="text-sm font-light text-neutral-500 tracking-[0.3em] mb-8">NOS PRESTATIONS</p>
+                <h2 class="font-serif text-5xl lg:text-6xl font-light text-black mb-8">
+                    Services <span class="italic">détaillés</span>
+                </h2>
+                <div class="line-through-center mt-12">
+                    <span class="text-neutral-400 font-light text-sm tracking-wider">EXPERTISE & SAVOIR-FAIRE</span>
+                </div>
+            </div>
+
+            <!-- Services Grid -->
+            <div class="space-y-24">
+                <!-- Brow Shading -->
+                <!-- Brow Shading -->
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+                    <div class="space-y-8">
+                        <div>
+                            <h3 class="font-serif text-4xl font-light text-black mb-6">Brow Shading</h3>
+                            <p class="text-lg font-light text-neutral-600 leading-relaxed mb-8">
+                                Technique de maquillage semi-permanent qui crée un effet poudré naturel.
+                                Idéal pour densifier et structurer vos sourcils avec un rendu doux et harmonieux.
+                            </p>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="border-l-2 border-black pl-6">
+                                <h4 class="font-medium text-black mb-2">Technique</h4>
+                                <p class="text-neutral-600 font-light">Pigmentation par micropoinçonnage pour un effet
+                                    ombré naturel</p>
+                            </div>
+                            <div class="border-l-2 border-neutral-200 pl-6">
+                                <h4 class="font-medium text-black mb-2">Durée</h4>
+                                <p class="text-neutral-600 font-light">12 à 18 mois selon le type de peau</p>
+                            </div>
+                            <div class="border-l-2 border-neutral-200 pl-6">
+                                <h4 class="font-medium text-black mb-2">Cicatrisation</h4>
+                                <p class="text-neutral-600 font-light">7 à 10 jours, retouche incluse après 4-6 semaines
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vidéo & Prix -->
+                    <div class="space-y-6">
+                        <div class="aspect-[4/5] bg-neutral-100 overflow-hidden">
+                            <video class="w-full h-full object-cover" autoplay muted loop playsinline poster="">
+                                <source
+                                    src="/media/Résultat Brows Shading – Avant - AprèsGrâce à la technique du shading, les sourcils sont restruc.mp4"
+                                    type="video/mp4">
+                                <source src="votre-video-brow-shading.webm" type="video/webm">
+                                <!-- Fallback pour navigateurs non compatibles -->
+                                <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                                    alt="Brow Shading - L'Atelier R" class="w-full h-full object-cover">
+                            </video>
+                        </div>
+                        <div class="bg-neutral-50 p-6 text-center">
+                            <p class="text-2xl font-light text-black mb-2">85.000 FCFA</p>
+                            <p class="text-xs text-neutral-500 tracking-wider">RETOUCHE INCLUSE</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Séparateur -->
+                <div class="border-t border-neutral-100"></div>
+
+                <!-- Extensions de Cils -->
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+                    <div class="order-2 lg:order-1 space-y-6">
+                        <div class="aspect-[4/5] bg-neutral-100 overflow-hidden">
+                            <img src="/img/ar5.jpg" alt="Extensions de Cils - L'Atelier R"
+                                class="w-full h-full object-cover">
+                        </div>
+                        <div class="bg-neutral-50 p-6 text-center">
+                            <p class="text-2xl font-light text-black mb-2">45.000 FCFA</p>
+                            <p class="text-xs text-neutral-500 tracking-wider">POSE COMPLÈTE</p>
+                        </div>
+                    </div>
+
+                    <div class="order-1 lg:order-2 space-y-8">
+                        <div>
+                            <h3 class="font-serif text-4xl font-light text-black mb-6">Extensions de Cils</h3>
+                            <p class="text-lg font-light text-neutral-600 leading-relaxed mb-8">
+                                Rehaussez l'intensité de votre regard avec nos extensions en soie premium.
+                                Application cil par cil pour un effet naturel et personnalisé selon vos envies.
+                            </p>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="border-l-2 border-black pl-6">
+                                <h4 class="font-medium text-black mb-2">Matériaux</h4>
+                                <p class="text-neutral-600 font-light">Soie premium hypoallergénique, colle médicale</p>
+                            </div>
+                            <div class="border-l-2 border-neutral-200 pl-6">
+                                <h4 class="font-medium text-black mb-2">Tenue</h4>
+                                <p class="text-neutral-600 font-light">3 à 4 semaines, remplissage toutes les 2-3
+                                    semaines</p>
+                            </div>
+                            <div class="border-l-2 border-neutral-200 pl-6">
+                                <h4 class="font-medium text-black mb-2">Styles</h4>
+                                <p class="text-neutral-600 font-light">Naturel, volume, cat-eye selon votre morphologie
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Séparateur -->
+                <div class="border-t border-neutral-100"></div>
+
+                <!-- Soins Visage -->
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+                    <div class="space-y-8">
+                        <div>
+                            <h3 class="font-serif text-4xl font-light text-black mb-6">Soins du Visage</h3>
+                            <p class="text-lg font-light text-neutral-600 leading-relaxed mb-8">
+                                Protocoles de soins sur mesure pour révéler l'éclat de votre peau.
+                                Nettoyage en profondeur, hydratation et traitements ciblés selon vos besoins.
+                            </p>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="border-l-2 border-black pl-6">
+                                <h4 class="font-medium text-black mb-2">Protocoles</h4>
+                                <p class="text-neutral-600 font-light">Soin hydratant, purifiant, anti-âge, éclat</p>
+                            </div>
+                            <div class="border-l-2 border-neutral-200 pl-6">
+                                <h4 class="font-medium text-black mb-2">Durée</h4>
+                                <p class="text-neutral-600 font-light">60 à 90 minutes selon le protocole choisi</p>
+                            </div>
+                            <div class="border-l-2 border-neutral-200 pl-6">
+                                <h4 class="font-medium text-black mb-2">Produits</h4>
+                                <p class="text-neutral-600 font-light">Cosmétiques premium adaptés à votre type de peau
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="aspect-[4/5] bg-neutral-100 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                                alt="Soins du Visage - L'Atelier R" class="w-full h-full object-cover">
+                        </div>
+                        <div class="bg-neutral-50 p-6 text-center">
+                            <p class="text-2xl font-light text-black mb-2">35.000 FCFA</p>
+                            <p class="text-xs text-neutral-500 tracking-wider">SOIN COMPLET</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Témoignages Clients Section -->
+    <section class="py-16 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
+        <!-- Background decorative elements -->
+        <div
+            class="absolute top-0 left-0 w-48 h-48 bg-gradient-to-br from-pink-200/20 to-pink-300/10 rounded-full blur-2xl transform -translate-x-1/2 -translate-y-1/2">
+        </div>
+        <div
+            class="absolute bottom-0 right-0 w-64 h-64 bg-gradient-to-tl from-gold-200/20 to-gold-300/10 rounded-full blur-2xl transform translate-x-1/2 translate-y-1/2">
+        </div>
+
+        <div class="max-w-5xl mx-auto px-6 lg:px-8 relative z-10">
+            <!-- Header with large quote -->
+            <div class="text-center mb-12 scroll-reveal">
+                <div class="text-6xl text-gray-200 font-serif leading-none mb-2">"</div>
+                <h2
+                    class="font-serif text-3xl lg:text-4xl font-normal text-brown-950 mb-6 leading-tight uppercase tracking-wider">
+                    Témoignages Clients
+                </h2>
+            </div>
+
+            <!-- Testimonials Slider Container -->
+            <div class="relative">
+                <!-- Slider Wrapper -->
+                <div class="overflow-hidden">
+                    <div class="testimonial-slider flex transition-transform duration-500 ease-in-out"
+                        id="testimonialSlider">
+
+                        <!-- Testimonial 1 -->
+                        <div class="w-full flex-shrink-0">
+                            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                                <!-- Left Testimonial -->
+                                <div class="text-center">
+                                    <h3 class="font-serif text-xl text-brown-950 mb-4">Elsa Severe</h3>
+                                    <div class="text-4xl text-gold-500 font-serif leading-none mb-4">"</div>
+                                    <p class="text-gray-700 text-base leading-relaxed mb-6 italic max-w-sm mx-auto">
+                                        Amandine est un esthéticienne très douce toujours souriante et à l'écoute. Je
+                                        vous la recommande
+                                        les yeux fermés. Le massage prénatal est juste parfait autant pour maman que
+                                        pour bébé.
+                                    </p>
+                                    <div class="flex justify-center space-x-1">
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                    </div>
+                                </div>
+
+                                <!-- Right Testimonial -->
+                                <div class="text-center">
+                                    <h3 class="font-serif text-xl text-brown-950 mb-4">A. Hadamart</h3>
+                                    <div class="text-4xl text-gold-500 font-serif leading-none mb-4">"</div>
+                                    <p class="text-gray-700 text-base leading-relaxed mb-6 italic max-w-sm mx-auto">
+                                        Se faire chouchouter, dorloter par des doigts de fée, j'adore ❤️ ❤️ ❤️ Vraiment
+                                        hâte de revenir vous
+                                        voir 😊 😊 😊 😊
+                                    </p>
+                                    <div class="flex justify-center space-x-1">
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Testimonial 2 -->
+                        <div class="w-full flex-shrink-0">
+                            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                                <!-- Left Testimonial -->
+                                <div class="text-center">
+                                    <h3 class="font-serif text-xl text-brown-950 mb-4">Fatou Diallo</h3>
+                                    <div class="text-4xl text-gold-500 font-serif leading-none mb-4">"</div>
+                                    <p class="text-gray-700 text-base leading-relaxed mb-6 italic max-w-sm mx-auto">
+                                        Mes ongles n'ont jamais été aussi beaux ! Le nail art est créatif et la tenue
+                                        est parfaite.
+                                        Je recommande vivement ce salon, l'équipe est professionnelle et accueillante.
+                                    </p>
+                                    <div class="flex justify-center space-x-1">
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                    </div>
+                                </div>
+
+                                <!-- Right Testimonial -->
+                                <div class="text-center">
+                                    <h3 class="font-serif text-xl text-brown-950 mb-4">Mariam Koné</h3>
+                                    <div class="text-4xl text-gold-500 font-serif leading-none mb-4">"</div>
+                                    <p class="text-gray-700 text-base leading-relaxed mb-6 italic max-w-sm mx-auto">
+                                        L'ambiance est apaisante et le service impeccable. Mon maquillage de mariage
+                                        était absolument parfait.
+                                        Merci pour ce moment magique ! Une équipe à l'écoute et très talentueuse.
+                                    </p>
+                                    <div class="flex justify-center space-x-1">
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Testimonial 3 -->
+                        <div class="w-full flex-shrink-0">
+                            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                                <!-- Left Testimonial -->
+                                <div class="text-center">
+                                    <h3 class="font-serif text-xl text-brown-950 mb-4">Khadija Bamba</h3>
+                                    <div class="text-4xl text-gold-500 font-serif leading-none mb-4">"</div>
+                                    <p class="text-gray-700 text-base leading-relaxed mb-6 italic max-w-sm mx-auto">
+                                        L'épilation est douce et sans douleur. Le personnel est très attentionné et
+                                        professionnel.
+                                        Je ne vais plus nulle part ailleurs ! Un vrai moment de détente à chaque visite.
+                                    </p>
+                                    <div class="flex justify-center space-x-1">
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                    </div>
+                                </div>
+
+                                <!-- Right Testimonial -->
+                                <div class="text-center">
+                                    <h3 class="font-serif text-xl text-brown-950 mb-4">Nadia Lama</h3>
+                                    <div class="text-4xl text-gold-500 font-serif leading-none mb-4">"</div>
+                                    <p class="text-gray-700 text-base leading-relaxed mb-6 italic max-w-sm mx-auto">
+                                        Les massages sont divins ! Un vrai moment de détente après une semaine
+                                        stressante.
+                                        L'équipe sait exactement comment nous faire nous sentir bien. Un institut
+                                        exceptionnel !
+                                    </p>
+                                    <div class="flex justify-center space-x-1">
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                        <span class="text-lg text-gold-500">⭐</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Navigation Arrows -->
+                <button
+                    class="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 w-10 h-10 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group"
+                    onclick="previousSlide()">
+                    <svg class="w-5 h-5 text-gray-400 group-hover:text-gold-500 transition-colors duration-300"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
+                        </path>
+                    </svg>
+                </button>
+
+                <button
+                    class="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 w-10 h-10 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group"
+                    onclick="nextSlide()">
+                    <svg class="w-5 h-5 text-gray-400 group-hover:text-gold-500 transition-colors duration-300"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Dots Navigation -->
+            <div class="flex justify-center space-x-2 mt-8">
+                <button
+                    class="testimonial-dot w-2.5 h-2.5 rounded-full bg-gray-300 hover:bg-gold-500 transition-colors duration-300 active"
+                    onclick="goToSlide(0)"></button>
+                <button
+                    class="testimonial-dot w-2.5 h-2.5 rounded-full bg-gray-300 hover:bg-gold-500 transition-colors duration-300"
+                    onclick="goToSlide(1)"></button>
+                <button
+                    class="testimonial-dot w-2.5 h-2.5 rounded-full bg-gray-300 hover:bg-gold-500 transition-colors duration-300"
+                    onclick="goToSlide(2)"></button>
+            </div>
+            <!-- CTA Section -->
+            <div class="text-center scroll-reveal">
+                <div class="bg-gradient-to-br from-gold-50 to-gold-100 rounded-2xl p-12">
+                    <h3 class="font-serif text-3xl font-light text-brown-950 mb-4">
+                        Prête pour votre transformation ?
+                    </h3>
+                    <p class="text-gray-600 mb-8 max-w-2xl mx-auto">
+                        Nos expertes vous accompagnent pour révéler votre beauté naturelle.
+                        Chaque soin est personnalisé selon vos besoins spécifiques.
+                    </p>
+                    <a href="/beautycontact.html"
+                        class="inline-flex items-center bg-white border-2 border-black text-black px-8 py-4 rounded-lg font-semibold hover:scale-105 transition-transform duration-300 hover:bg-black hover:text-white transition-all duration-300">
+                        Réserver ma transformation
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 8l4 4m0 0l-4 4m4-4H3">
+                            </path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            let currentSlide = 0;
+            const totalSlides = 3;
+
+            function updateSlider() {
+                const slider = document.getElementById('testimonialSlider');
+                const dots = document.querySelectorAll('.testimonial-dot');
+
+                // Move slider
+                slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+                // Update dots
+                dots.forEach((dot, index) => {
+                    if (index === currentSlide) {
+                        dot.classList.add('active');
+                        dot.style.backgroundColor = '#d4b896'; // gold-500
+                    } else {
+                        dot.classList.remove('active');
+                        dot.style.backgroundColor = '#d1d5db'; // gray-300
+                    }
+                });
+            }
+
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                updateSlider();
+            }
+
+            function previousSlide() {
+                currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                updateSlider();
+            }
+
+            function goToSlide(index) {
+                currentSlide = index;
+                updateSlider();
+            }
+
+            // Auto-advance slides every 6 seconds
+            setInterval(nextSlide, 6000);
+
+            // Initialize
+            updateSlider();
+        </script>
+    </section>
+
+    <!-- Section FAQ -->
+    <section class="py-24 bg-neutral-50">
+        <div class="max-w-4xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <p class="text-sm font-light text-neutral-500 tracking-[0.3em] mb-8">QUESTIONS FRÉQUENTES</p>
+                <h2 class="font-serif text-4xl lg:text-5xl font-light text-black mb-8">
+                    Tout savoir sur nos <span class="italic">prestations</span>
+                </h2>
+            </div>
+
+            <div class="space-y-8">
+                <!-- FAQ Item 1 -->
+                <div class="border-b border-neutral-200 pb-8">
+                    <button class="w-full text-left group" onclick="toggleFAQ(this)">
+                        <div class="flex justify-between items-center">
+                            <h3
+                                class="font-medium text-black text-lg group-hover:text-neutral-600 transition-colors duration-300">
+                                Combien de temps dure une séance de brow shading ?
+                            </h3>
+                            <svg class="w-5 h-5 text-neutral-400 transform transition-transform duration-300"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                    <div class="hidden mt-4 text-neutral-600 font-light leading-relaxed">
+                        Une séance complète de brow shading dure environ 2h30 à 3h. Cette durée inclut la consultation,
+                        l'analyse morphologique, le dessin préparatoire, l'application de l'anesthésiant et la
+                        pigmentation.
+                        Nous prenons le temps nécessaire pour un résultat parfait.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="border-b border-neutral-200 pb-8">
+                    <button class="w-full text-left group" onclick="toggleFAQ(this)">
+                        <div class="flex justify-between items-center">
+                            <h3
+                                class="font-medium text-black text-lg group-hover:text-neutral-600 transition-colors duration-300">
+                                Quels produits utilisez-vous pour vos prestations ?
+                            </h3>
+                            <svg class="w-5 h-5 text-neutral-400 transform transition-transform duration-300"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                    <div class="hidden mt-4 text-neutral-600 font-light leading-relaxed">
+                        Nous utilisons exclusivement des produits premium certifiés : pigments organiques européens pour
+                        le maquillage semi-permanent, extensions en soie naturelle hypoallergénique, et cosmétiques
+                        professionnels adaptés à tous types de peau. Tous nos produits respectent les normes d'hygiène
+                        les plus strictes.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="border-b border-neutral-200 pb-8">
+                    <button class="w-full text-left group" onclick="toggleFAQ(this)">
+                        <div class="flex justify-between items-center">
+                            <h3
+                                class="font-medium text-black text-lg group-hover:text-neutral-600 transition-colors duration-300">
+                                Comment entretenir mes extensions de cils ?
+                            </h3>
+                            <svg class="w-5 h-5 text-neutral-400 transform transition-transform duration-300"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                    <div class="hidden mt-4 text-neutral-600 font-light leading-relaxed">
+                        Évitez l'eau et la vapeur pendant 24h après la pose. Utilisez un nettoyant doux sans huile,
+                        brossez délicatement avec la brosse fournie, et dormez sur le dos si possible.
+                        Évitez de toucher ou tirer sur les extensions. Un remplissage toutes les 2-3 semaines
+                        maintiendra la densité optimale.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div class="border-b border-neutral-200 pb-8">
+                    <button class="w-full text-left group" onclick="toggleFAQ(this)">
+                        <div class="flex justify-between items-center">
+                            <h3
+                                class="font-medium text-black text-lg group-hover:text-neutral-600 transition-colors duration-300">
+                                Proposez-vous des forfaits ou abonnements ?
+                            </h3>
+                            <svg class="w-5 h-5 text-neutral-400 transform transition-transform duration-300"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                    <div class="hidden mt-4 text-neutral-600 font-light leading-relaxed">
+                        Oui, nous proposons des forfaits avantageux : forfait 3 soins visage (90.000 FCFA au lieu de
+                        105.000),
+                        forfait entretien extensions (forfait 3 remplissages à 120.000 FCFA), et forfait découverte
+                        (brow shading + soin visage à 110.000 FCFA). Ces forfaits sont valables 6 mois.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 5 -->
+                <div class="border-b border-neutral-200 pb-8">
+                    <button class="w-full text-left group" onclick="toggleFAQ(this)">
+                        <div class="flex justify-between items-center">
+                            <h3
+                                class="font-medium text-black text-lg group-hover:text-neutral-600 transition-colors duration-300">
+                                Y a-t-il des contre-indications à vos prestations ?
+                            </h3>
+                            <svg class="w-5 h-5 text-neutral-400 transform transition-transform duration-300"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                    <div class="hidden mt-4 text-neutral-600 font-light leading-relaxed">
+                        Certaines conditions nécessitent des précautions : grossesse et allaitement (selon la
+                        prestation),
+                        diabète non stabilisé, traitements anticoagulants, allergies connues aux produits cosmétiques,
+                        infections oculaires en cours. Nous effectuons toujours un entretien préalable pour évaluer
+                        la faisabilité de chaque prestation.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 6 -->
+                <div class="pb-8">
+                    <button class="w-full text-left group" onclick="toggleFAQ(this)">
+                        <div class="flex justify-between items-center">
+                            <h3
+                                class="font-medium text-black text-lg group-hover:text-neutral-600 transition-colors duration-300">
+                                Quels sont vos modes de paiement acceptés ?
+                            </h3>
+                            <svg class="w-5 h-5 text-neutral-400 transform transition-transform duration-300"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </button>
+                    <div class="hidden mt-4 text-neutral-600 font-light leading-relaxed">
+                        Nous acceptons les paiements en espèces, par mobile money (Orange Money, MTN Money, Moov Money),
+                        et par virement bancaire. Un acompte de 30% est demandé lors de la réservation,
+                        le solde étant réglé le jour de la prestation. Des facilités de paiement peuvent être
+                        proposées pour les forfaits.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function toggleFAQ(button) {
+            const content = button.nextElementSibling;
+            const icon = button.querySelector('svg');
+
+            // Toggle content visibility
+            content.classList.toggle('hidden');
+
+            // Rotate icon
+            if (content.classList.contains('hidden')) {
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                icon.style.transform = 'rotate(180deg)';
+            }
+
+            // Close other FAQ items
+            const allFAQs = document.querySelectorAll('[onclick="toggleFAQ(this)"]');
+            allFAQs.forEach(otherButton => {
+                if (otherButton !== button) {
+                    const otherContent = otherButton.nextElementSibling;
+                    const otherIcon = otherButton.querySelector('svg');
+                    otherContent.classList.add('hidden');
+                    otherIcon.style.transform = 'rotate(0deg)';
+                }
+            });
+        }
+    </script>
+
+    <style>
+        .line-through-center {
+            position: relative;
+        }
+
+        .line-through-center::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e5e5e5;
+            z-index: 0;
+        }
+
+        .line-through-center span {
+            background: white;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+
+    <!-- Footer minimaliste -->
+    <footer class="bg-white border-t border-neutral-100 py-16">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <!-- Logo & Description -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-4 mb-6">
+                        <div class="logo-ar text-3xl text-black">AR</div>
+                        <div class="border-l border-neutral-200 pl-4">
+                            <h4 class="text-lg font-light tracking-[0.2em] text-black">L'ATELIER R</h4>
+                            <p class="text-xs text-neutral-500 tracking-[0.3em] font-light">BROWS EXPERT • VISAGISTE</p>
+                        </div>
+                    </div>
+                    <p class="text-neutral-600 font-light leading-relaxed max-w-md">
+                        L'art de sublimer votre regard et révéler votre beauté naturelle.
+                        Excellence et précision depuis 3 ans à Abidjan.
+                    </p>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h4 class="text-black font-medium mb-6 tracking-wide">SERVICES</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#"
+                                class="text-neutral-600 font-light hover:text-black transition-colors duration-300">Brows
+                                Expert</a></li>
+                        <li><a href="#"
+                                class="text-neutral-600 font-light hover:text-black transition-colors duration-300">Visagisme</a>
+                        </li>
+                        <li><a href="#"
+                                class="text-neutral-600 font-light hover:text-black transition-colors duration-300">Restructuration</a>
+                        </li>
+                        <li><a href="#"
+                                class="text-neutral-600 font-light hover:text-black transition-colors duration-300">Consultation</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h4 class="text-black font-medium mb-6 tracking-wide">CONTACT</h4>
+                    <div class="space-y-3 text-sm">
+                        <p class="text-neutral-600 font-light">Riviera M'Badon<br>Abidjan, CI</p>
+                        <p class="text-neutral-600 font-light">+225 XX XX XX XX XX</p>
+                        <p class="text-neutral-600 font-light">contact@latelierr.ci</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="border-t border-neutral-100 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-neutral-500 text-sm font-light">
+                    © 2025 L'Atelier R. Tous droits réservés.
+                </p>
+                <p class="text-neutral-500 text-sm font-light mt-4 md:mt-0">
+                    Créé avec passion
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Chargement
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+
+        // Navigation fluide
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 100;
+                    const elementPosition = target.offsetTop;
+                    const offsetPosition = elementPosition - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Effets navbar au scroll
+        let lastScrollY = window.scrollY;
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            const currentScrollY = window.scrollY;
+
+            if (currentScrollY > 50) {
+                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+                navbar.style.backdropFilter = 'blur(10px)';
+                navbar.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                navbar.style.backdropFilter = 'blur(5px)';
+                navbar.style.boxShadow = 'none';
+            }
+
+            // Masquer/afficher navbar
+            if (currentScrollY > lastScrollY && currentScrollY > 200) {
+                navbar.style.transform = 'translateY(-100%)';
+            } else {
+                navbar.style.transform = 'translateY(0)';
+            }
+
+            lastScrollY = currentScrollY;
+        });
+
+        // Observateur d'intersection pour les révélations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observer tous les éléments reveal
+        document.querySelectorAll('.reveal').forEach(el => {
+            revealObserver.observe(el);
+        });
+
+        // Menu mobile
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenu?.addEventListener('click', () => {
+            // Logic pour menu mobile à implémenter si nécessaire
+            console.log('Mobile menu clicked');
+        });
+
+        // Animation du formulaire
+        const form = document.querySelector('form');
+        if (form) {
+            const inputs = form.querySelectorAll('input, textarea, select');
+
+            inputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    input.style.borderBottomColor = '#000';
+                });
+
+                input.addEventListener('blur', () => {
+                    if (!input.value) {
+                        input.style.borderBottomColor = '#e5e5e5';
+                    }
+                });
+            });
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const submitBtn = form.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+
+                submitBtn.textContent = 'Envoi en cours...';
+                submitBtn.style.opacity = '0.7';
+                submitBtn.disabled = true;
+
+                // Simulation d'envoi
+                setTimeout(() => {
+                    submitBtn.textContent = 'Message envoyé !';
+                    setTimeout(() => {
+                        submitBtn.textContent = originalText;
+                        submitBtn.style.opacity = '1';
+                        submitBtn.disabled = false;
+                        form.reset();
+
+                        // Reset border colors
+                        inputs.forEach(input => {
+                            input.style.borderBottomColor = '#e5e5e5';
+                        });
+                    }, 2000);
+                }, 1500);
+            });
+        }
+
+        // Effets de hover subtils
+        document.querySelectorAll('.minimal-hover').forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                element.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)';
+            });
+
+            element.addEventListener('mouseleave', () => {
+                element.style.boxShadow = 'none';
+            });
+        });
+
+        // Animation des statistiques au scroll
+        const statsSection = document.querySelector('#accueil');
+        if (statsSection) {
+            const statsNumbers = statsSection.querySelectorAll('.text-2xl');
+            let hasAnimated = false;
+
+            const statsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !hasAnimated) {
+                        hasAnimated = true;
+                        statsNumbers.forEach((stat, index) => {
+                            const finalValue = stat.textContent;
+                            const numericValue = parseInt(finalValue);
+
+                            if (!isNaN(numericValue)) {
+                                let currentValue = 0;
+                                const increment = numericValue / 30;
+
+                                const timer = setInterval(() => {
+                                    currentValue += increment;
+                                    if (currentValue >= numericValue) {
+                                        stat.textContent = finalValue;
+                                        clearInterval(timer);
+                                    } else {
+                                        stat.textContent = Math.floor(currentValue) + (finalValue.includes('+') ? '+' : '');
+                                    }
+                                }, 50);
+                            }
+                        });
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            statsObserver.observe(statsSection);
+        }
+    </script>
+</body>
+
+</html>

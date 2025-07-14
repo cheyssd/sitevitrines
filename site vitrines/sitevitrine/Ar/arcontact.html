@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Atelier R - Brows Expert & Visagiste</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'serif': ['Playfair Display', 'serif'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'neutral-50': '#fafafa',
+                        'neutral-100': '#f5f5f5',
+                        'neutral-900': '#171717',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.8s ease-out forwards',
+                        'slide-up': 'slideUp 0.6s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(40px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        body.loaded {
+            opacity: 1;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .logo-ar {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            letter-spacing: -0.05em;
+        }
+
+        .minimal-hover {
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .minimal-hover:hover {
+            transform: translateY(-2px);
+        }
+
+        .line-through-center {
+            position: relative;
+        }
+
+        .line-through-center::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e5e5e5;
+            z-index: 0;
+        }
+
+        .line-through-center span {
+            background: white;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+
+<body class="bg-white text-neutral-900">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 transition-all duration-500" id="navbar">
+        <div class="bg-white/95 backdrop-blur-sm border-b border-neutral-100">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                <div class="flex justify-between items-center py-6">
+                    <!-- Logo simplifié -->
+                    <div class="flex items-center space-x-4">
+                        <div class="logo-ar text-4xl text-black">AR</div>
+                        <div class="border-l border-neutral-200 pl-4">
+                            <h1 class="text-lg font-light tracking-[0.2em] text-black">L'ATELIER R</h1>
+                            <p class="text-xs text-neutral-500 tracking-[0.3em] font-light">BROWS EXPERT • VISAGISTE</p>
+                        </div>
+                    </div>
+
+                    <!-- Menu épuré -->
+                    <div class="hidden lg:flex space-x-12">
+                        <a href="/ar.html"
+                            class="text-sm font-light text-black hover:text-neutral-600 transition-colors duration-300 tracking-wide">Accueil</a>
+                        <a href="#expertise"
+                            class="text-sm font-light text-black hover:text-neutral-600 transition-colors duration-300 tracking-wide">Expertise</a>
+                        <a href="/arpropos.html"
+                            class="text-sm font-light text-black hover:text-neutral-600 transition-colors duration-300 tracking-wide">A
+                            propos</a>
+                        <a href="#services"
+                            class="text-sm font-light text-black hover:text-neutral-600 transition-colors duration-300 tracking-wide">Blog</a>
+                        <a href="#contact"
+                            class="text-sm font-light text-black hover:text-neutral-600 transition-colors duration-300 tracking-wide">Contact</a>
+                    </div>
+
+                    <!-- Bouton mobile -->
+                    <button class="lg:hidden" id="mobile-menu">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <section id="contact" class="py-24 bg-neutral-50">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-20">
+                <!-- Informations -->
+                <div class="reveal space-y-12">
+                    <div>
+                        <p class="text-sm font-light text-neutral-500 tracking-[0.3em] mb-8">PRENONS CONTACT</p>
+                        <h2 class="font-serif text-5xl lg:text-6xl font-light text-black leading-tight mb-8">
+                            Votre beauté<br>
+                            <span class="italic">nous attend</span>
+                        </h2>
+                    </div>
+
+                    <!-- Contact minimaliste -->
+                    <div class="space-y-8">
+                        <div>
+                            <h4 class="text-black font-medium mb-3 tracking-wide">ADRESSE</h4>
+                            <p class="text-neutral-600 font-light leading-relaxed">
+                                Riviera M'Badon<br>
+                                Abidjan, Côte d'Ivoire
+                            </p>
+                        </div>
+
+                        <div>
+                            <h4 class="text-black font-medium mb-3 tracking-wide">TÉLÉPHONE</h4>
+                            <p class="text-neutral-600 font-light">+225 XX XX XX XX XX</p>
+                        </div>
+
+                        <div>
+                            <h4 class="text-black font-medium mb-3 tracking-wide">EMAIL</h4>
+                            <p class="text-neutral-600 font-light">contact@latelierr.ci</p>
+                        </div>
+
+                        <div class="pt-8 border-t border-neutral-200">
+                            <h4 class="text-black font-medium mb-6 tracking-wide">SUIVEZ-NOUS</h4>
+                            <div class="flex space-x-4">
+                                <a href="#"
+                                    class="w-10 h-10 border border-black flex items-center justify-center hover:bg-black hover:text-white transition-colors duration-300">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                                    </svg>
+                                </a>
+                                <a href="#"
+                                    class="w-10 h-10 border border-black flex items-center justify-center hover:bg-black hover:text-white transition-colors duration-300">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path
+                                            d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulaire épuré -->
+                <div class="reveal">
+                    <div class="bg-white p-12 border border-neutral-100">
+                        <h3 class="font-serif text-3xl font-light text-black mb-8">Réservez votre consultation</h3>
+
+                        <form class="space-y-6">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <input type="text" placeholder="Prénom"
+                                    class="w-full p-4 border-b border-neutral-200 bg-transparent focus:border-black focus:outline-none transition-colors duration-300 font-light">
+                                <input type="text" placeholder="Nom"
+                                    class="w-full p-4 border-b border-neutral-200 bg-transparent focus:border-black focus:outline-none transition-colors duration-300 font-light">
+                            </div>
+
+                            <input type="email" placeholder="Email"
+                                class="w-full p-4 border-b border-neutral-200 bg-transparent focus:border-black focus:outline-none transition-colors duration-300 font-light">
+
+                            <input type="tel" placeholder="Téléphone"
+                                class="w-full p-4 border-b border-neutral-200 bg-transparent focus:border-black focus:outline-none transition-colors duration-300 font-light">
+
+                            <select
+                                class="w-full p-4 border-b border-neutral-200 bg-transparent focus:border-black focus:outline-none transition-colors duration-300 font-light">
+                                <option value="">Service souhaité</option>
+                                <option value="brows">Brows Expert</option>
+                                <option value="visagisme">Visagisme</option>
+                                <option value="consultation">Consultation</option>
+                            </select>
+
+                            <textarea placeholder="Message" rows="4"
+                                class="w-full p-4 border-b border-neutral-200 bg-transparent focus:border-black focus:outline-none transition-colors duration-300 font-light resize-none"></textarea>
+
+                            <button type="submit"
+                                class="w-full bg-black text-white py-4 font-light tracking-wide hover:bg-neutral-800 transition-colors duration-300 mt-8">
+                                Envoyer la demande
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+        <!-- Footer minimaliste -->
+    <footer class="bg-white border-t border-neutral-100 py-16">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <!-- Logo & Description -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-4 mb-6">
+                        <div class="logo-ar text-3xl text-black">AR</div>
+                        <div class="border-l border-neutral-200 pl-4">
+                            <h4 class="text-lg font-light tracking-[0.2em] text-black">L'ATELIER R</h4>
+                            <p class="text-xs text-neutral-500 tracking-[0.3em] font-light">BROWS EXPERT • VISAGISTE</p>
+                        </div>
+                    </div>
+                    <p class="text-neutral-600 font-light leading-relaxed max-w-md">
+                        L'art de sublimer votre regard et révéler votre beauté naturelle.
+                        Excellence et précision depuis 3 ans à Abidjan.
+                    </p>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h4 class="text-black font-medium mb-6 tracking-wide">SERVICES</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#"
+                                class="text-neutral-600 font-light hover:text-black transition-colors duration-300">Brows
+                                Expert</a></li>
+                        <li><a href="#"
+                                class="text-neutral-600 font-light hover:text-black transition-colors duration-300">Visagisme</a>
+                        </li>
+                        <li><a href="#"
+                                class="text-neutral-600 font-light hover:text-black transition-colors duration-300">Restructuration</a>
+                        </li>
+                        <li><a href="#"
+                                class="text-neutral-600 font-light hover:text-black transition-colors duration-300">Consultation</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h4 class="text-black font-medium mb-6 tracking-wide">CONTACT</h4>
+                    <div class="space-y-3 text-sm">
+                        <p class="text-neutral-600 font-light">Riviera M'Badon<br>Abidjan, CI</p>
+                        <p class="text-neutral-600 font-light">+225 XX XX XX XX XX</p>
+                        <p class="text-neutral-600 font-light">contact@latelierr.ci</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="border-t border-neutral-100 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-neutral-500 text-sm font-light">
+                    © 2025 L'Atelier R. Tous droits réservés.
+                </p>
+                <p class="text-neutral-500 text-sm font-light mt-4 md:mt-0">
+                    Créé avec passion
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Chargement
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+
+        // Navigation fluide
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 100;
+                    const elementPosition = target.offsetTop;
+                    const offsetPosition = elementPosition - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Effets navbar au scroll
+        let lastScrollY = window.scrollY;
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            const currentScrollY = window.scrollY;
+
+            if (currentScrollY > 50) {
+                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+                navbar.style.backdropFilter = 'blur(10px)';
+                navbar.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                navbar.style.backdropFilter = 'blur(5px)';
+                navbar.style.boxShadow = 'none';
+            }
+
+            // Masquer/afficher navbar
+            if (currentScrollY > lastScrollY && currentScrollY > 200) {
+                navbar.style.transform = 'translateY(-100%)';
+            } else {
+                navbar.style.transform = 'translateY(0)';
+            }
+
+            lastScrollY = currentScrollY;
+        });
+
+        // Observateur d'intersection pour les révélations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observer tous les éléments reveal
+        document.querySelectorAll('.reveal').forEach(el => {
+            revealObserver.observe(el);
+        });
+
+        // Menu mobile
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenu?.addEventListener('click', () => {
+            // Logic pour menu mobile à implémenter si nécessaire
+            console.log('Mobile menu clicked');
+        });
+
+        // Animation du formulaire
+        const form = document.querySelector('form');
+        if (form) {
+            const inputs = form.querySelectorAll('input, textarea, select');
+
+            inputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    input.style.borderBottomColor = '#000';
+                });
+
+                input.addEventListener('blur', () => {
+                    if (!input.value) {
+                        input.style.borderBottomColor = '#e5e5e5';
+                    }
+                });
+            });
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const submitBtn = form.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+
+                submitBtn.textContent = 'Envoi en cours...';
+                submitBtn.style.opacity = '0.7';
+                submitBtn.disabled = true;
+
+                // Simulation d'envoi
+                setTimeout(() => {
+                    submitBtn.textContent = 'Message envoyé !';
+                    setTimeout(() => {
+                        submitBtn.textContent = originalText;
+                        submitBtn.style.opacity = '1';
+                        submitBtn.disabled = false;
+                        form.reset();
+
+                        // Reset border colors
+                        inputs.forEach(input => {
+                            input.style.borderBottomColor = '#e5e5e5';
+                        });
+                    }, 2000);
+                }, 1500);
+            });
+        }
+
+        // Effets de hover subtils
+        document.querySelectorAll('.minimal-hover').forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                element.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)';
+            });
+
+            element.addEventListener('mouseleave', () => {
+                element.style.boxShadow = 'none';
+            });
+        });
+
+        // Animation des statistiques au scroll
+        const statsSection = document.querySelector('#accueil');
+        if (statsSection) {
+            const statsNumbers = statsSection.querySelectorAll('.text-2xl');
+            let hasAnimated = false;
+
+            const statsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !hasAnimated) {
+                        hasAnimated = true;
+                        statsNumbers.forEach((stat, index) => {
+                            const finalValue = stat.textContent;
+                            const numericValue = parseInt(finalValue);
+
+                            if (!isNaN(numericValue)) {
+                                let currentValue = 0;
+                                const increment = numericValue / 30;
+
+                                const timer = setInterval(() => {
+                                    currentValue += increment;
+                                    if (currentValue >= numericValue) {
+                                        stat.textContent = finalValue;
+                                        clearInterval(timer);
+                                    } else {
+                                        stat.textContent = Math.floor(currentValue) + (finalValue.includes('+') ? '+' : '');
+                                    }
+                                }, 50);
+                            }
+                        });
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            statsObserver.observe(statsSection);
+        }
+    </script>
+</body>
+</html>

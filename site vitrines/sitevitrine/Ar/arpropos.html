@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Atelier R - Brows Expert & Visagiste</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'serif': ['Playfair Display', 'serif'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'neutral-50': '#fafafa',
+                        'neutral-100': '#f5f5f5',
+                        'neutral-900': '#171717',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.8s ease-out forwards',
+                        'slide-up': 'slideUp 0.6s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(40px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        body.loaded {
+            opacity: 1;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .logo-ar {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            letter-spacing: -0.05em;
+        }
+
+        .minimal-hover {
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .minimal-hover:hover {
+            transform: translateY(-2px);
+        }
+
+        .line-through-center {
+            position: relative;
+        }
+
+        .line-through-center::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e5e5e5;
+            z-index: 0;
+        }
+
+        .line-through-center span {
+            background: white;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+
+<body class="bg-white text-neutral-900">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 transition-all duration-500" id="navbar">
+        <div class="bg-white/95 backdrop-blur-sm border-b border-neutral-100">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                <div class="flex justify-between items-center py-6">
+                    <!-- Logo simplifié -->
+                    <div class="flex items-center space-x-4">
+                        <div class="logo-ar text-4xl text-black">AR</div>
+                        <div class="border-l border-neutral-200 pl-4">
+                            <h1 class="text-lg font-light tracking-[0.2em] text-black">L'ATELIER R</h1>
+                            <p class="text-xs text-neutral-500 tracking-[0.3em] font-light">BROWS EXPERT • VISAGISTE</p>
+                        </div>
+                    </div>
+
+                    <!-- Menu épuré -->
+                    <div class="hidden lg:flex space-x-12">
+                        <a href="/ar.html"
+                            class="text-sm font-light text-black hover:text-neutral-600 transition-colors duration-300 tracking-wide">Accueil</a>
+                        <a href="#expertise"
+                            class="text-sm font-light text-black hover:text-neutral-600 transition-colors duration-300 tracking-wide">Expertise</a>
+                        <a href="/arpropos.html"
+                            class="text-sm font-light text-black hover:text-neutral-600 transition-colors duration-300 tracking-wide">A
+                            propos</a>
+                        <a href="#services"
+                            class="text-sm font-light text-black hover:text-neutral-600 transition-colors duration-300 tracking-wide">Blog</a>
+                        <a href="#contact"
+                            class="text-sm font-light text-black hover:text-neutral-600 transition-colors duration-300 tracking-wide">Contact</a>
+                    </div>
+
+                    <!-- Bouton mobile -->
+                    <button class="lg:hidden" id="mobile-menu">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+
+    <!-- Section À Propos -->
+    <section class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <!-- Introduction Philosophie -->
+            <div class="text-center mb-20">
+                <p class="text-sm font-light text-neutral-500 tracking-[0.3em] mb-8">NOTRE HISTOIRE</p>
+                <h2 class="font-serif text-5xl lg:text-6xl font-light text-black mb-12">
+                    L'art de révéler votre <span class="italic">essence</span>
+                </h2>
+                <div class="max-w-4xl mx-auto">
+                    <p class="text-xl font-light text-neutral-600 leading-relaxed mb-8">
+                        Née d'une passion pour la beauté authentique, L'Atelier R transcende les codes
+                        traditionnels de l'esthétique pour révéler l'unique beauté qui sommeille en chacune.
+                    </p>
+                    <p class="text-lg font-light text-neutral-500 leading-relaxed">
+                        Notre philosophie : respecter et magnifier vos traits naturels plutôt que de les transformer.
+                        Chaque geste, chaque technique est pensée pour créer une harmonie parfaite avec votre
+                        personnalité.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Valeurs Core -->
+            <div class="grid md:grid-cols-3 gap-12 mb-24">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-black mx-auto mb-6 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="font-serif text-2xl font-light text-black mb-4">Passion</h3>
+                    <p class="text-neutral-600 font-light leading-relaxed">
+                        Chaque prestation est réalisée avec amour et dévouement,
+                        car votre beauté mérite notre engagement total.
+                    </p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-black mx-auto mb-6 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="font-serif text-2xl font-light text-black mb-4">Précision</h3>
+                    <p class="text-neutral-600 font-light leading-relaxed">
+                        L'excellence technique au service de votre beauté naturelle.
+                        Chaque détail compte dans notre quête de perfection.
+                    </p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-black mx-auto mb-6 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="font-serif text-2xl font-light text-black mb-4">Innovation</h3>
+                    <p class="text-neutral-600 font-light leading-relaxed">
+                        Toujours à l'avant-garde des techniques et tendances
+                        pour vous offrir le meilleur de l'art cosmétique.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Équipe -->
+    <section class="py-24 bg-neutral-50">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <p class="text-sm font-light text-neutral-500 tracking-[0.3em] mb-8">NOTRE ÉQUIPE</p>
+                <h2 class="font-serif text-4xl lg:text-5xl font-light text-black mb-8">
+                    Les artistes de votre <span class="italic">beauté</span>
+                </h2>
+                <div class="line-through-center">
+                    <span class="text-neutral-400 font-light text-sm tracking-wider bg-neutral-50">EXPERTISE &
+                        SAVOIR-FAIRE</span>
+                </div>
+            </div>
+
+            <!-- Fondatrice Principale -->
+            <div class="mb-20">
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+                    <div class="order-2 lg:order-1">
+                        <div class="space-y-6">
+                            <div>
+                                <p class="text-sm font-light text-neutral-500 tracking-[0.2em] mb-4">FONDATRICE &
+                                    DIRECTRICE ARTISTIQUE</p>
+                                <h3 class="font-serif text-4xl font-light text-black mb-6">Rachel Kouassi</h3>
+                                <p class="text-lg font-light text-neutral-600 leading-relaxed mb-8">
+                                    Passionnée par l'art de la beauté depuis plus de 5 ans, Rachel a fondé L'Atelier R
+                                    avec une vision claire : révéler l'unique beauté de chaque femme en respectant
+                                    son essence naturelle.
+                                </p>
+                            </div>
+
+                            <!-- Parcours -->
+                            <div class="space-y-4">
+                                <div class="border-l-2 border-black pl-6">
+                                    <h4 class="font-medium text-black mb-1">Formation</h4>
+                                    <p class="text-neutral-600 font-light text-sm">Diplômée en esthétique • Formation
+                                        avancée en maquillage semi-permanent (Paris)</p>
+                                </div>
+                                <div class="border-l-2 border-neutral-200 pl-6">
+                                    <h4 class="font-medium text-black mb-1">Spécialités</h4>
+                                    <p class="text-neutral-600 font-light text-sm">Brow shading • Visagisme •
+                                        Restructuration sourcils</p>
+                                </div>
+                                <div class="border-l-2 border-neutral-200 pl-6">
+                                    <h4 class="font-medium text-black mb-1">Expérience</h4>
+                                    <p class="text-neutral-600 font-light text-sm">3+ années • 100+ clientes satisfaites
+                                        • Formation continue</p>
+                                </div>
+                            </div>
+
+                            <!-- Citation -->
+                            <div class="bg-white p-6 border-l-4 border-black mt-8">
+                                <blockquote class="text-neutral-700 italic font-light leading-relaxed mb-4">
+                                    "Ma mission est de révéler la beauté unique qui existe déjà en vous.
+                                    Chaque sourcil, chaque regard raconte une histoire que j'ai l'honneur de sublimer."
+                                </blockquote>
+                                <p class="text-neutral-500 text-sm font-medium">— Rachel Kouassi</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="order-1 lg:order-2">
+                        <div class="relative">
+                            <div class="aspect-[3/4] bg-white overflow-hidden shadow-sm">
+                                <img src="https://images.unsplash.com/photo-1494790108755-2616c3e0e78b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                                    alt="Rachel Kouassi - Fondatrice L'Atelier R" class="w-full h-full object-cover">
+                            </div>
+                            <!-- Badge certifications -->
+                            <div class="absolute -bottom-6 -right-6 bg-black text-white p-4 shadow-lg">
+                                <div class="text-center">
+                                    <div class="text-2xl font-light mb-1">5+</div>
+                                    <p class="text-xs tracking-wider">ANNÉES</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Autres Membres de l'Équipe -->
+            <div class="grid md:grid-cols-2 gap-12">
+                <!-- Spécialiste Extensions -->
+                <div class="bg-white p-8 border border-neutral-100">
+                    <div class="flex items-start space-x-6">
+                        <div class="w-20 h-20 bg-neutral-100 overflow-hidden flex-shrink-0">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"
+                                alt="Sarah Diabaté" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-xs text-neutral-500 tracking-wider mb-2">SPÉCIALISTE EXTENSIONS</p>
+                            <h4 class="font-serif text-2xl font-light text-black mb-3">Sarah Diabaté</h4>
+                            <p class="text-neutral-600 font-light text-sm leading-relaxed mb-4">
+                                Experte en extensions de cils avec 3 ans d'expérience.
+                                Formée aux techniques les plus avancées pour un résultat naturel et durable.
+                            </p>
+                            <div class="flex items-center space-x-4 text-xs text-neutral-500">
+                                <span>• Extensions volume</span>
+                                <span>• Rehaussement cils</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Esthéticienne -->
+                <div class="bg-white p-8 border border-neutral-100">
+                    <div class="flex items-start space-x-6">
+                        <div class="w-20 h-20 bg-neutral-100 overflow-hidden flex-shrink-0">
+                            <img src="https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"
+                                alt="Marie Traoré" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-xs text-neutral-500 tracking-wider mb-2">ESTHÉTICIENNE</p>
+                            <h4 class="font-serif text-2xl font-light text-black mb-3">Marie Traoré</h4>
+                            <p class="text-neutral-600 font-light text-sm leading-relaxed mb-4">
+                                Diplômée en soins esthétiques, Marie maîtrise tous les protocoles
+                                de soins du visage pour révéler l'éclat naturel de votre peau.
+                            </p>
+                            <div class="flex items-center space-x-4 text-xs text-neutral-500">
+                                <span>• Soins anti-âge</span>
+                                <span>• Protocoles hydratants</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Philosophie & Engagement -->
+    <section class="py-24 bg-white">
+        <div class="max-w-6xl mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-20 items-center">
+                <!-- Contenu -->
+                <div class="space-y-8">
+                    <div>
+                        <p class="text-sm font-light text-neutral-500 tracking-[0.3em] mb-8">NOTRE ENGAGEMENT</p>
+                        <h2 class="font-serif text-4xl lg:text-5xl font-light text-black leading-tight mb-8">
+                            Une beauté <span class="italic">responsable</span>
+                            et authentique
+                        </h2>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="font-medium text-black mb-3">Produits éthiques et sûrs</h3>
+                            <p class="text-neutral-600 font-light leading-relaxed">
+                                Nous sélectionnons rigoureusement nos produits : pigments organiques certifiés,
+                                cosmétiques sans parabènes, extensions en soie naturelle. Votre sécurité et
+                                votre bien-être sont nos priorités absolues.
+                            </p>
+                        </div>
+
+                        <div>
+                            <h3 class="font-medium text-black mb-3">Hygiène et sécurité</h3>
+                            <p class="text-neutral-600 font-light leading-relaxed">
+                                Protocoles de stérilisation stricts, matériel à usage unique,
+                                respect des normes sanitaires les plus exigeantes. Chaque geste
+                                est pensé pour votre protection et votre confort.
+                            </p>
+                        </div>
+
+                        <div>
+                            <h3 class="font-medium text-black mb-3">Accompagnement personnalisé</h3>
+                            <p class="text-neutral-600 font-light leading-relaxed">
+                                Au-delà de la technique, nous vous accompagnons dans votre démarche beauté.
+                                Conseils d'entretien, suivi post-prestation, écoute de vos besoins :
+                                votre satisfaction est notre plus belle récompense.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Stats Impact -->
+                    <div class="grid grid-cols-3 gap-8 pt-8 border-t border-neutral-100">
+                        <div class="text-center">
+                            <div class="text-3xl font-light text-black mb-2">98%</div>
+                            <p class="text-xs text-neutral-500 tracking-wider">SATISFACTION CLIENT</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-light text-black mb-2">100%</div>
+                            <p class="text-xs text-neutral-500 tracking-wider">PRODUITS CERTIFIÉS</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-light text-black mb-2">0</div>
+                            <p class="text-xs text-neutral-500 tracking-wider">COMPROMIS QUALITÉ</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Image Atelier -->
+                <div class="space-y-6">
+                    <div class="aspect-[4/5] bg-neutral-100 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                            alt="L'Atelier R - Espace de soins" class="w-full h-full object-cover">
+                    </div>
+
+                    <!-- Citation philosophique -->
+                    <div class="bg-neutral-50 p-8 text-center">
+                        <blockquote class="font-serif text-xl italic text-black leading-relaxed mb-4">
+                            "La vraie beauté réside dans l'authenticité.
+                            Notre rôle est de la révéler, jamais de la transformer."
+                        </blockquote>
+                        <p class="text-neutral-500 text-sm tracking-wider">— Philosophie L'Atelier R</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Certifications -->
+    <section class="py-16 bg-neutral-50">
+        <div class="max-w-6xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h3 class="font-serif text-3xl font-light text-black mb-8">
+                    Certifications & <span class="italic">Formations</span>
+                </h3>
+            </div>
+
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="text-center p-6 bg-white border border-neutral-100">
+                    <div class="w-16 h-16 bg-black mx-auto mb-4 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h4 class="font-medium text-black mb-2">Hygiène & Sécurité</h4>
+                    <p class="text-xs text-neutral-500">Certification HACCP</p>
+                </div>
+
+                <div class="text-center p-6 bg-white border border-neutral-100">
+                    <div class="w-16 h-16 bg-black mx-auto mb-4 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                            </path>
+                        </svg>
+                    </div>
+                    <h4 class="font-medium text-black mb-2">Formation Continue</h4>
+                    <p class="text-xs text-neutral-500">Techniques avancées</p>
+                </div>
+
+                <div class="text-center p-6 bg-white border border-neutral-100">
+                    <div class="w-16 h-16 bg-black mx-auto mb-4 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h4 class="font-medium text-black mb-2">Produits Premium</h4>
+                    <p class="text-xs text-neutral-500">Certifiés biologiques</p>
+                </div>
+
+                <div class="text-center p-6 bg-white border border-neutral-100">
+                    <div class="w-16 h-16 bg-black mx-auto mb-4 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h4 class="font-medium text-black mb-2">Équipe Qualifiée</h4>
+                    <p class="text-xs text-neutral-500">Diplômes reconnus</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .line-through-center {
+            position: relative;
+        }
+
+        .line-through-center::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e5e5e5;
+            z-index: 0;
+        }
+
+        .line-through-center span {
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+    <!-- Footer minimaliste -->
+    <footer class="bg-white border-t border-neutral-100 py-16">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <!-- Logo & Description -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-4 mb-6">
+                        <div class="logo-ar text-3xl text-black">AR</div>
+                        <div class="border-l border-neutral-200 pl-4">
+                            <h4 class="text-lg font-light tracking-[0.2em] text-black">L'ATELIER R</h4>
+                            <p class="text-xs text-neutral-500 tracking-[0.3em] font-light">BROWS EXPERT • VISAGISTE</p>
+                        </div>
+                    </div>
+                    <p class="text-neutral-600 font-light leading-relaxed max-w-md">
+                        L'art de sublimer votre regard et révéler votre beauté naturelle.
+                        Excellence et précision depuis 3 ans à Abidjan.
+                    </p>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h4 class="text-black font-medium mb-6 tracking-wide">SERVICES</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#"
+                                class="text-neutral-600 font-light hover:text-black transition-colors duration-300">Brows
+                                Expert</a></li>
+                        <li><a href="#"
+                                class="text-neutral-600 font-light hover:text-black transition-colors duration-300">Visagisme</a>
+                        </li>
+                        <li><a href="#"
+                                class="text-neutral-600 font-light hover:text-black transition-colors duration-300">Restructuration</a>
+                        </li>
+                        <li><a href="#"
+                                class="text-neutral-600 font-light hover:text-black transition-colors duration-300">Consultation</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h4 class="text-black font-medium mb-6 tracking-wide">CONTACT</h4>
+                    <div class="space-y-3 text-sm">
+                        <p class="text-neutral-600 font-light">Riviera M'Badon<br>Abidjan, CI</p>
+                        <p class="text-neutral-600 font-light">+225 XX XX XX XX XX</p>
+                        <p class="text-neutral-600 font-light">contact@latelierr.ci</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="border-t border-neutral-100 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-neutral-500 text-sm font-light">
+                    © 2025 L'Atelier R. Tous droits réservés.
+                </p>
+                <p class="text-neutral-500 text-sm font-light mt-4 md:mt-0">
+                    Créé avec passion
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Chargement
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+
+        // Navigation fluide
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 100;
+                    const elementPosition = target.offsetTop;
+                    const offsetPosition = elementPosition - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Effets navbar au scroll
+        let lastScrollY = window.scrollY;
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            const currentScrollY = window.scrollY;
+
+            if (currentScrollY > 50) {
+                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+                navbar.style.backdropFilter = 'blur(10px)';
+                navbar.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                navbar.style.backdropFilter = 'blur(5px)';
+                navbar.style.boxShadow = 'none';
+            }
+
+            // Masquer/afficher navbar
+            if (currentScrollY > lastScrollY && currentScrollY > 200) {
+                navbar.style.transform = 'translateY(-100%)';
+            } else {
+                navbar.style.transform = 'translateY(0)';
+            }
+
+            lastScrollY = currentScrollY;
+        });
+
+        // Observateur d'intersection pour les révélations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observer tous les éléments reveal
+        document.querySelectorAll('.reveal').forEach(el => {
+            revealObserver.observe(el);
+        });
+
+        // Menu mobile
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenu?.addEventListener('click', () => {
+            // Logic pour menu mobile à implémenter si nécessaire
+            console.log('Mobile menu clicked');
+        });
+
+        // Animation du formulaire
+        const form = document.querySelector('form');
+        if (form) {
+            const inputs = form.querySelectorAll('input, textarea, select');
+
+            inputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    input.style.borderBottomColor = '#000';
+                });
+
+                input.addEventListener('blur', () => {
+                    if (!input.value) {
+                        input.style.borderBottomColor = '#e5e5e5';
+                    }
+                });
+            });
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const submitBtn = form.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+
+                submitBtn.textContent = 'Envoi en cours...';
+                submitBtn.style.opacity = '0.7';
+                submitBtn.disabled = true;
+
+                // Simulation d'envoi
+                setTimeout(() => {
+                    submitBtn.textContent = 'Message envoyé !';
+                    setTimeout(() => {
+                        submitBtn.textContent = originalText;
+                        submitBtn.style.opacity = '1';
+                        submitBtn.disabled = false;
+                        form.reset();
+
+                        // Reset border colors
+                        inputs.forEach(input => {
+                            input.style.borderBottomColor = '#e5e5e5';
+                        });
+                    }, 2000);
+                }, 1500);
+            });
+        }
+
+        // Effets de hover subtils
+        document.querySelectorAll('.minimal-hover').forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                element.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)';
+            });
+
+            element.addEventListener('mouseleave', () => {
+                element.style.boxShadow = 'none';
+            });
+        });
+
+        // Animation des statistiques au scroll
+        const statsSection = document.querySelector('#accueil');
+        if (statsSection) {
+            const statsNumbers = statsSection.querySelectorAll('.text-2xl');
+            let hasAnimated = false;
+
+            const statsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !hasAnimated) {
+                        hasAnimated = true;
+                        statsNumbers.forEach((stat, index) => {
+                            const finalValue = stat.textContent;
+                            const numericValue = parseInt(finalValue);
+
+                            if (!isNaN(numericValue)) {
+                                let currentValue = 0;
+                                const increment = numericValue / 30;
+
+                                const timer = setInterval(() => {
+                                    currentValue += increment;
+                                    if (currentValue >= numericValue) {
+                                        stat.textContent = finalValue;
+                                        clearInterval(timer);
+                                    } else {
+                                        stat.textContent = Math.floor(currentValue) + (finalValue.includes('+') ? '+' : '');
+                                    }
+                                }, 50);
+                            }
+                        });
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            statsObserver.observe(statsSection);
+        }
+    </script>
+</body>
+
+</html>
