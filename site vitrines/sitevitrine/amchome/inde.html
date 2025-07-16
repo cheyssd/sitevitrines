@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMC HOME - Création d'Émotions et de Souvenirs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Space Grotesk', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace'],
+                    },
+                    animation: {
+                        'text-slide': 'textSlide 20s linear infinite',
+                        'rotate-slow': 'rotateSlow 20s linear infinite',
+                        'bounce-slow': 'bounceSlow 3s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 2s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        textSlide: {
+                            '0%': { transform: 'translateX(100%)' },
+                            '100%': { transform: 'translateX(-100%)' }
+                        },
+                        rotateSlow: {
+                            '0%': { transform: 'rotate(0deg)' },
+                            '100%': { transform: 'rotate(360deg)' }
+                        },
+                        bounceSlow: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' }
+                        },
+                        pulseGlow: {
+                            '0%': { boxShadow: '0 0 20px rgba(0,0,0,0.3)' },
+                            '100%': { boxShadow: '0 0 40px rgba(0,0,0,0.6)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        
+        body.loaded {
+            opacity: 1;
+        }
+        
+        .diagonal-split {
+            clip-path: polygon(0 0, 70% 0, 100% 100%, 0 100%);
+        }
+        
+        .diagonal-split-reverse {
+            clip-path: polygon(30% 0, 100% 0, 100% 100%, 0 100%);
+        }
+        
+        .circle-clip {
+            clip-path: circle(50% at center);
+        }
+        
+        .hexagon {
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+        
+        .text-stroke {
+            -webkit-text-stroke: 2px black;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .grid-pattern {
+            background-image: 
+                linear-gradient(to right, #f0f0f0 1px, transparent 1px),
+                linear-gradient(to bottom, #f0f0f0 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        .rotate-text {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+    </style>
+</head>
+
+<body class="bg-white text-black overflow-x-hidden">
+    <!-- Navigation Floating -->
+    <nav class="fixed top-8 left-8 right-8 z-50" id="navbar">
+        <div class="bg-black text-white px-8 py-4 flex justify-between items-center">
+            <!-- Logo Moderne -->
+            <div class="font-mono text-xl font-bold tracking-wider">
+                AMC.HOME
+            </div>
+
+            <!-- Menu en ligne -->
+            <div class="hidden md:flex space-x-8 font-mono text-sm">
+                <a href="#home" class="hover:line-through transition-all duration-300">[ACCUEIL]</a>
+                <a href="#flowers" class="hover:line-through transition-all duration-300">[FLEURS]</a>
+                <a href="#about" class="hover:line-through transition-all duration-300">[CONCEPT]</a>
+                <a href="#contact" class="hover:line-through transition-all duration-300">[CONTACT]</a>
+            </div>
+
+            <!-- Phone -->
+            <a href="tel:+2250778820677" class="bg-white text-black px-4 py-2 font-mono text-sm hover:bg-gray-200 transition-colors duration-300">
+                CALL
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section Experimental -->
+    <section id="home" class="min-h-screen relative bg-white overflow-hidden">
+        <!-- Texte défilant en arrière-plan -->
+        <div class="absolute top-0 left-0 w-full h-full opacity-5 overflow-hidden">
+            <div class="animate-text-slide whitespace-nowrap text-9xl font-bold pt-20">
+                FLEURS • ÉMOTIONS • SOUVENIRS • FLEURS • ÉMOTIONS • SOUVENIRS •
+            </div>
+        </div>
+
+        <!-- Grid pattern -->
+        <div class="absolute inset-0 grid-pattern opacity-30"></div>
+
+        <div class="relative z-10 min-h-screen flex items-center">
+            <div class="w-full max-w-7xl mx-auto px-8">
+                <!-- Layout asymétrique -->
+                <div class="grid grid-cols-12 gap-8 items-center">
+                    <!-- Colonne texte -->
+                    <div class="col-span-12 lg:col-span-7">
+                        <!-- Titre principal expérimental -->
+                        <div class="mb-12">
+                            <div class="font-mono text-sm mb-4 tracking-wider">
+                                [001] — FLEURISTE ABIDJAN
+                            </div>
+                            
+                            <h1 class="text-8xl lg:text-9xl font-black leading-none mb-8">
+                                <span class="block">AMC</span>
+                                <span class="block text-stroke">HOME</span>
+                            </h1>
+                            
+                            <div class="text-2xl font-light max-w-md leading-tight mb-8">
+                                Création d'Émotions<br>
+                                et de Souvenirs
+                            </div>
+                        </div>
+
+                        <!-- Stats en colonnes -->
+                        <div class="grid grid-cols-3 gap-8 mb-12">
+                            <div class="border-l-4 border-black pl-4">
+                                <div class="font-mono text-3xl font-bold">100+</div>
+                                <div class="text-sm uppercase tracking-wider">Créations</div>
+                            </div>
+                            <div class="border-l-4 border-black pl-4">
+                                <div class="font-mono text-3xl font-bold">24H</div>
+                                <div class="text-sm uppercase tracking-wider">Livraison</div>
+                            </div>
+                            <div class="border-l-4 border-black pl-4">
+                                <div class="font-mono text-3xl font-bold">365J</div>
+                                <div class="text-sm uppercase tracking-wider">Service</div>
+                            </div>
+                        </div>
+
+                        <!-- CTA expérimental -->
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button class="bg-black text-white px-8 py-4 font-mono uppercase tracking-wider hover:bg-gray-800 transition-colors duration-300 group">
+                                <span class="group-hover:line-through">Commander maintenant</span>
+                            </button>
+                            <button class="border-2 border-black px-8 py-4 font-mono uppercase tracking-wider hover:bg-black hover:text-white transition-all duration-300">
+                                Voir le catalogue
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Colonne visuelle -->
+                    <div class="col-span-12 lg:col-span-5">
+                        <div class="relative">
+                            <!-- Image principale avec forme géométrique -->
+                            <div class="hexagon w-80 h-80 mx-auto bg-black overflow-hidden animate-pulse-glow">
+                                <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                                     alt="AMC HOME Bouquet" 
+                                     class="w-full h-full object-cover">
+                            </div>
+                            
+                            <!-- Éléments flottants -->
+                            <div class="absolute -top-8 -right-8 w-16 h-16 bg-black rotate-45 animate-bounce-slow"></div>
+                            <div class="absolute -bottom-8 -left-8 w-12 h-12 border-4 border-black rounded-full animate-rotate-slow"></div>
+                            
+                            <!-- Texte vertical -->
+                            <div class="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-full rotate-text font-mono text-sm tracking-widest">
+                                SINCE 2020
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+            <div class="w-1 h-16 bg-black animate-pulse"></div>
+        </div>
+    </section>
+
+    <!-- Section Fleurs - Split Screen -->
+    <section id="flowers" class="min-h-screen bg-gray-100">
+        <div class="grid lg:grid-cols-2 min-h-screen">
+            <!-- Partie gauche - Contenu -->
+            <div class="bg-white p-16 flex flex-col justify-center diagonal-split">
+                <div class="max-w-md">
+                    <div class="font-mono text-sm mb-8 tracking-wider">
+                        [002] — NOS CRÉATIONS
+                    </div>
+                    
+                    <h2 class="text-6xl font-black mb-8 leading-none">
+                        FLOWER<br>
+                        POWER
+                    </h2>
+                    
+                    <p class="text-lg mb-12 leading-relaxed">
+                        Chaque bouquet est une œuvre d'art unique. 
+                        Nous ne vendons pas des fleurs, nous créons 
+                        des émotions tangibles.
+                    </p>
+                    
+                    <!-- Liste de services avec numérotation -->
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <span class="font-mono text-xs bg-black text-white px-2 py-1">[01]</span>
+                            <div>
+                                <h4 class="font-semibold mb-1">Bouquets Sur Mesure</h4>
+                                <p class="text-sm text-gray-600">Créés selon vos goûts et l'occasion</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                            <span class="font-mono text-xs bg-black text-white px-2 py-1">[02]</span>
+                            <div>
+                                <h4 class="font-semibold mb-1">Livraison Express</h4>
+                                <p class="text-sm text-gray-600">Partout à Abidjan en moins de 3h</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                            <span class="font-mono text-xs bg-black text-white px-2 py-1">[03]</span>
+                            <div>
+                                <h4 class="font-semibold mb-1">Événements Spéciaux</h4>
+                                <p class="text-sm text-gray-600">Mariages, anniversaires, condoléances</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Partie droite - Galerie dynamique -->
+            <div class="bg-black p-16 diagonal-split-reverse overflow-hidden">
+                <div class="grid grid-cols-2 gap-4 h-full">
+                    <div class="space-y-4">
+                        <img src="https://images.unsplash.com/photo-1563241527-3004b7be0ffd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+                             alt="Bouquet 1" 
+                             class="w-full h-32 object-cover hover:scale-110 transition-transform duration-500">
+                        <img src="https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+                             alt="Bouquet 2" 
+                             class="w-full h-48 object-cover hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="space-y-4 mt-8">
+                        <img src="https://images.unsplash.com/photo-1574866728831-f7e0e37bd94b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+                             alt="Bouquet 3" 
+                             class="w-full h-48 object-cover hover:scale-110 transition-transform duration-500">
+                        <img src="https://images.unsplash.com/photo-1487530811176-3780de880c2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+                             alt="Bouquet 4" 
+                             class="w-full h-32 object-cover hover:scale-110 transition-transform duration-500">
+                    </div>
+                </div>
+                
+                <!-- Prix flottants -->
+                <div class="absolute top-8 right-8 text-white font-mono">
+                    <div class="text-right">
+                        <div class="text-sm opacity-50">À partir de</div>
+                        <div class="text-3xl font-bold">15K</div>
+                        <div class="text-sm">FCFA</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Concept - Full Screen -->
+    <section id="about" class="min-h-screen bg-black text-white flex items-center">
+        <div class="max-w-7xl mx-auto px-8 w-full">
+            <div class="text-center">
+                <!-- Titre giant -->
+                <h2 class="text-9xl lg:text-[12rem] font-black leading-none mb-16 opacity-10">
+                    CONCEPT
+                </h2>
+                
+                <!-- Contenu centré -->
+                <div class="relative -mt-32">
+                    <div class="font-mono text-sm mb-8 tracking-wider">
+                        [003] — NOTRE PHILOSOPHIE
+                    </div>
+                    
+                    <div class="max-w-4xl mx-auto mb-16">
+                        <p class="text-4xl lg:text-5xl font-light leading-tight">
+                            Nous ne vendons pas des fleurs.<br>
+                            Nous créons des <span class="font-bold">moments</span>.<br>
+                            Nous sculpteons des <span class="font-bold">émotions</span>.<br>
+                            Nous gardons vos <span class="font-bold">souvenirs</span>.
+                        </p>
+                    </div>
+                    
+                    <!-- Quote avec design moderne -->
+                    <div class="relative max-w-2xl mx-auto">
+                        <div class="text-8xl font-black opacity-20 absolute -top-8 -left-8">"</div>
+                        <blockquote class="text-xl italic font-light relative z-10">
+                            Chaque bouquet raconte une histoire unique, 
+                            créée spécialement pour celui qui la reçoit.
+                        </blockquote>
+                        <cite class="font-mono text-sm mt-8 block">— AMC HOME Team</cite>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Contact - Layout Créatif -->
+    <section id="contact" class="bg-white text-black py-24">
+        <div class="max-w-7xl mx-auto px-8">
+            <!-- Header avec numérotation -->
+            <div class="mb-16">
+                <div class="font-mono text-sm mb-4 tracking-wider">
+                    [004] — CONTACT & COMMANDE
+                </div>
+                <h2 class="text-6xl font-black mb-8">
+                    LET'S CREATE<br>
+                    TOGETHER
+                </h2>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-16">
+                <!-- Infos contact - Style industriel -->
+                <div class="lg:col-span-1">
+                    <div class="space-y-8">
+                        <div class="border-l-4 border-black pl-6">
+                            <div class="font-mono text-xs uppercase tracking-wider mb-2">LOCALISATION</div>
+                            <div class="font-semibold">Abidjan, Côte d'Ivoire</div>
+                            <div class="text-sm text-gray-600">Livraison dans toute la ville</div>
+                        </div>
+                        
+                        <div class="border-l-4 border-black pl-6">
+                            <div class="font-mono text-xs uppercase tracking-wider mb-2">TÉLÉPHONE</div>
+                            <a href="tel:+2250778820677" class="font-mono text-lg font-bold hover:underline">
+                                +225.07.78.82.06.77
+                            </a>
+                        </div>
+                        
+                        <div class="border-l-4 border-black pl-6">
+                            <div class="font-mono text-xs uppercase tracking-wider mb-2">HORAIRES</div>
+                            <div class="font-semibold">Lun - Sam : 08:00 - 20:00</div>
+                            <div class="text-sm text-gray-600">Dimanche : Urgences uniquement</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Social links modernes -->
+                    <div class="mt-12">
+                        <div class="font-mono text-xs uppercase tracking-wider mb-4">SUIVEZ-NOUS</div>
+                        <div class="flex space-x-4">
+                            <a href="#" class="w-12 h-12 bg-black text-white flex items-center justify-center font-mono text-xs hover:bg-gray-800 transition-colors">
+                                IG
+                            </a>
+                            <a href="#" class="w-12 h-12 bg-black text-white flex items-center justify-center font-mono text-xs hover:bg-gray-800 transition-colors">
+                                FB
+                            </a>
+                            <a href="#" class="w-12 h-12 bg-black text-white flex items-center justify-center font-mono text-xs hover:bg-gray-800 transition-colors">
+                                WA
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulaire moderne -->
+                <div class="lg:col-span-2">
+                    <form class="space-y-6" id="contact-form">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="font-mono text-xs uppercase tracking-wider block mb-2">PRÉNOM</label>
+                                <input type="text" required
+                                       class="w-full border-0 border-b-2 border-gray-300 bg-transparent py-3 focus:border-black focus:outline-none transition-colors">
+                            </div>
+                            <div>
+                                <label class="font-mono text-xs uppercase tracking-wider block mb-2">NOM</label>
+                                <input type="text" required
+                                       class="w-full border-0 border-b-2 border-gray-300 bg-transparent py-3 focus:border-black focus:outline-none transition-colors">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="font-mono text-xs uppercase tracking-wider block mb-2">TÉLÉPHONE</label>
+                            <input type="tel" required
+                                   class="w-full border-0 border-b-2 border-gray-300 bg-transparent py-3 focus:border-black focus:outline-none transition-colors">
+                        </div>
+                        
+                        <div>
+                            <label class="font-mono text-xs uppercase tracking-wider block mb-2">TYPE DE BOUQUET</label>
+                            <select required class="w-full border-0 border-b-2 border-gray-300 bg-transparent py-3 focus:border-black focus:outline-none transition-colors">
+                                <option value="">Sélectionner...</option>
+                                <option value="romantique">Romantique</option>
+                                <option value="mariage">Mariage</option>
+                                <option value="anniversaire">Anniversaire</option>
+                                <option value="condoleances">Condoléances</option>
+                                <option value="sur-mesure">Sur mesure</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="font-mono text-xs uppercase tracking-wider block mb-2">MESSAGE</label>
+                            <textarea rows="4" class="w-full border-0 border-b-2 border-gray-300 bg-transparent py-3 focus:border-black focus:outline-none transition-colors resize-none"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="bg-black text-white px-12 py-4 font-mono uppercase tracking-wider hover:bg-gray-800 transition-colors group">
+                            <span class="group-hover:line-through">ENVOYER LA COMMANDE</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer minimaliste -->
+    <footer class="bg-black text-white py-8">
+        <div class="max-w-7xl mx-auto px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="font-mono text-sm">
+                    © 2025 AMC.HOME — Tous droits réservés
+                </div>
+                <div class="font-mono text-sm mt-4 md:mt-0">
+                    Créé avec passion 🌸
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Chargement
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Form handling
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = this.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = '<span>ENVOI EN COURS...</span>';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.innerHTML = '<span>COMMANDE ENVOYÉE !</span>';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    this.reset();
+                }, 2000);
+            }, 1500);
+        });
+
+        // Parallax effect for hero text
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * -0.5;
+            
+            const heroText = document.querySelector('.animate-text-slide');
+            if (heroText) {
+                heroText.style.transform = `translateX(${rate}px)`;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMC HOME - Création d'Émotions et de Souvenirs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                        'serif': ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        'cream': '#faf9f7',
+                        'gray-text': '#333333',
+                        'gray-light': '#666666',
+                        'pink-accent': '#ff6b9d',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 1s ease-out forwards',
+                        'slide-up': 'slideUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(60px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        body.loaded {
+            opacity: 1;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body class="bg-white text-gray-text">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 transition-all duration-500" id="navbar">
+        <div class="glass-effect border-b border-gray-100">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="flex justify-between items-center py-6">
+                    <!-- Logo -->
+                    <div class="text-center">
+                        <h1 class="font-sans text-2xl font-bold text-gray-900 tracking-tight leading-none"
+                            style="letter-spacing: 0.1em;">
+                            AMC HOME
+                        </h1>
+                        <p class="text-xs text-gray-600 font-light tracking-wide mt-1">
+                            Création d'Émotions et de Souvenirs
+                        </p>
+                    </div>
+
+                    <!-- Menu Desktop -->
+                    <div class="hidden lg:flex space-x-10">
+                        <a href="#accueil"
+                            class="text-sm font-medium text-gray-900 hover:text-green-600 transition-colors duration-300">Accueil</a>
+                        <a href="#fleurs"
+                            class="text-sm font-medium text-gray-900 hover:text-green-600 transition-colors duration-300">Fleurs</a>
+                        <a href="#cadeaux"
+                            class="text-sm font-medium text-gray-900 hover:text-green-600 transition-colors duration-300">Cadeaux</a>
+                        <a href="#services"
+                            class="text-sm font-medium text-gray-900 hover:text-green-600 transition-colors duration-300">Services</a>
+                        <a href="#contact"
+                            class="text-sm font-medium text-gray-900 hover:text-green-600 transition-colors duration-300">Contact</a>
+                        <a href="tel:+2250778820677"
+                            class="bg-gray-900 text-white px-6 py-2 text-sm font-medium hover:bg-green-600 transition-all duration-300">
+                            Commander
+                        </a>
+                    </div>
+
+                    <!-- Bouton Mobile -->
+                    <button class="lg:hidden" id="mobile-menu-button">
+                        <svg class="w-6 h-6 text-gray-900" id="menu-icon" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" id="hamburger"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" id="close" class="hidden"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Menu Mobile -->
+            <div class="lg:hidden glass-effect border-t border-gray-100 hidden" id="mobile-menu">
+                <div class="px-6 py-4 space-y-4">
+                    <a href="#accueil"
+                        class="block text-gray-900 font-medium py-2 hover:text-green-600 transition-colors duration-300">Accueil</a>
+                    <a href="#fleurs"
+                        class="block text-gray-900 font-medium py-2 hover:text-green-600 transition-colors duration-300">Fleurs</a>
+                    <a href="#cadeaux"
+                        class="block text-gray-900 font-medium py-2 hover:text-green-600 transition-colors duration-300">Cadeaux</a>
+                    <a href="#services"
+                        class="block text-gray-900 font-medium py-2 hover:text-green-600 transition-colors duration-300">Services</a>
+                    <a href="#contact"
+                        class="block text-gray-900 font-medium py-2 hover:text-green-600 transition-colors duration-300">Contact</a>
+                    <a href="tel:+2250778820677"
+                        class="block bg-gray-900 text-white text-center py-3 mt-4 hover:bg-green-600 transition-all duration-300">
+                        Commander
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <section class="relative min-h-screen mb-8 flex items-center bg-cover bg-center bg-no-repeat"
+        style="background-image: url('/img/Group\ 20\ \(4\).png');">
+        <!-- Overlay -->
+        <!-- <div class="absolute inset-0 bg-white/70"></div> -->
+
+        <!-- Contenu -->
+        <div class="relative z-10 max-w-7xl mx-auto px-6 py-16 w-full">
+            <div class="max-w-2xl">
+                <div class="w-14 h-1 bg-pink-300 mb-6"></div>
+                <h1 class="text-4xl md:text-6xl font-serif font-semibold text-gray-900 mb-6">
+                    Les plus belles histoires <em class="italic font-normal">commencent</em> avec des fleurs
+                </h1>
+                <p class="text-lg text-gray-600 mb-8">
+                    Chaque bouquet raconte une émotion unique. Laissez-nous créer votre histoire parfaite à Abidjan avec
+                    nos créations florales sur mesure.
+                </p>
+                <div class="flex gap-4">
+                    <a href="tel:+2250778820677"
+                        class="bg-black text-white px-8 py-4 font-medium hover:opacity-90 transition-opacity">COMMANDER</a>
+                    <a href="#contact"
+                        class="border-2 border-black px-8 py-4 font-medium text-black hover:bg-gray-100 transition-colors">NOUS
+                        CONTACTER</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Categories -->
+    <section id="categories" class="py-16 bg-gray-50">
+        <div class="max-w-6xl mx-auto px-6">
+            <!-- Titre centré -->
+            <div class="text-center mb-12">
+                <div class="w-12 h-0.5 bg-pink-400 mx-auto mb-4"></div>
+                <h2 class="font-serif text-3xl font-medium text-gray-800">
+                    Explore our categories
+                </h2>
+            </div>
+
+            <!-- Grid des catégories -->
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Célébration -->
+                <div class="text-center group cursor-pointer">
+                    <div class="w-12 h-12 mx-auto mb-4 flex items-center justify-center">
+                        <!-- Icône gâteau -->
+                        <svg class="w-8 h-8 text-pink-400 group-hover:text-pink-500 transition-colors" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="font-serif text-xl text-gray-800 mb-3">Celebration</h3>
+                    <a href="#"
+                        class="text-gray-600 hover:text-gray-800 text-xs tracking-wide uppercase border-b border-gray-400 pb-1 transition-colors">
+                        VIEW CATEGORY
+                    </a>
+                </div>
+
+                <!-- Love & Romance -->
+                <div class="text-center group cursor-pointer">
+                    <div class="w-12 h-12 mx-auto mb-4 flex items-center justify-center">
+                        <!-- Icône coeur -->
+                        <svg class="w-8 h-8 text-pink-400 group-hover:text-pink-500 transition-colors" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="font-serif text-xl text-gray-800 mb-3">Love & Romance</h3>
+                    <a href="#"
+                        class="text-gray-600 hover:text-gray-800 text-xs tracking-wide uppercase border-b border-gray-400 pb-1 transition-colors">
+                        VIEW CATEGORY
+                    </a>
+                </div>
+
+                <!-- Home Decor -->
+                <div class="text-center group cursor-pointer">
+                    <div class="w-12 h-12 mx-auto mb-4 flex items-center justify-center">
+                        <!-- Icône maison -->
+                        <svg class="w-8 h-8 text-pink-400 group-hover:text-pink-500 transition-colors" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="font-serif text-xl text-gray-800 mb-3">Home Decor</h3>
+                    <a href="#"
+                        class="text-gray-600 hover:text-gray-800 text-xs tracking-wide uppercase border-b border-gray-400 pb-1 transition-colors">
+                        VIEW CATEGORY
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    </section>
+
+    <!-- Section Expérience -->
+    <section class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-20 items-center">
+                <!-- Contenu Texte -->
+                <div class="reveal">
+                    <h2 class="font-serif text-4xl lg:text-5xl font-medium text-gray-text mb-8 leading-tight">
+                        Une <span class="italic font-light">décennie</span> d'expérience
+                        dans l'industrie florale
+                    </h2>
+
+                    <p class="text-lg text-gray-light leading-relaxed mb-12 max-w-lg">
+                        Depuis plus de 10 ans, AMC HOME crée des émotions uniques à travers l'art floral.
+                        Notre expertise nous permet de transformer chaque commande en œuvre d'art personnalisée,
+                        adaptée à vos moments les plus précieux.
+                    </p>
+
+                    <!-- Statistiques -->
+                    <div class="flex space-x-16 mb-12">
+                        <div>
+                            <div class="flex items-baseline mb-2">
+                                <span class="font-serif text-5xl font-medium text-gray-text">14</span>
+                                <span class="text-pink-accent text-2xl ml-1">+</span>
+                            </div>
+                            <p class="text-sm font-medium text-gray-light uppercase tracking-wider">
+                                ANNÉES D'<br>
+                                EXPÉRIENCE
+                            </p>
+                        </div>
+
+                        <div>
+                            <div class="flex items-baseline mb-2">
+                                <span class="font-serif text-5xl font-medium text-gray-text">6,500</span>
+                                <span class="text-pink-accent text-2xl ml-1">+</span>
+                            </div>
+                            <p class="text-sm font-medium text-gray-light uppercase tracking-wider">
+                                CRÉATIONS<br>
+                                LIVRÉES
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Bouton -->
+                    <button
+                        class="bg-gray-text text-white px-8 py-4 font-medium uppercase tracking-wide hover:bg-gray-700 transition-colors duration-300">
+                        À PROPOS
+                    </button>
+                </div>
+
+                <!-- Image -->
+                <div class="reveal">
+                    <div class="relative overflow-hidden">
+                        <!-- Fond décoratif -->
+                        <div class="absolute inset-0 bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300"></div>
+                        <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-pink-200 to-pink-300">
+                        </div>
+
+                        <!-- Image du bouquet -->
+                        <div class="relative z-10 p-8">
+                            <img src="/img/fleur1.jpg" alt="Bouquet artisanal AMC HOME"
+                                class="w-full h-80 object-cover">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Services -->
+    <section class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-3 gap-16">
+                <!-- Contenu Texte -->
+                <div class="reveal">
+                    <h2 class="font-serif text-4xl lg:text-5xl font-medium text-gray-text mb-8 leading-tight">
+                        Parcourez nos
+                        <span class="italic font-light">services</span>
+                    </h2>
+
+                    <p class="text-lg text-gray-light leading-relaxed mb-12">
+                        Découvrez notre gamme complète de services floraux personnalisés.
+                        De l'événementiel au quotidien, nous créons des moments uniques.
+                    </p>
+
+                    <!-- Bouton -->
+                    <button
+                        class="bg-gray-text text-white px-8 py-4 font-medium uppercase tracking-wide hover:bg-gray-700 transition-colors duration-300">
+                        TOUS NOS SERVICES
+                    </button>
+                </div>
+
+                <!-- Grid Services -->
+                <div class="lg:col-span-2 grid grid-cols-2 gap-6">
+                    <!-- Service 1 - Mariages -->
+                    <div class="reveal group cursor-pointer">
+                        <div class="relative overflow-hidden mb-4">
+                            <img src="/img/fleur6.jpg" alt="Mariages"
+                                class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <h3 class="font-serif text-xl font-medium text-gray-text mb-2">Mariages</h3>
+                        <p class="text-sm text-gray-light uppercase tracking-wide">À PARTIR DE 150.000F</p>
+                    </div>
+
+                    <!-- Service 2 - Événements Privés -->
+                    <div class="reveal group cursor-pointer">
+                        <div class="relative overflow-hidden mb-4">
+                            <img src="/img/fleur5.jpg" alt="Événements privés"
+                                class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <h3 class="font-serif text-xl font-medium text-gray-text mb-2">Événements privés</h3>
+                        <p class="text-sm text-gray-light uppercase tracking-wide">À PARTIR DE 75.000F</p>
+                    </div>
+
+                    <!-- Service 3 - Décoration Maison -->
+                    <div class="reveal group cursor-pointer">
+                        <div class="relative overflow-hidden mb-4">
+                            <img src="/img/fleur4.jpg" alt="Décoration maison"
+                                class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <h3 class="font-serif text-xl font-medium text-gray-text mb-2">Décoration maison</h3>
+                        <p class="text-sm text-gray-light uppercase tracking-wide">À PARTIR DE 25.000F</p>
+                    </div>
+
+                    <!-- Service 4 - Bouquets de Luxe -->
+                    <div class="reveal group cursor-pointer">
+                        <div class="relative overflow-hidden mb-4">
+                            <img src="/img/fleur3.jpg" alt="Bouquets de luxe"
+                                class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <h3 class="font-serif text-xl font-medium text-gray-text mb-2">Bouquets de luxe</h3>
+                        <p class="text-sm text-gray-light uppercase tracking-wide">À PARTIR DE 35.000F</p>
+                    </div>
+
+                    <!-- Service 5 - Ateliers -->
+                    <div class="reveal group cursor-pointer">
+                        <div class="relative overflow-hidden mb-4">
+                            <img src="/img/fleur7.jpg" alt="Ateliers floraux"
+                                class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <h3 class="font-serif text-xl font-medium text-gray-text mb-2">Ateliers</h3>
+                        <p class="text-sm text-gray-light uppercase tracking-wide">À PARTIR DE 15.000F</p>
+                    </div>
+
+                    <!-- Service 6 - Décoration Hôtel -->
+                    <div class="reveal group cursor-pointer">
+                        <div class="relative overflow-hidden mb-4">
+                            <img src="/img/fleur1.jpg" alt="Décoration hôtel"
+                                class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <h3 class="font-serif text-xl font-medium text-gray-text mb-2">Décoration hôtel</h3>
+                        <p class="text-sm text-gray-light uppercase tracking-wide">À PARTIR DE 100.000F</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Processus Créatif -->
+    <section class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <!-- En-tête avec ligne décorative -->
+            <div class="text-center mb-16 reveal">
+                <div class="w-16 h-0.5 bg-pink-accent mx-auto mb-8"></div>
+                <h2 class="font-serif text-4xl lg:text-5xl font-medium text-gray-text mb-8 leading-tight">
+                    Découvrez comment nous <span class="italic font-light">créons</span> nos
+                    magnifiques créations
+                </h2>
+            </div>
+
+            <!-- Valeurs / Caractéristiques -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+                <!-- Valeur 1 -->
+                <div class="text-center reveal">
+                    <div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center">
+                        <svg class="w-12 h-12 text-pink-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="font-serif text-xl font-medium text-gray-text mb-4">Créé par des artistes</h3>
+                    <p class="text-gray-light leading-relaxed">
+                        Chaque arrangement est conçu par nos fleuristes expérimentés
+                        avec passion et créativité.
+                    </p>
+                </div>
+
+                <!-- Valeur 2 -->
+                <div class="text-center reveal">
+                    <div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center">
+                        <svg class="w-12 h-12 text-pink-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="font-serif text-xl font-medium text-gray-text mb-4">Durable</h3>
+                    <p class="text-gray-light leading-relaxed">
+                        Nous privilégions les sources locales et les pratiques
+                        respectueuses de l'environnement.
+                    </p>
+                </div>
+
+                <!-- Valeur 3 -->
+                <div class="text-center reveal">
+                    <div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center">
+                        <svg class="w-12 h-12 text-pink-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-serif text-xl font-medium text-gray-text mb-4">100% Fraîcheur</h3>
+                    <p class="text-gray-light leading-relaxed">
+                        Fleurs sélectionnées quotidiennement pour garantir
+                        une fraîcheur et une qualité optimales.
+                    </p>
+                </div>
+
+                <!-- Valeur 4 -->
+                <div class="text-center reveal">
+                    <div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center">
+                        <svg class="w-12 h-12 text-pink-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="font-serif text-xl font-medium text-gray-text mb-4">Produit localement</h3>
+                    <p class="text-gray-light leading-relaxed">
+                        Nous soutenons les producteurs locaux d'Abidjan
+                        pour des créations authentiques.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Section Témoignages -->
+    <section class="py-24 bg-cream">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-20 items-center">
+                <!-- Contenu Texte -->
+                <div class="reveal">
+                    <div class="w-16 h-0.5 bg-pink-accent mb-8"></div>
+                    <h2 class="font-serif text-4xl lg:text-5xl font-medium text-gray-text mb-8 leading-tight">
+                        Ne nous croyez pas
+                        sur parole, <span class="italic font-light">écoutez-les</span>
+                    </h2>
+
+                    <button
+                        class="bg-gray-text text-white px-8 py-4 font-medium uppercase tracking-wide hover:bg-gray-700 transition-colors duration-300 mb-12">
+                        COMMANDEZ MAINTENANT
+                    </button>
+                </div>
+
+                <!-- Carousel Témoignages -->
+                <div class="reveal relative">
+                    <div class="bg-white p-12 shadow-sm relative">
+                        <!-- Témoignage -->
+                        <div id="testimonial-content">
+
+
+                            <blockquote class="text-lg text-gray-text leading-relaxed text-center mb-8 italic">
+                                "AMC HOME a créé le bouquet de mes rêves pour mon mariage.
+                                Chaque détail était parfait et l'équipe a su comprendre exactement
+                                ce que je voulais. Un service exceptionnel !"
+                            </blockquote>
+
+                            <div class="text-center">
+                                <p class="font-medium text-gray-text uppercase tracking-wide">MARIE KOUASSI</p>
+                                <p class="text-sm text-gray-light uppercase tracking-wide">ABIDJAN, CI</p>
+                            </div>
+                        </div>
+
+                        <!-- Navigation -->
+                        <button id="prev-btn"
+                            class="absolute left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-text transition-colors duration-300">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                        </button>
+
+                        <button id="next-btn"
+                            class="absolute right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-text transition-colors duration-300">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+                                </path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Instagram -->
+    <section class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <!-- En-tête -->
+            <div class="text-center mb-16 reveal">
+                <div class="w-16 h-0.5 bg-pink-accent mx-auto mb-8"></div>
+                <h2 class="font-serif text-4xl lg:text-5xl font-medium text-gray-text mb-8">
+                    Suivez-nous sur <span class="italic font-light">Instagram</span>
+                </h2>
+
+                <button
+                    class="bg-gray-text text-white px-8 py-4 font-medium uppercase tracking-wide hover:bg-gray-700 transition-colors duration-300">
+                    @AMCHOME_CI
+                </button>
+            </div>
+
+            <!-- Galerie Instagram avec défilement -->
+            <div class="reveal overflow-hidden">
+                <div class="flex animate-scroll space-x-6" id="instagram-gallery">
+                    <!-- Image 1 -->
+                    <div class="flex-shrink-0 w-64 h-64 relative group cursor-pointer">
+                        <img src="/img/fleur3.jpg" alt="Instagram post 1"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div
+                            class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+                            <svg class="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                                fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Image 2 -->
+                    <div class="flex-shrink-0 w-64 h-64 relative group cursor-pointer">
+                        <img src="/img/fleur4.jpg" alt="Instagram post 2"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div
+                            class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+                            <svg class="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                                fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Image 3 -->
+                    <div class="flex-shrink-0 w-64 h-64 relative group cursor-pointer">
+                        <img src="/img/fleur5.jpg" alt="Instagram post 3"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div
+                            class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+                            <svg class="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                                fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Image 4 -->
+                    <div class="flex-shrink-0 w-64 h-64 relative group cursor-pointer">
+                        <img src="/img/fleur7.jpg" alt="Instagram post 4"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div
+                            class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+                            <svg class="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                                fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Dupliquer les images pour un défilement continu -->
+                    <div class="flex-shrink-0 w-64 h-64 relative group cursor-pointer">
+                        <img src="/img/fleur1.jpg" alt="Instagram post 5"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </div>
+
+                    <div class="flex-shrink-0 w-64 h-64 relative group cursor-pointer">
+                        <img src="/img/fleur2.jpg" alt="Instagram post 6"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .animate-scroll {
+            animation: scroll 30s linear infinite;
+        }
+
+        .animate-scroll:hover {
+            animation-play-state: paused;
+        }
+    </style>
+
+    <script>
+        // Témoignages carousel
+        const testimonials = [
+            {
+                text: "AMC HOME a créé le bouquet de mes rêves pour mon mariage. Chaque détail était parfait et l'équipe a su comprendre exactement ce que je voulais. Un service exceptionnel !",
+                name: "MARIE KOUASSI",
+                location: "ABIDJAN, CI",
+                image: "https://images.unsplash.com/photo-1494790108755-2616c3e0e78b?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
+            },
+            {
+                text: "Pour l'anniversaire de ma mère, AMC HOME a livré un arrangement magnifique qui l'a émue aux larmes. La qualité et la fraîcheur étaient remarquables.",
+                name: "KOFI ASANTE",
+                location: "ABIDJAN, CI",
+                image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
+            },
+            {
+                text: "Service impeccable ! Les fleurs pour notre événement d'entreprise étaient sublimes. AMC HOME a dépassé nos attentes avec leur professionnalisme.",
+                name: "FATOU TRAORE",
+                location: "ABIDJAN, CI",
+                image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
+            }
+        ];
+
+        let currentTestimonial = 0;
+
+        function updateTestimonial() {
+            const testimonial = testimonials[currentTestimonial];
+            const content = document.getElementById('testimonial-content');
+
+            content.innerHTML = `
+
+        
+        <blockquote class="text-lg text-gray-text leading-relaxed text-center mb-8 italic">
+            "${testimonial.text}"
+        </blockquote>
+        
+        <div class="text-center">
+            <p class="font-medium text-gray-text uppercase tracking-wide">${testimonial.name}</p>
+            <p class="text-sm text-gray-light uppercase tracking-wide">${testimonial.location}</p>
+        </div>
+    `;
+        }
+
+        document.getElementById('next-btn').addEventListener('click', () => {
+            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+            updateTestimonial();
+        });
+
+        document.getElementById('prev-btn').addEventListener('click', () => {
+            currentTestimonial = (currentTestimonial - 1 + testimonials.length) % testimonials.length;
+            updateTestimonial();
+        });
+
+        // Auto-play témoignages
+        setInterval(() => {
+            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+            updateTestimonial();
+        }, 5000);
+    </script>
+
+    <!-- Footer -->
+    <footer class="bg-white py-16 border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <!-- Logo -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-8 h-8 border-2 border-gray-text rounded-full flex items-center justify-center">
+                            <span class="text-sm font-bold">🌸</span>
+                        </div>
+                        <h4 class="font-serif text-xl font-medium text-gray-text tracking-wide">
+                            AMC HOME
+                        </h4>
+                    </div>
+                    <p class="text-gray-light leading-relaxed max-w-md mb-6">
+                        Création d'Émotions et de Souvenirs
+                    </p>
+                    <p class="text-gray-light leading-relaxed max-w-md">
+                        Votre fleuriste de confiance à Abidjan pour tous vos moments précieux.
+                    </p>
+                </div>
+
+                <!-- Navigation -->
+                <div>
+                    <h4 class="text-gray-text font-medium mb-6 uppercase tracking-wide">Navigation</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#home"
+                                class="text-gray-light hover:text-gray-text transition-colors duration-300">Accueil</a>
+                        </li>
+                        <li><a href="#categories"
+                                class="text-gray-light hover:text-gray-text transition-colors duration-300">Catégories</a>
+                        </li>
+                        <li><a href="#shop"
+                                class="text-gray-light hover:text-gray-text transition-colors duration-300">Boutique</a>
+                        </li>
+                        <li><a href="#about"
+                                class="text-gray-light hover:text-gray-text transition-colors duration-300">À Propos</a>
+                        </li>
+                        <li><a href="#contact"
+                                class="text-gray-light hover:text-gray-text transition-colors duration-300">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h4 class="text-gray-text font-medium mb-6 uppercase tracking-wide">Contact</h4>
+                    <div class="space-y-3 text-sm">
+                        <p class="text-gray-light">Abidjan, Côte d'Ivoire</p>
+                        <p><a href="tel:+2250778820677"
+                                class="text-gray-light hover:text-gray-text transition-colors duration-300">+225 07 78
+                                82 06 77</a></p>
+                        <p class="text-gray-light">Lun-Sam: 8h-18h</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="border-t border-gray-100 pt-8 text-center">
+                <p class="text-gray-light text-sm">
+                    © 2025 AMC HOME. Tous droits réservés.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Chargement
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+
+        // Navigation fluide
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 100;
+                    const elementPosition = target.offsetTop;
+                    const offsetPosition = elementPosition - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Révélations au scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            revealObserver.observe(el);
+        });
+
+        // Formulaire
+        const form = document.getElementById('contact-form');
+        if (form) {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const submitBtn = form.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+
+                submitBtn.textContent = 'Envoi en cours...';
+                submitBtn.disabled = true;
+
+                setTimeout(() => {
+                    submitBtn.textContent = 'Demande envoyée !';
+                    setTimeout(() => {
+                        submitBtn.textContent = originalText;
+                        submitBtn.disabled = false;
+                        form.reset();
+                    }, 2000);
+                }, 1500);
+            });
+        }
+
+        // Menu mobile
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        if (mobileMenuButton) {
+            mobileMenuButton.addEventListener('click', function () {
+                // Logique du menu mobile à implémenter si nécessaire
+                console.log('Menu mobile cliqué');
+            });
+        }
+    </script>
+</body>
+
+</html>
