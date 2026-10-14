@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Atelier Beauté — Fini le cahier</title>
+    <meta name="description" content="Caisse, reçus et suivi des revenus pour L'Atelier Beauté : découvrez la démo de votre future application.">
+    <meta property="og:title" content="L'Atelier Beauté — Votre salon, sans cahier">
+    <meta property="og:description" content="Encaissez en 3 clics, remettez un reçu à chaque cliente et suivez vos revenus du mois. Démo interactive.">
+    <meta property="og:type" content="website">
+    <meta name="robots" content="noindex">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg     : #FBF7F2;
+            --paper  : #FFFFFF;
+            --sand   : #F3EAE0;
+            --ink    : #2A1F1C;
+            --ink-2  : #5E514B;
+            --muted  : #9A8C84;
+            --line   : #EADFD4;
+            --accent : #B5603F;
+            --acc-d  : #8F4529;
+            --acc-l  : #F3DDD0;
+            --plum   : #2E2128;
+            --good   : #1F7A4A;
+            --good-l : #E1F1E7;
+            --bad    : #B93A32;
+            --bad-l  : #F8E1DE;
+            --ease   : cubic-bezier(0.16,1,0.3,1);
+            --serif  : 'Fraunces', serif;
+            --mono   : 'IBM Plex Mono', monospace;
+        }
+        html { scroll-behavior: smooth; overflow-x: clip; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; }
+        img { display: block; max-width: 100%; }
+        a { color: inherit; text-decoration: none; }
+        button, input, select { font-family: inherit; color: inherit; }
+        button { cursor: pointer; border: none; background: none; }
+        .wrap { width: min(1240px, 100% - 3rem); margin-inline: auto; }
+        section { padding: 110px 0; }
+
+        .eyebrow { display: inline-flex; align-items: center; gap: .5rem; font-size: .75rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+        .eyebrow::before { content: ''; width: 22px; height: 1.5px; background: currentColor; }
+        h1, h2, h3 { font-family: var(--serif); font-weight: 500; letter-spacing: -.02em; line-height: 1.08; }
+        h2 { font-size: clamp(2.1rem, 4.2vw, 3.4rem); margin-top: .9rem; }
+        h2 em, h1 em { font-style: italic; color: var(--accent); }
+        .lead { color: var(--ink-2); font-size: 1.05rem; max-width: 560px; margin-top: 1rem; }
+        .head { display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; flex-wrap: wrap; margin-bottom: 3rem; }
+
+        .btn { display: inline-flex; align-items: center; gap: .6rem; padding: .95rem 1.5rem; border-radius: 14px; font-weight: 700; font-size: .92rem; transition: transform .35s var(--ease), background .3s, box-shadow .3s; }
+        .btn-dark { background: var(--ink); color: #fff; }
+        .btn-dark:hover { transform: translateY(-2px); box-shadow: 0 12px 30px -10px rgba(42,31,28,.5); }
+        .btn-acc { background: var(--accent); color: #fff; }
+        .btn-acc:hover { background: var(--acc-d); transform: translateY(-2px); }
+        .btn-line { border: 1.5px solid var(--ink); }
+        .btn-line:hover { background: var(--ink); color: #fff; }
+
+        .card { background: var(--paper); border: 1px solid var(--line); border-radius: 22px; }
+
+        .rv { opacity: 0; transform: translateY(30px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+        .rv.on { opacity: 1; transform: none; }
+
+        /* ─── NAV ─── */
+        .nav { position: sticky; top: 0; z-index: 50; background: rgba(251,247,242,.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid transparent; transition: border-color .3s; }
+        .nav.scrolled { border-color: var(--line); }
+        .nav-in { display: flex; justify-content: space-between; align-items: center; height: 74px; }
+        .logo { display: flex; align-items: center; gap: .6rem; font-family: var(--serif); font-size: 1.3rem; font-weight: 500; }
+        .logo i { width: 36px; height: 36px; border-radius: 11px; background: var(--ink); color: var(--acc-l); display: grid; place-items: center; font-size: .9rem; }
+        .nav-links { display: flex; gap: 2rem; font-size: .88rem; font-weight: 600; color: var(--ink-2); }
+        .nav-links a:hover { color: var(--accent); }
+        .nav .btn { padding: .7rem 1.2rem; font-size: .85rem; }
+        .burger { display: none; width: 42px; height: 42px; border-radius: 12px; background: var(--ink); color: #fff; }
+
+        /* ─── HERO ─── */
+        .hero { padding: 70px 0 100px; }
+        .hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 3.5rem; align-items: center; }
+        .hero-tag { display: inline-flex; gap: .5rem; align-items: center; padding: .45rem .9rem .45rem .5rem; border-radius: 999px; background: var(--paper); border: 1px solid var(--line); font-size: .8rem; font-weight: 600; color: var(--ink-2); }
+        .hero-tag b { background: var(--acc-l); color: var(--acc-d); padding: .2rem .6rem; border-radius: 999px; font-size: .72rem; }
+        .hero h1 { font-size: clamp(2.8rem, 6vw, 5.2rem); margin: 1.4rem 0 0; }
+        .hero h1 s { text-decoration-thickness: 4px; text-decoration-color: var(--accent); color: var(--muted); font-style: italic; }
+        .hero .lead { font-size: 1.12rem; }
+        .hero-cta { display: flex; gap: .8rem; margin-top: 2rem; flex-wrap: wrap; }
+        .hero-proof { display: flex; gap: 2.2rem; margin-top: 2.6rem; flex-wrap: wrap; }
+        .hero-proof b { font-family: var(--serif); font-size: 1.9rem; font-weight: 500; display: block; line-height: 1; }
+        .hero-proof small { font-size: .8rem; color: var(--muted); }
+
+        .hero-vis { position: relative; height: 560px; }
+        .tablet { position: absolute; inset: 20px 40px 40px 0; background: var(--plum); border-radius: 30px; padding: 12px; box-shadow: 0 40px 80px -30px rgba(46,33,40,.55); }
+        .screen { background: var(--bg); border-radius: 20px; height: 100%; padding: 1.3rem; overflow: hidden; display: flex; flex-direction: column; gap: .9rem; }
+        .scr-top { display: flex; justify-content: space-between; align-items: center; }
+        .scr-top b { font-family: var(--serif); font-size: 1.1rem; font-weight: 500; }
+        .scr-top span { font-size: .72rem; color: var(--muted); }
+        .scr-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem; }
+        .scr-kpi { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: .75rem; }
+        .scr-kpi small { font-size: .66rem; color: var(--muted); display: block; }
+        .scr-kpi b { font-size: 1.05rem; }
+        .delta { display: inline-flex; align-items: center; gap: .25rem; font-size: .68rem; font-weight: 700; padding: .12rem .45rem; border-radius: 999px; }
+        .delta.up { background: var(--good-l); color: var(--good); }
+        .delta.down { background: var(--bad-l); color: var(--bad); }
+        .scr-chart { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: .9rem; flex: 1; display: flex; align-items: flex-end; gap: 6px; }
+        .scr-chart i { flex: 1; background: var(--accent); border-radius: 4px 4px 0 0; opacity: .85; transform-origin: bottom; animation: grow 1.2s var(--ease) both; }
+        .scr-chart i.low { background: var(--acc-l); }
+        @keyframes grow { from { transform: scaleY(0); } }
+        .scr-list { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: .4rem .9rem; }
+        .scr-list div { display: flex; justify-content: space-between; font-size: .75rem; padding: .45rem 0; border-bottom: 1px dashed var(--line); }
+        .scr-list div:last-child { border: none; }
+        .scr-list span { color: var(--ink-2); }
+
+        .float-receipt { position: absolute; right: 0; bottom: 0; width: 210px; background: #fff; padding: 1.1rem 1rem 1.4rem; font-family: var(--mono); font-size: .68rem; box-shadow: 0 30px 60px -20px rgba(0,0,0,.35); transform: rotate(4deg); animation: floaty 6s ease-in-out infinite; }
+        .float-receipt::after { content: ''; position: absolute; left: 0; right: 0; bottom: -8px; height: 8px; background: radial-gradient(circle at 5px 0, transparent 5px, #fff 5.5px) 0 0 / 10px 8px repeat-x; }
+        @keyframes floaty { 50% { transform: rotate(4deg) translateY(-10px); } }
+        .float-receipt h5 { font-family: var(--serif); font-size: .95rem; text-align: center; font-weight: 500; }
+        .float-receipt p { text-align: center; color: var(--muted); margin-bottom: .6rem; }
+        .float-receipt div { display: flex; justify-content: space-between; padding: .15rem 0; }
+        .float-receipt .t { border-top: 1px dashed #bbb; margin-top: .4rem; padding-top: .4rem; font-weight: 600; }
+        .float-badge { position: absolute; left: -10px; bottom: 70px; background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: .8rem 1rem; display: flex; gap: .7rem; align-items: center; box-shadow: 0 20px 40px -20px rgba(0,0,0,.2); font-size: .8rem; }
+        .float-badge i { width: 34px; height: 34px; border-radius: 10px; background: var(--good-l); color: var(--good); display: grid; place-items: center; }
+        .float-badge small { display: block; color: var(--muted); font-size: .7rem; }
+
+        /* ─── AVANT / APRÈS ─── */
+        .vs { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; }
+        .notebook { position: relative; background: #FFFDF6; border-radius: 22px; padding: 2rem 2rem 2rem 4.2rem; border: 1px solid #EFE6CF; overflow: hidden;
+            background-image: linear-gradient(transparent 31px, #DCE6F0 32px); background-size: 100% 32px; background-position: 0 14px; }
+        .notebook::before { content: ''; position: absolute; left: 3rem; top: 0; bottom: 0; width: 2px; background: #F1B9B0; }
+        .hand { font-family: 'Caveat', cursive; font-size: 1.45rem; line-height: 32px; color: #2C3E73; }
+        .hand .x { text-decoration: line-through; color: #8a93ab; }
+        .hand .q { color: var(--bad); }
+        .vs-label { position: absolute; top: 1.2rem; right: 1.2rem; font-size: .72rem; font-weight: 700; padding: .35rem .8rem; border-radius: 999px; background: var(--bad-l); color: var(--bad); font-family: 'Plus Jakarta Sans'; }
+        .app-side { background: var(--plum); color: #fff; border-radius: 22px; padding: 2rem; position: relative; }
+        .app-side .vs-label { background: rgba(255,255,255,.12); color: #fff; }
+        .app-side h3 { font-size: 1.6rem; margin-bottom: 1.4rem; }
+        .pains { list-style: none; display: grid; gap: .9rem; margin-top: 1.6rem; }
+        .pain { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; align-items: center; padding: 1rem 1.2rem; background: var(--paper); border: 1px solid var(--line); border-radius: 16px; font-size: .92rem; }
+        .pain .a { color: var(--ink-2); display: flex; gap: .6rem; align-items: center; }
+        .pain .a i { color: var(--bad); }
+        .pain .b { font-weight: 600; display: flex; gap: .6rem; align-items: center; }
+        .pain .b i { color: var(--good); }
+        .pain .arrow { width: 30px; height: 30px; border-radius: 50%; background: var(--sand); display: grid; place-items: center; font-size: .7rem; color: var(--accent); }
+        .app-feats { display: grid; gap: .8rem; }
+        .app-feat { display: flex; gap: .9rem; align-items: flex-start; padding: .9rem; border-radius: 14px; background: rgba(255,255,255,.06); }
+        .app-feat i { width: 38px; height: 38px; flex: none; border-radius: 11px; background: var(--accent); display: grid; place-items: center; font-size: .9rem; }
+        .app-feat b { display: block; font-size: .95rem; }
+        .app-feat small { color: rgba(255,255,255,.65); font-size: .82rem; }
+
+        /* ─── CAISSE ─── */
+        .pos { display: grid; grid-template-columns: 1.35fr 1fr; gap: 1.4rem; align-items: start; }
+        .pos-main { padding: 1.6rem; }
+        .pos-step { font-size: .78rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; margin: 1.5rem 0 .8rem; display: flex; justify-content: space-between; }
+        .pos-step:first-child { margin-top: 0; }
+        .cats { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: .9rem; }
+        .cats button { padding: .45rem .9rem; border-radius: 999px; background: var(--sand); font-size: .8rem; font-weight: 600; }
+        .cats button.on { background: var(--ink); color: #fff; }
+        .services { display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem; }
+        .svc { text-align: left; padding: .9rem; border-radius: 14px; border: 1.5px solid var(--line); background: var(--bg); transition: border-color .25s, transform .3s var(--ease); position: relative; }
+        .svc:hover { border-color: var(--accent); transform: translateY(-2px); }
+        .svc i { color: var(--accent); font-size: .95rem; }
+        .svc b { display: block; font-size: .86rem; margin-top: .45rem; line-height: 1.3; }
+        .svc small { font-family: var(--mono); font-size: .78rem; color: var(--ink-2); }
+        .svc .n { position: absolute; top: .6rem; right: .6rem; min-width: 22px; height: 22px; border-radius: 999px; background: var(--accent); color: #fff; font-size: .7rem; font-weight: 700; display: none; place-items: center; padding: 0 6px; }
+        .svc.in-cart { border-color: var(--accent); background: #FFF8F3; }
+        .svc.in-cart .n { display: grid; }
+        .chips { display: flex; gap: .5rem; flex-wrap: wrap; }
+        .chip { display: flex; align-items: center; gap: .55rem; padding: .45rem .9rem .45rem .45rem; border-radius: 999px; border: 1.5px solid var(--line); font-size: .85rem; font-weight: 600; background: var(--bg); }
+        .chip .av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: .72rem; font-weight: 800; color: #fff; }
+        .chip.on { border-color: var(--ink); background: var(--paper); }
+        .pay { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; }
+        .pay button { padding: .8rem .4rem; border-radius: 14px; border: 1.5px solid var(--line); background: var(--bg); font-size: .8rem; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: .35rem; }
+        .pay button i { font-size: 1rem; color: var(--ink-2); }
+        .pay button.on { border-color: var(--ink); background: var(--paper); }
+        .client { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+        .client input { width: 100%; padding: .8rem 1rem; border-radius: 12px; border: 1.5px solid var(--line); background: var(--bg); font-size: .88rem; outline: none; }
+        .client input:focus { border-color: var(--accent); }
+
+        .ticket-wrap { position: sticky; top: 96px; }
+        .ticket { background: #fff; padding: 1.6rem 1.4rem 2rem; font-family: var(--mono); font-size: .8rem; position: relative; box-shadow: 0 24px 50px -25px rgba(42,31,28,.35); border-radius: 6px 6px 0 0; }
+        .ticket::after { content: ''; position: absolute; left: 0; right: 0; bottom: -10px; height: 10px; background: radial-gradient(circle at 6px 0, transparent 6px, #fff 6.5px) 0 0 / 12px 10px repeat-x; }
+        .tk-h { text-align: center; padding-bottom: .9rem; border-bottom: 1px dashed #c9bfb6; }
+        .tk-h h4 { font-family: var(--serif); font-size: 1.25rem; font-weight: 500; }
+        .tk-h p { color: var(--muted); font-size: .72rem; }
+        .tk-meta { display: grid; grid-template-columns: 1fr 1fr; gap: .2rem .8rem; font-size: .72rem; color: var(--ink-2); padding: .8rem 0; border-bottom: 1px dashed #c9bfb6; }
+        .tk-meta span:nth-child(even) { text-align: right; }
+        .tk-lines { padding: .8rem 0; min-height: 90px; border-bottom: 1px dashed #c9bfb6; }
+        .tk-line { display: grid; grid-template-columns: 1fr auto; gap: .5rem; padding: .25rem 0; align-items: center; }
+        .tk-line button { font-family: var(--mono); color: var(--muted); font-size: .7rem; margin-left: .4rem; }
+        .tk-line button:hover { color: var(--bad); }
+        .tk-empty { color: var(--muted); text-align: center; padding: 1.4rem 0; font-size: .75rem; }
+        .tk-tot { padding: .8rem 0 0; }
+        .tk-tot div { display: flex; justify-content: space-between; padding: .15rem 0; }
+        .tk-tot .big { font-size: 1.1rem; font-weight: 600; padding-top: .5rem; }
+        .tk-disc { display: flex; gap: .4rem; align-items: center; font-size: .72rem; color: var(--ink-2); margin-top: .5rem; }
+        .tk-disc select { font-family: var(--mono); font-size: .72rem; border: 1px solid var(--line); border-radius: 6px; padding: .15rem .3rem; background: #fff; }
+        .tk-foot { text-align: center; margin-top: 1rem; font-size: .7rem; color: var(--muted); }
+        .barcode { height: 34px; margin: .8rem auto 0; width: 70%; background: repeating-linear-gradient(90deg, #2A1F1C 0 2px, transparent 2px 4px, #2A1F1C 4px 5px, transparent 5px 8px, #2A1F1C 8px 11px, transparent 11px 12px); }
+        .paid-stamp { position: absolute; top: 42%; left: 50%; transform: translate(-50%, -50%) rotate(-14deg) scale(1.6); border: 3px solid var(--good); color: var(--good); font-family: 'Plus Jakarta Sans'; font-weight: 800; font-size: 1.4rem; letter-spacing: .1em; padding: .3rem 1rem; border-radius: 8px; opacity: 0; pointer-events: none; transition: all .45s var(--ease); background: rgba(255,255,255,.7); }
+        .paid .paid-stamp { opacity: 1; transform: translate(-50%, -50%) rotate(-14deg) scale(1); }
+        .tk-actions { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin-top: 1.6rem; }
+        .tk-actions .btn { justify-content: center; padding: .9rem .6rem; font-size: .85rem; }
+        .tk-actions .btn:disabled { opacity: .4; pointer-events: none; }
+        .tk-actions .full { grid-column: span 2; }
+
+        .journal { margin-top: 1.4rem; padding: 1.4rem 1.6rem; }
+        .journal-h { display: flex; justify-content: space-between; align-items: center; margin-bottom: .6rem; }
+        .journal-h b { font-family: var(--serif); font-size: 1.2rem; font-weight: 500; }
+        .journal-h span { font-family: var(--mono); font-size: 1rem; font-weight: 600; }
+        .jrow { display: grid; grid-template-columns: 54px 1fr auto auto; gap: .8rem; align-items: center; padding: .65rem 0; border-top: 1px solid var(--line); font-size: .85rem; }
+        .jrow time { font-family: var(--mono); font-size: .76rem; color: var(--muted); }
+        .jrow small { color: var(--muted); display: block; font-size: .74rem; }
+        .jrow .m { font-size: .7rem; font-weight: 700; padding: .2rem .55rem; border-radius: 999px; background: var(--sand); color: var(--ink-2); }
+        .jrow b { font-family: var(--mono); font-weight: 600; }
+        .jrow.new { animation: flash 1.6s var(--ease); }
+        @keyframes flash { 0% { background: var(--acc-l); } 100% { background: transparent; } }
+
+        /* ─── DASHBOARD ─── */
+        .dash-sec { background: var(--plum); color: #fff; }
+        .dash-sec .lead { color: rgba(255,255,255,.7); }
+        .dash-sec .eyebrow { color: #E9A684; }
+        .dash-sec h2 em { color: #E9A684; }
+        .dash { background: var(--bg); color: var(--ink); border-radius: 28px; padding: 1.6rem; }
+        .dash-top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+        .dash-top h3 { font-size: 1.4rem; }
+        .dash-top h3 small { font-family: 'Plus Jakarta Sans'; font-size: .8rem; color: var(--muted); font-weight: 500; margin-left: .5rem; letter-spacing: 0; }
+        .seg { display: inline-flex; background: var(--sand); border-radius: 12px; padding: 4px; }
+        .seg button { padding: .5rem 1rem; border-radius: 9px; font-size: .8rem; font-weight: 600; color: var(--ink-2); }
+        .seg button.on { background: var(--paper); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+        .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: .8rem; }
+        .kpi { padding: 1.2rem 1.3rem; }
+        .kpi small { font-size: .78rem; color: var(--muted); font-weight: 600; display: block; }
+        .kpi b { font-family: var(--serif); font-size: 2rem; font-weight: 500; display: block; margin: .3rem 0 .4rem; line-height: 1.1; letter-spacing: -.02em; }
+        .kpi .cmp { font-size: .74rem; color: var(--muted); }
+        .dash-grid { display: grid; grid-template-columns: 1.7fr 1fr; gap: .8rem; margin-top: .8rem; }
+        .panel { padding: 1.3rem 1.4rem; display: flex; flex-direction: column; }
+        .panel-h { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 1rem; }
+        .panel-h b { font-size: .98rem; display: block; }
+        .panel-h small { font-size: .76rem; color: var(--muted); }
+        .link-btn { font-size: .76rem; font-weight: 700; color: var(--accent); white-space: nowrap; }
+        .chart { position: relative; }
+        .chart svg { width: 100%; height: auto; display: block; overflow: visible; }
+        .chart .bar { fill: var(--accent); transition: fill .2s; cursor: pointer; }
+        .chart .bar.partial { fill: url(#hatch); }
+        .chart .bar.sel { fill: var(--acc-d); }
+        .chart .hit:hover + .bar, .chart .hit:focus + .bar { fill: var(--acc-d); }
+        .chart .hit { fill: transparent; cursor: pointer; outline: none; }
+        .chart .grid line { stroke: var(--line); stroke-width: 1; }
+        .chart text { font-family: 'Plus Jakarta Sans'; font-size: 11px; fill: var(--muted); }
+        .chart text.v { fill: var(--ink-2); font-weight: 700; font-size: 10.5px; }
+        .chart .avg { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 4 4; }
+        .tip { position: absolute; pointer-events: none; background: var(--ink); color: #fff; padding: .55rem .8rem; border-radius: 10px; font-size: .78rem; white-space: nowrap; transform: translate(-50%, calc(-100% - 10px)); opacity: 0; transition: opacity .15s; z-index: 5; }
+        .tip b { display: block; font-size: .95rem; }
+        .tip span { color: rgba(255,255,255,.7); }
+        .legend { display: flex; gap: 1.2rem; font-size: .74rem; color: var(--ink-2); margin-top: .7rem; flex-wrap: wrap; }
+        .legend span { display: inline-flex; gap: .4rem; align-items: center; }
+        .legend i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+        .table-view { display: none; width: 100%; border-collapse: collapse; font-size: .82rem; }
+        .table-view th, .table-view td { text-align: left; padding: .45rem .3rem; border-bottom: 1px solid var(--line); }
+        .table-view td:not(:first-child), .table-view th:not(:first-child) { text-align: right; font-family: var(--mono); }
+        .show-table .table-view { display: table; }
+        .show-table svg { display: none !important; }
+
+        .hbars { display: grid; gap: .75rem; }
+        .hb { display: grid; grid-template-columns: 1fr; gap: .3rem; }
+        .hb-top { display: flex; justify-content: space-between; font-size: .82rem; }
+        .hb-top span { color: var(--ink-2); }
+        .hb-top b { font-family: var(--mono); font-size: .8rem; font-weight: 600; }
+        .hb-track { height: 10px; background: var(--sand); border-radius: 0 4px 4px 0; overflow: hidden; }
+        .hb-track i { display: block; height: 100%; background: var(--accent); border-radius: 0 4px 4px 0; transition: width 1s var(--ease); }
+
+        .alert { display: flex; gap: 1rem; padding: 1.1rem 1.2rem; border-radius: 16px; background: var(--bad-l); color: var(--ink); margin-top: .8rem; align-items: flex-start; }
+        .alert > i { width: 36px; height: 36px; flex: none; border-radius: 10px; background: var(--bad); color: #fff; display: grid; place-items: center; }
+        .alert.good { background: var(--good-l); }
+        .alert.good > i { background: var(--good); }
+        .alert b { display: block; font-size: .92rem; }
+        .alert p { font-size: .84rem; color: var(--ink-2); margin-top: .15rem; }
+        .alert .btn { margin-left: auto; padding: .6rem 1rem; font-size: .78rem; white-space: nowrap; align-self: center; }
+
+        .days { display: grid; grid-template-columns: repeat(7, 1fr); gap: .4rem; align-items: end; flex: 1; min-height: 170px; }
+        .day { display: flex; flex-direction: column; align-items: center; gap: .35rem; height: 100%; justify-content: flex-end; font-size: .72rem; color: var(--muted); }
+        .day i { width: 100%; max-width: 34px; background: var(--accent); border-radius: 4px 4px 0 0; }
+        .day b { font-size: .7rem; color: var(--ink-2); font-family: var(--mono); }
+
+        /* ─── CLIENTES & RDV ─── */
+        .feat3 { display: grid; grid-template-columns: 1.3fr 1fr; gap: 1.2rem; }
+        .agenda { padding: 1.4rem; overflow-x: auto; }
+        .ag-grid { display: grid; grid-template-columns: 52px repeat(3, minmax(130px, 1fr)); min-width: 460px; }
+        .ag-col-h { text-align: center; font-size: .8rem; font-weight: 700; padding-bottom: .7rem; display: flex; gap: .4rem; justify-content: center; align-items: center; }
+        .ag-col-h .av { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: .62rem; color: #fff; }
+        .ag-time { font-family: var(--mono); font-size: .7rem; color: var(--muted); height: 52px; border-top: 1px solid var(--line); padding-top: 2px; }
+        .ag-col { position: relative; border-left: 1px solid var(--line); }
+        .ag-col .slotline { height: 52px; border-top: 1px solid var(--line); }
+        .appt { position: absolute; left: 5px; right: 5px; border-radius: 10px; padding: .4rem .55rem; font-size: .72rem; line-height: 1.3; overflow: hidden; border-left: 3px solid; }
+        .appt b { display: block; font-size: .76rem; }
+        .client-card { padding: 1.4rem; }
+        .cc-top { display: flex; gap: 1rem; align-items: center; }
+        .cc-top .av { width: 56px; height: 56px; border-radius: 50%; background: var(--acc-l); color: var(--acc-d); display: grid; place-items: center; font-family: var(--serif); font-size: 1.3rem; }
+        .cc-top b { font-size: 1.05rem; display: block; }
+        .cc-top small { color: var(--muted); font-size: .8rem; }
+        .cc-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; margin: 1.2rem 0; }
+        .cc-stats div { background: var(--bg); border-radius: 12px; padding: .7rem; text-align: center; }
+        .cc-stats b { font-family: var(--serif); font-size: 1.2rem; font-weight: 500; display: block; }
+        .cc-stats small { font-size: .7rem; color: var(--muted); }
+        .hist { list-style: none; font-size: .82rem; }
+        .hist li { display: flex; justify-content: space-between; padding: .55rem 0; border-top: 1px solid var(--line); }
+        .hist span { color: var(--muted); font-family: var(--mono); font-size: .75rem; }
+        .wa { margin-top: 1rem; background: #E7F6EC; border-radius: 14px; padding: .9rem 1rem; font-size: .82rem; }
+        .wa small { display: block; color: var(--good); font-weight: 700; margin-bottom: .3rem; }
+
+        .mini-feats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 1.2rem; }
+        .mf { padding: 1.4rem; }
+        .mf i { width: 44px; height: 44px; border-radius: 13px; background: var(--acc-l); color: var(--acc-d); display: grid; place-items: center; margin-bottom: 1rem; }
+        .mf b { display: block; font-size: 1rem; margin-bottom: .3rem; }
+        .mf p { font-size: .85rem; color: var(--ink-2); }
+
+        /* ─── ÉTAPES & OFFRE ─── */
+        .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; counter-reset: s; }
+        .step { padding: 1.8rem; position: relative; }
+        .step::before { counter-increment: s; content: '0' counter(s); font-family: var(--serif); font-size: 3rem; color: var(--acc-l); line-height: 1; display: block; margin-bottom: 1rem; }
+        .step b { font-size: 1.1rem; display: block; margin-bottom: .4rem; }
+        .step p { font-size: .9rem; color: var(--ink-2); }
+        .offer { margin-top: 1.4rem; display: grid; grid-template-columns: 1.3fr 1fr; gap: 2rem; align-items: center; padding: 2.4rem; background: var(--accent); color: #fff; border-radius: 28px; position: relative; overflow: hidden; }
+        .offer::after { content: '\f0c4'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: -30px; bottom: -60px; font-size: 16rem; color: rgba(255,255,255,.07); transform: rotate(-20deg); }
+        .offer h3 { font-size: clamp(1.8rem, 3.4vw, 2.6rem); }
+        .offer p { color: rgba(255,255,255,.85); margin-top: .8rem; }
+        .offer ul { list-style: none; display: grid; gap: .6rem; position: relative; z-index: 2; }
+        .offer li { display: flex; gap: .7rem; align-items: center; font-weight: 600; }
+        .offer li i { width: 24px; height: 24px; border-radius: 50%; background: rgba(255,255,255,.2); display: grid; place-items: center; font-size: .65rem; }
+        .offer .btn { background: #fff; color: var(--acc-d); margin-top: 1.6rem; position: relative; z-index: 2; }
+
+        footer { padding: 3rem 0; border-top: 1px solid var(--line); }
+        .foot { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; font-size: .85rem; color: var(--muted); }
+
+        .toast { position: fixed; left: 50%; bottom: 1.5rem; transform: translate(-50%, 250%); background: var(--ink); color: #fff; padding: .85rem 1.3rem; border-radius: 14px; font-size: .88rem; z-index: 100; display: flex; gap: .6rem; align-items: center; transition: transform .5s var(--ease); max-width: calc(100% - 2rem); }
+        .toast i { color: #7FD3A0; }
+        .toast.show { transform: translate(-50%, 0); }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 1080px) {
+            .hero-grid, .pos, .feat3, .offer { grid-template-columns: 1fr; }
+            .ticket-wrap { position: static; }
+            .dash-grid { grid-template-columns: 1fr; }
+            .kpis { grid-template-columns: repeat(2, 1fr); }
+            .mini-feats { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 860px) {
+            .nav-links, .nav .btn { display: none; }
+            .burger { display: grid; place-items: center; }
+            .nav.open .nav-links { display: flex; flex-direction: column; position: absolute; top: 74px; left: 0; right: 0; padding: 1.4rem 1.5rem; background: var(--bg); border-bottom: 1px solid var(--line); }
+            .vs { grid-template-columns: 1fr; }
+            .pain { grid-template-columns: 1fr; gap: .5rem; }
+            .pain .arrow { transform: rotate(90deg); }
+            .steps { grid-template-columns: 1fr; }
+            .services { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 560px) {
+            .wrap { width: calc(100% - 2rem); }
+            section { padding: 80px 0; }
+            .hero-vis { height: 470px; }
+            .tablet { inset: 0 20px 60px 0; }
+            .scr-kpis { grid-template-columns: 1fr 1fr; }
+            .scr-kpis .scr-kpi:last-child { display: none; }
+            .float-receipt { width: 170px; }
+            .float-badge { display: none; }
+            .pay { grid-template-columns: repeat(2, 1fr); }
+            .client { grid-template-columns: 1fr; }
+            .dash { padding: 1rem; border-radius: 20px; }
+            .kpi b { font-size: 1.15rem; }
+            .kpi { padding: 1rem; }
+            .mini-feats { grid-template-columns: 1fr; }
+            .alert { flex-wrap: wrap; }
+            .alert .btn { margin-left: 0; }
+            .offer { padding: 1.8rem; }
+            .jrow { grid-template-columns: 44px 1fr auto; }
+            .jrow .m { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+    <div class="wrap nav-in">
+        <a href="#" class="logo"><i class="fa-solid fa-scissors"></i>L'Atelier Beauté</a>
+        <div class="nav-links">
+            <a href="#avant-apres">Avant / Après</a>
+            <a href="#caisse">La caisse</a>
+            <a href="#tableau">Tableau de bord</a>
+            <a href="#clientes">Clientes &amp; RDV</a>
+            <a href="#demarrer">Démarrer</a>
+        </div>
+        <a href="#caisse" class="btn btn-dark">Essayer la démo <i class="fa-solid fa-arrow-right"></i></a>
+        <button class="burger" id="burger" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+    </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+    <div class="wrap hero-grid">
+        <div>
+            <span class="hero-tag"><b>Nouveau</b> L'application de gestion pensée pour votre salon</span>
+            <h1>Le <s>cahier</s>,<br>c'est terminé.<br><em>Votre salon</em> sous contrôle.</h1>
+            <p class="lead">Encaissez en 3 clics, remettez un vrai reçu à chaque cliente et suivez vos revenus du mois en un coup d'œil : les hausses, les baisses et ce qu'il faut faire pour remonter.</p>
+            <div class="hero-cta">
+                <a href="#caisse" class="btn btn-acc">Voir la caisse en action <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="#tableau" class="btn btn-line">Voir mes revenus</a>
+            </div>
+            <div class="hero-proof">
+                <div><b>3 clics</b><small>pour encaisser</small></div>
+                <div><b>0 calcul</b><small>à faire à la main</small></div>
+                <div><b>100 %</b><small>des ventes tracées</small></div>
+            </div>
+        </div>
+        <div class="hero-vis rv">
+            <div class="tablet">
+                <div class="screen">
+                    <div class="scr-top"><b>Bonjour Madame&nbsp;👋</b><span id="heroDate"></span></div>
+                    <div class="scr-kpis">
+                        <div class="scr-kpi"><small>Aujourd'hui</small><b>86 500 F</b></div>
+                        <div class="scr-kpi"><small>Septembre</small><b>1,58 M</b> <span class="delta up"><i class="fa-solid fa-arrow-up"></i>17 %</span></div>
+                        <div class="scr-kpi"><small>Clientes</small><b>9</b></div>
+                    </div>
+                    <div class="scr-chart">
+                        <i style="height:62%"></i><i style="height:58%"></i><i style="height:92%"></i><i style="height:48%"></i><i style="height:55%"></i><i style="height:66%"></i><i style="height:70%"></i><i style="height:76%"></i><i style="height:64%"></i><i class="low" style="height:44%"></i><i style="height:58%"></i><i style="height:80%"></i>
+                    </div>
+                    <div class="scr-list">
+                        <div><span>10:15 · Tresses box braids</span><b>25 000 F</b></div>
+                        <div><span>11:40 · Brushing + soin</span><b>8 500 F</b></div>
+                        <div><span>13:05 · Pose perruque</span><b>15 000 F</b></div>
+                    </div>
+                </div>
+            </div>
+            <div class="float-badge"><i class="fa-solid fa-check"></i><div><b>Paiement Wave reçu</b><small>Aminata · 12 000 F</small></div></div>
+            <div class="float-receipt">
+                <h5>L'Atelier Beauté</h5>
+                <p>Reçu n° 0247</p>
+                <div><span>Défrisage</span><span>7 000</span></div>
+                <div><span>Brushing</span><span>5 000</span></div>
+                <div class="t"><span>TOTAL</span><span>12 000 F</span></div>
+                <p style="margin:.6rem 0 0">Merci et à bientôt ✿</p>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- AVANT / APRÈS -->
+<section id="avant-apres" style="background:var(--paper)">
+    <div class="wrap">
+        <div class="head rv">
+            <div>
+                <span class="eyebrow">Le constat</span>
+                <h2>Le cahier fait le travail…<br><em>jusqu'au jour où il ne le fait plus.</em></h2>
+            </div>
+            <p class="lead">Additions à la main, pages raturées, aucun reçu pour la cliente, et impossible de savoir pourquoi un mois a été moins bon que l'autre.</p>
+        </div>
+        <div class="vs">
+            <div class="notebook rv">
+                <span class="vs-label">Aujourd'hui</span>
+                <div class="hand">
+                    <div>Lundi 13 — octobre</div>
+                    <div>Awa — tresses ......... 25 000</div>
+                    <div>Fatou — brushing ..... <span class="x">6 000</span> 5 000</div>
+                    <div>Mme Koné — défrisage .. 7 000 <span class="q">(payé ? )</span></div>
+                    <div>??? — coupe ........... 3 000</div>
+                    <div>Orange money ou cash ?? <span class="q">✗</span></div>
+                    <div>Total : 40 000 … <span class="x">38 000</span> <span class="q">à recompter</span></div>
+                </div>
+            </div>
+            <div class="app-side rv">
+                <span class="vs-label">Avec l'application</span>
+                <h3>Tout est noté, calculé<br>et rangé automatiquement.</h3>
+                <div class="app-feats">
+                    <div class="app-feat"><i class="fa-solid fa-cash-register"></i><div><b>Caisse simple</b><small>On touche la prestation, on choisit le mode de paiement, c'est enregistré.</small></div></div>
+                    <div class="app-feat"><i class="fa-solid fa-receipt"></i><div><b>Reçu pour chaque cliente</b><small>Imprimé ou envoyé par WhatsApp, avec le nom du salon.</small></div></div>
+                    <div class="app-feat"><i class="fa-solid fa-chart-column"></i><div><b>Revenus du mois en direct</b><small>Comparaison avec le mois dernier, alertes en cas de baisse.</small></div></div>
+                </div>
+            </div>
+        </div>
+        <ul class="pains">
+            <li class="pain rv"><span class="a"><i class="fa-solid fa-xmark"></i>Additions à la main en fin de journée</span><span class="arrow"><i class="fa-solid fa-arrow-right"></i></span><span class="b"><i class="fa-solid fa-check"></i>Total du jour calculé en temps réel</span></li>
+            <li class="pain rv"><span class="a"><i class="fa-solid fa-xmark"></i>Aucun reçu, des litiges avec les clientes</span><span class="arrow"><i class="fa-solid fa-arrow-right"></i></span><span class="b"><i class="fa-solid fa-check"></i>Un reçu numéroté à chaque passage</span></li>
+            <li class="pain rv"><span class="a"><i class="fa-solid fa-xmark"></i>Cash, Wave, Orange Money mélangés</span><span class="arrow"><i class="fa-solid fa-arrow-right"></i></span><span class="b"><i class="fa-solid fa-check"></i>Chaque paiement classé par mode</span></li>
+            <li class="pain rv"><span class="a"><i class="fa-solid fa-xmark"></i>« Ce mois était moins bon… mais pourquoi ? »</span><span class="arrow"><i class="fa-solid fa-arrow-right"></i></span><span class="b"><i class="fa-solid fa-check"></i>Les baisses détectées et expliquées</span></li>
+        </ul>
+    </div>
+</section>
+
+<!-- CAISSE -->
+<section id="caisse">
+    <div class="wrap">
+        <div class="head rv">
+            <div>
+                <span class="eyebrow">Démo · La caisse</span>
+                <h2>Encaisser une cliente,<br><em>essayez vous-même.</em></h2>
+            </div>
+            <p class="lead">Touchez les prestations, choisissez la coiffeuse et le mode de paiement. Le reçu se remplit tout seul et la vente s'ajoute au journal du jour.</p>
+        </div>
+
+        <div class="pos">
+            <div>
+                <div class="pos-main card rv">
+                    <div class="pos-step"><span>1 · Prestations</span></div>
+                    <div class="cats" id="cats"></div>
+                    <div class="services" id="services"></div>
+
+                    <div class="pos-step"><span>2 · Coiffeuse</span></div>
+                    <div class="chips" id="staff"></div>
+
+                    <div class="pos-step"><span>3 · Cliente</span><span style="text-transform:none;letter-spacing:0;font-weight:500">facultatif</span></div>
+                    <div class="client">
+                        <input id="cName" placeholder="Nom de la cliente" value="Aminata Traoré">
+                        <input id="cPhone" placeholder="Téléphone" value="07 58 21 33 90">
+                    </div>
+
+                    <div class="pos-step"><span>4 · Paiement</span></div>
+                    <div class="pay" id="pay">
+                        <button data-m="Espèces" class="on"><i class="fa-solid fa-money-bill-wave"></i>Espèces</button>
+                        <button data-m="Wave"><i class="fa-solid fa-water"></i>Wave</button>
+                        <button data-m="Orange Money"><i class="fa-solid fa-mobile-screen-button"></i>Orange Money</button>
+                        <button data-m="MTN MoMo"><i class="fa-solid fa-sim-card"></i>MTN MoMo</button>
+                    </div>
+                </div>
+
+                <div class="journal card rv">
+                    <div class="journal-h"><b>Journal du jour</b><span id="jTotal"></span></div>
+                    <div id="journal"></div>
+                </div>
+            </div>
+
+            <div class="ticket-wrap rv">
+                <div class="ticket" id="ticket">
+                    <div class="tk-h">
+                        <h4>L'Atelier Beauté</h4>
+                        <p>Salon de coiffure &amp; esthétique<br>Cocody Angré · 07 00 00 00 00</p>
+                    </div>
+                    <div class="tk-meta">
+                        <span>Reçu n°</span><span id="tkNo"></span>
+                        <span>Date</span><span id="tkDate"></span>
+                        <span>Coiffeuse</span><span id="tkStaff"></span>
+                        <span>Cliente</span><span id="tkClient"></span>
+                    </div>
+                    <div class="tk-lines" id="tkLines"></div>
+                    <div class="tk-tot">
+                        <div><span>Sous-total</span><span id="tkSub"></span></div>
+                        <div class="tk-disc">Remise fidélité
+                            <select id="disc"><option value="0">0 %</option><option value="5">5 %</option><option value="10">10 %</option></select>
+                            <span id="tkDisc" style="margin-left:auto"></span>
+                        </div>
+                        <div class="big"><span>TOTAL</span><span id="tkTotal"></span></div>
+                        <div><span>Payé par</span><span id="tkPay"></span></div>
+                    </div>
+                    <div class="barcode"></div>
+                    <div class="tk-foot">Merci pour votre visite ✿ À très bientôt !</div>
+                    <div class="paid-stamp">PAYÉ</div>
+                </div>
+                <div class="tk-actions">
+                    <button class="btn btn-acc full" id="checkout">Encaisser <span id="ckAmt"></span></button>
+                    <button class="btn btn-line" id="sendWa" disabled><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>
+                    <button class="btn btn-line" id="newSale" disabled><i class="fa-solid fa-plus"></i> Nouvelle vente</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- DASHBOARD -->
+<section id="tableau" class="dash-sec">
+    <div class="wrap">
+        <div class="head rv">
+            <div>
+                <span class="eyebrow">Démo · Tableau de bord</span>
+                <h2>Vos revenus du mois,<br><em>enfin clairs.</em></h2>
+            </div>
+            <p class="lead">Touchez un mois sur le graphique pour voir le détail. L'application compare automatiquement avec le mois précédent et vous alerte quand ça baisse.</p>
+        </div>
+
+        <div class="dash rv">
+            <div class="dash-top">
+                <h3 id="dMonth">Septembre 2026<small>mois sélectionné</small></h3>
+                <div class="seg" id="range"><button data-r="6">6 mois</button><button data-r="12" class="on">12 mois</button></div>
+            </div>
+            <div class="kpis">
+                <div class="kpi card"><small>Chiffre d'affaires</small><b id="kCa"></b><span id="kCaD"></span> <span class="cmp" id="kCaC"></span></div>
+                <div class="kpi card"><small>Bénéfice net</small><b id="kNet"></b><span id="kNetD"></span> <span class="cmp">après dépenses</span></div>
+                <div class="kpi card"><small>Clientes servies</small><b id="kCli"></b><span id="kCliD"></span> <span class="cmp">vs mois préc.</span></div>
+                <div class="kpi card"><small>Panier moyen</small><b id="kAvg"></b><span id="kAvgD"></span> <span class="cmp">par cliente</span></div>
+            </div>
+
+            <div id="dAlert"></div>
+
+            <div class="dash-grid">
+                <div class="panel card">
+                    <div class="panel-h">
+                        <div><b>Chiffre d'affaires par mois</b><small>En FCFA · la ligne pointillée indique la moyenne</small></div>
+                        <button class="link-btn" id="toggleTable">Voir en tableau</button>
+                    </div>
+                    <div class="chart" id="chart">
+                        <div class="tip" id="tip"></div>
+                    </div>
+                    <div class="legend">
+                        <span><i style="background:var(--accent)"></i>Mois terminé</span>
+                        <span><i style="background:repeating-linear-gradient(45deg,var(--accent) 0 2px,var(--acc-l) 2px 5px)"></i>Mois en cours</span>
+                        <span><i style="background:none;border-top:2px dashed var(--ink-2);height:0;width:16px;border-radius:0"></i>Moyenne</span>
+                    </div>
+                </div>
+                <div class="panel card">
+                    <div class="panel-h"><div><b>Prestations qui rapportent le plus</b><small id="topSub">Septembre 2026</small></div></div>
+                    <div class="hbars" id="topSvc"></div>
+                </div>
+                <div class="panel card">
+                    <div class="panel-h"><div><b>Jours les plus chargés</b><small>Recette moyenne par jour de la semaine</small></div></div>
+                    <div class="days" id="days"></div>
+                </div>
+                <div class="panel card">
+                    <div class="panel-h"><div><b>Par coiffeuse</b><small id="staffSub">Septembre 2026</small></div></div>
+                    <div class="hbars" id="byStaff"></div>
+                    <div class="panel-h" style="margin:1.4rem 0 1rem"><div><b>Modes de paiement</b></div></div>
+                    <div class="hbars" id="byPay"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CLIENTES & RDV -->
+<section id="clientes">
+    <div class="wrap">
+        <div class="head rv">
+            <div>
+                <span class="eyebrow">Et aussi</span>
+                <h2>Rendez-vous, clientes,<br><em>dépenses et stock.</em></h2>
+            </div>
+            <p class="lead">Un seul outil pour tout le salon. Chaque coiffeuse voit son planning, et chaque cliente a sa fiche avec son historique.</p>
+        </div>
+        <div class="feat3">
+            <div class="agenda card rv">
+                <div class="panel-h"><div><b>Planning de demain</b><small>Mercredi · 3 coiffeuses</small></div><span class="link-btn"><i class="fa-solid fa-plus"></i> Ajouter</span></div>
+                <div class="ag-grid" id="agenda"></div>
+            </div>
+            <div class="client-card card rv">
+                <div class="cc-top"><div class="av">AK</div><div><b>Adjoua Kouassi</b><small>07 48 12 55 03 · Cliente depuis 2024</small></div></div>
+                <div class="cc-stats">
+                    <div><b>14</b><small>visites</small></div>
+                    <div><b>186k</b><small>dépensés</small></div>
+                    <div><b>48 j</b><small>sans visite</small></div>
+                </div>
+                <ul class="hist">
+                    <li>Tresses knotless <span>27/08 · 30 000 F</span></li>
+                    <li>Soin kératine <span>12/07 · 15 000 F</span></li>
+                    <li>Brushing <span>28/06 · 5 000 F</span></li>
+                </ul>
+                <div class="wa"><small><i class="fa-brands fa-whatsapp"></i> Rappel automatique proposé</small>« Bonjour Adjoua ✿ Cela fait un moment ! Profitez de −10 % sur votre prochaine visite à L'Atelier Beauté cette semaine. »</div>
+            </div>
+        </div>
+        <div class="mini-feats">
+            <div class="mf card rv"><i class="fa-solid fa-calendar-check"></i><b>Rendez-vous</b><p>Planning par coiffeuse, rappel WhatsApp la veille : moins de clientes qui oublient.</p></div>
+            <div class="mf card rv"><i class="fa-solid fa-wallet"></i><b>Dépenses</b><p>Loyer, produits, salaires : le bénéfice réel est calculé tout seul.</p></div>
+            <div class="mf card rv"><i class="fa-solid fa-box-open"></i><b>Stock produits</b><p>Alerte quand les mèches ou le défrisant arrivent à la fin.</p></div>
+            <div class="mf card rv"><i class="fa-solid fa-wifi"></i><b>Marche sans internet</b><p>Tout est enregistré sur le téléphone, puis synchronisé dès que le réseau revient.</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- DÉMARRER -->
+<section id="demarrer" style="padding-top:0">
+    <div class="wrap">
+        <div class="head rv">
+            <div>
+                <span class="eyebrow">Mise en place</span>
+                <h2>Opérationnel <em>en une journée.</em></h2>
+            </div>
+        </div>
+        <div class="steps">
+            <div class="step card rv"><b>On installe ensemble</b><p>Sur votre téléphone ou une tablette au comptoir. Pas besoin d'ordinateur.</p></div>
+            <div class="step card rv"><b>On saisit vos prestations</b><p>Vos tarifs, vos coiffeuses, vos modes de paiement. Je m'occupe de tout.</p></div>
+            <div class="step card rv"><b>Formation d'une heure</b><p>Vous et votre équipe savez encaisser dès le premier jour. Suivi inclus.</p></div>
+        </div>
+        <div class="offer rv">
+            <div>
+                <h3>Un mois d'essai offert, sans engagement.</h3>
+                <p>Gardez votre cahier à côté pendant le premier mois et comparez : vous verrez la différence dès la première semaine.</p>
+                <a href="#caisse" class="btn">Je veux essayer <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <ul>
+                <li><i class="fa-solid fa-check"></i>Caisse et reçus illimités</li>
+                <li><i class="fa-solid fa-check"></i>Tableau de bord mensuel</li>
+                <li><i class="fa-solid fa-check"></i>Fiches clientes et rappels WhatsApp</li>
+                <li><i class="fa-solid fa-check"></i>Installation et formation incluses</li>
+                <li><i class="fa-solid fa-check"></i>Vos données sauvegardées chaque jour</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="wrap foot">
+        <a href="#" class="logo"><i class="fa-solid fa-scissors"></i>L'Atelier Beauté</a>
+        <span>Maquette de présentation · Les chiffres affichés sont des exemples</span>
+    </div>
+</footer>
+
+<div class="toast" id="toast"><i class="fa-solid fa-circle-check"></i><span id="toastTxt"></span></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const fcfa = n => Math.round(n).toLocaleString('fr-FR').replace(/ | /g, ' ') + ' F';
+const short = n => n >= 1e6 ? (n / 1e6).toFixed(2).replace('.', ',') + ' M' : Math.round(n / 1000) + 'k';
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+let tt;
+function toast(m) { $('toastTxt').textContent = m; $('toast').classList.add('show'); clearTimeout(tt); tt = setTimeout(() => $('toast').classList.remove('show'), 2800); }
+
+const today = new Date();
+$('heroDate').textContent = today.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+
+/* ════════ CAISSE ════════ */
+const SERVICES = [
+    { c: 'Coiffure', n: 'Tresses box braids', p: 25000, i: 'fa-solid fa-wand-magic-sparkles' },
+    { c: 'Coiffure', n: 'Tresses knotless', p: 30000, i: 'fa-solid fa-wand-magic-sparkles' },
+    { c: 'Coiffure', n: 'Brushing', p: 5000, i: 'fa-solid fa-wind' },
+    { c: 'Coiffure', n: 'Défrisage', p: 7000, i: 'fa-solid fa-droplet' },
+    { c: 'Coiffure', n: 'Coupe', p: 3000, i: 'fa-solid fa-scissors' },
+    { c: 'Coiffure', n: 'Pose perruque', p: 15000, i: 'fa-solid fa-user' },
+    { c: 'Soins', n: 'Soin kératine', p: 15000, i: 'fa-solid fa-spa' },
+    { c: 'Soins', n: 'Shampoing + soin', p: 3500, i: 'fa-solid fa-pump-soap' },
+    { c: 'Ongles', n: 'Manucure', p: 5000, i: 'fa-solid fa-hand-sparkles' },
+    { c: 'Ongles', n: 'Pédicure', p: 6000, i: 'fa-solid fa-shoe-prints' },
+    { c: 'Ongles', n: 'Pose gel', p: 10000, i: 'fa-solid fa-gem' },
+    { c: 'Produits', n: 'Mèches (paquet)', p: 2500, i: 'fa-solid fa-box' },
+];
+const STAFF = [{ n: 'Awa', c: '#B5603F' }, { n: 'Mariam', c: '#6B4E71' }, { n: 'Grace', c: '#3E7C6B' }];
+const CATS = ['Tout', 'Coiffure', 'Soins', 'Ongles', 'Produits'];
+
+let cat = 'Tout', staff = 0, mode = 'Espèces', cart = {}, receiptNo = 248, paid = false;
+const journal = [
+    { t: '09:20', n: 'Fatou B.', s: 'Brushing', m: 'Espèces', a: 5000 },
+    { t: '10:15', n: 'Awa D.', s: 'Tresses box braids', m: 'Wave', a: 25000 },
+    { t: '11:40', n: 'Mme Koné', s: 'Défrisage + brushing', m: 'Orange Money', a: 12000 },
+];
+
+function renderCats() { $('cats').innerHTML = CATS.map(c => `<button class="${c === cat ? 'on' : ''}" data-c="${c}">${c}</button>`).join(''); }
+function renderServices() {
+    $('services').innerHTML = SERVICES.map((s, i) => (cat === 'Tout' || s.c === cat) ? `
+        <button class="svc ${cart[i] ? 'in-cart' : ''}" data-i="${i}">
+            <span class="n">${cart[i] || ''}</span>
+            <i class="${s.i}"></i><b>${s.n}</b><small>${fcfa(s.p)}</small>
+        </button>` : '').join('');
+}
+function renderStaff() {
+    $('staff').innerHTML = STAFF.map((s, i) => `<button class="chip ${i === staff ? 'on' : ''}" data-i="${i}"><span class="av" style="background:${s.c}">${s.n[0]}</span>${s.n}</button>`).join('');
+}
+function totals() {
+    const sub = Object.entries(cart).reduce((t, [i, q]) => t + SERVICES[i].p * q, 0);
+    const disc = Math.round(sub * +$('disc').value / 100);
+    return { sub, disc, total: sub - disc };
+}
+function renderTicket() {
+    const { sub, disc, total } = totals();
+    $('tkNo').textContent = String(receiptNo).padStart(4, '0');
+    $('tkDate').textContent = today.toLocaleDateString('fr-FR') + ' ' + new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    $('tkStaff').textContent = STAFF[staff].n;
+    $('tkClient').textContent = $('cName').value.trim() || 'Cliente de passage';
+    const lines = Object.entries(cart);
+    $('tkLines').innerHTML = lines.length ? lines.map(([i, q]) => `
+        <div class="tk-line"><span>${q > 1 ? q + ' × ' : ''}${SERVICES[i].n}</span><span>${(SERVICES[i].p * q).toLocaleString('fr-FR').replace(/ | /g, ' ')}${paid ? '' : `<button data-rm="${i}" title="Retirer">✕</button>`}</span></div>`).join('')
+        : '<div class="tk-empty">Touchez une prestation pour l\'ajouter</div>';
+    $('tkSub').textContent = fcfa(sub);
+    $('tkDisc').textContent = disc ? '− ' + fcfa(disc) : '—';
+    $('tkTotal').textContent = fcfa(total);
+    $('tkPay').textContent = mode;
+    $('ckAmt').textContent = total ? '· ' + fcfa(total) : '';
+    $('checkout').disabled = !total || paid;
+    $('checkout').style.opacity = (!total || paid) ? .4 : 1;
+    $('sendWa').disabled = !paid; $('newSale').disabled = !paid;
+    $('ticket').classList.toggle('paid', paid);
+}
+function renderJournal() {
+    $('journal').innerHTML = journal.slice().reverse().map((j, k) => `
+        <div class="jrow ${j.fresh && k === 0 ? 'new' : ''}"><time>${j.t}</time><div>${esc(j.n)}<small>${esc(j.s)}</small></div><span class="m">${j.m}</span><b>${fcfa(j.a)}</b></div>`).join('');
+    $('jTotal').textContent = fcfa(journal.reduce((t, j) => t + j.a, 0));
+}
+
+$('cats').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; cat = b.dataset.c; renderCats(); renderServices(); });
+$('services').addEventListener('click', e => {
+    const b = e.target.closest('.svc'); if (!b) return;
+    if (paid) { toast('Cliquez sur « Nouvelle vente » pour un nouveau reçu'); return; }
+    const i = +b.dataset.i; cart[i] = (cart[i] || 0) + 1; renderServices(); renderTicket();
+});
+$('tkLines').addEventListener('click', e => {
+    const b = e.target.closest('[data-rm]'); if (!b) return;
+    const i = b.dataset.rm; cart[i]--; if (cart[i] <= 0) delete cart[i]; renderServices(); renderTicket();
+});
+$('staff').addEventListener('click', e => { const b = e.target.closest('.chip'); if (!b || paid) return; staff = +b.dataset.i; renderStaff(); renderTicket(); });
+$('pay').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b || paid) return; mode = b.dataset.m;
+    [...$('pay').children].forEach(x => x.classList.toggle('on', x === b)); renderTicket();
+});
+['cName', 'disc'].forEach(id => $(id).addEventListener('input', renderTicket));
+$('checkout').addEventListener('click', () => {
+    const { total } = totals(); if (!total) return;
+    paid = true;
+    journal.push({
+        t: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
+        n: $('cName').value.trim() || 'Cliente de passage',
+        s: Object.keys(cart).map(i => SERVICES[i].n).join(' + '), m: mode, a: total, fresh: true,
+    });
+    renderTicket(); renderJournal(); renderServices();
+    toast(`Vente enregistrée · ${fcfa(total)} en ${mode}`);
+});
+$('sendWa').addEventListener('click', () => toast(`Reçu n° ${String(receiptNo).padStart(4, '0')} envoyé au ${$('cPhone').value || 'numéro de la cliente'}`));
+$('newSale').addEventListener('click', () => {
+    cart = {}; paid = false; receiptNo++; $('disc').value = 0; $('cName').value = ''; $('cPhone').value = '';
+    renderServices(); renderTicket();
+});
+
+/* ════════ TABLEAU DE BORD ════════ */
+// Données de démonstration : 12 derniers mois jusqu'au mois en cours (partiel)
+const MONTHS = [];
+const CA = [1420000, 1380000, 1850000, 1210000, 1300000, 1470000, 1520000, 1600000, 1480000, 1220000, 1350000, 1580000, 742000];
+const CLIENTS = [148, 141, 182, 129, 136, 150, 154, 161, 152, 131, 140, 163, 79];
+const EXP = [520000, 510000, 600000, 495000, 500000, 530000, 540000, 550000, 530000, 505000, 515000, 545000, 280000];
+for (let k = 12; k >= 0; k--) { const d = new Date(today.getFullYear(), today.getMonth() - k, 1); MONTHS.push(d); }
+const mName = (d, o = { month: 'long', year: 'numeric' }) => { const s = d.toLocaleDateString('fr-FR', o); return s[0].toUpperCase() + s.slice(1); };
+const LAST = MONTHS.length - 1;            // mois en cours
+let sel = LAST - 1, range = innerWidth < 560 ? 6 : 12;
+
+const SVC_MIX = [['Tresses', .38], ['Défrisage & brushing', .21], ['Pose perruque', .14], ['Ongles', .12], ['Soins', .09], ['Vente produits', .06]];
+const STAFF_MIX = [['Awa', .41], ['Mariam', .33], ['Grace', .26]];
+const PAY_MIX = [['Espèces', .46], ['Wave', .31], ['Orange Money', .17], ['MTN MoMo', .06]];
+const DAYS = [['Lun', 31000], ['Mar', 38000], ['Mer', 42000], ['Jeu', 47000], ['Ven', 68000], ['Sam', 96000], ['Dim', 22000]];
+
+function pct(a, b) { return (a - b) / b * 100; }
+function deltaHTML(v, inv) {
+    const up = v >= 0;
+    return `<span class="delta ${up ? 'up' : 'down'}"><i class="fa-solid fa-arrow-${up ? 'up' : 'down'}"></i>${up ? '+' : '−'}${Math.abs(v).toFixed(1).replace('.', ',')} %</span>`;
+}
+function hbars(el, mix, total) {
+    const max = mix[0][1];
+    el.innerHTML = mix.map(([n, p]) => `
+        <div class="hb"><div class="hb-top"><span>${n}</span><b>${fcfa(total * p)}</b></div><div class="hb-track"><i style="width:${p / max * 100}%"></i></div></div>`).join('');
+}
+
+function renderKpis() {
+    const i = sel, prev = i - 1;
+    const partial = i === LAST;
+    $('dMonth').innerHTML = `${mName(MONTHS[i])}<small>${partial ? 'en cours · au ' + today.getDate() + ' ' + mName(today, { month: 'long' }).toLowerCase() : 'mois sélectionné'}</small>`;
+    const ca = CA[i], cl = CLIENTS[i], net = ca - EXP[i];
+    $('kCa').textContent = fcfa(ca);
+    $('kNet').textContent = fcfa(net);
+    $('kCli').textContent = cl;
+    $('kAvg').textContent = fcfa(ca / cl);
+    if (prev >= 0 && !partial) {
+        $('kCaD').innerHTML = deltaHTML(pct(ca, CA[prev])); $('kCaC').textContent = 'vs ' + mName(MONTHS[prev], { month: 'long' });
+        $('kNetD').innerHTML = deltaHTML(pct(net, CA[prev] - EXP[prev]));
+        $('kCliD').innerHTML = deltaHTML(pct(cl, CLIENTS[prev]));
+        $('kAvgD').innerHTML = deltaHTML(pct(ca / cl, CA[prev] / CLIENTS[prev]));
+    } else {
+        // Mois en cours : on compare au même nombre de jours du mois précédent
+        const dim = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+        const proj = ca / today.getDate() * dim;
+        $('kCaD').innerHTML = deltaHTML(pct(proj, CA[prev])); $('kCaC').textContent = 'projection : ' + short(proj);
+        ['kNetD', 'kCliD', 'kAvgD'].forEach(id => $(id).innerHTML = '<span class="cmp">mois en cours</span>');
+    }
+    // Alerte
+    const v = prev >= 0 ? pct(ca, CA[prev]) : 0;
+    if (partial) {
+        $('dAlert').innerHTML = `<div class="alert good"><i class="fa-solid fa-chart-line"></i><div><b>Bon rythme ce mois-ci</b><p>À ce rythme, ${mName(MONTHS[i], { month: 'long' }).toLowerCase()} devrait finir autour de ${short(CA[i] / today.getDate() * new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate())}. Le samedi reste votre meilleur jour.</p></div></div>`;
+    } else if (v < -5) {
+        $('dAlert').innerHTML = `<div class="alert"><i class="fa-solid fa-arrow-trend-down"></i><div><b>Baisse de ${Math.abs(v).toFixed(0)} % par rapport à ${mName(MONTHS[prev], { month: 'long' }).toLowerCase()}</b><p>${CLIENTS[prev] - CLIENTS[i]} clientes de moins. 18 clientes régulières ne sont pas revenues depuis plus de 45 jours.</p></div><button class="btn btn-dark" onclick="toast('Rappel WhatsApp envoyé à 18 clientes')">Les relancer</button></div>`;
+    } else if (v > 5) {
+        $('dAlert').innerHTML = `<div class="alert good"><i class="fa-solid fa-arrow-trend-up"></i><div><b>Hausse de ${v.toFixed(0)} % par rapport à ${mName(MONTHS[prev], { month: 'long' }).toLowerCase()}</b><p>Les tresses ont tiré le mois vers le haut. ${CLIENTS[i] - CLIENTS[prev]} clientes de plus que le mois précédent.</p></div></div>`;
+    } else {
+        $('dAlert').innerHTML = `<div class="alert good"><i class="fa-solid fa-equals"></i><div><b>Mois stable</b><p>Chiffre d'affaires proche de ${mName(MONTHS[prev], { month: 'long' }).toLowerCase()}.</p></div></div>`;
+    }
+    $('topSub').textContent = $('staffSub').textContent = mName(MONTHS[i]);
+    hbars($('topSvc'), SVC_MIX, ca);
+    hbars($('byStaff'), STAFF_MIX, ca);
+    hbars($('byPay'), PAY_MIX, ca);
+}
+
+function renderChart() {
+    const idx = []; for (let k = Math.max(0, LAST - range + 1); k <= LAST; k++) idx.push(k);
+    const W = Math.max(330, Math.min(640, $('chart').clientWidth || 640)), H = W < 500 ? 230 : 260, pl = 44, pr = 8, pt = 24, pb = 28;
+    const max = 2000000, iw = W - pl - pr, ih = H - pt - pb, bw = iw / idx.length;
+    const y = v => pt + ih - v / max * ih;
+    const done = idx.filter(k => k !== LAST), avg = done.reduce((t, k) => t + CA[k], 0) / done.length;
+    const lo = done.reduce((a, k) => CA[k] < CA[a] ? k : a, done[0]);
+    const hi = done.reduce((a, k) => CA[k] > CA[a] ? k : a, done[0]);
+    let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Chiffre d'affaires mensuel">
+        <defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#F3DDD0"/><rect width="2.5" height="6" fill="#B5603F"/></pattern></defs>
+        <g class="grid">`;
+    [0, 500000, 1000000, 1500000, 2000000].forEach(v => { s += `<line x1="${pl}" x2="${W - pr}" y1="${y(v)}" y2="${y(v)}"/><text x="${pl - 8}" y="${y(v) + 4}" text-anchor="end">${v ? short(v).replace(',00', '') : '0'}</text>`; });
+    s += `</g>`;
+    idx.forEach((k, j) => {
+        const x = pl + j * bw, w = Math.min(bw - 8, 34), bx = x + (bw - w) / 2, bh = ih - (y(CA[k]) - pt);
+        const r = Math.min(4, bh);
+        const path = `M${bx},${pt + ih} V${y(CA[k]) + r} Q${bx},${y(CA[k])} ${bx + r},${y(CA[k])} H${bx + w - r} Q${bx + w},${y(CA[k])} ${bx + w},${y(CA[k]) + r} V${pt + ih} Z`;
+        s += `<rect class="hit" x="${x}" y="${pt}" width="${bw}" height="${ih}" data-k="${k}" tabindex="0"/>`;
+        s += `<path class="bar ${k === LAST ? 'partial' : ''} ${k === sel ? 'sel' : ''}" d="${path}" pointer-events="none"/>`;
+        s += `<text x="${x + bw / 2}" y="${H - 8}" text-anchor="middle" ${k === sel ? 'style="fill:var(--ink);font-weight:700"' : ''}>${mName(MONTHS[k], { month: 'short' }).replace('.', '')}</text>`;
+        if (k === lo || k === hi || k === sel) s += `<text class="v" x="${x + bw / 2}" y="${y(CA[k]) - 7}" text-anchor="middle">${short(CA[k])}</text>`;
+    });
+    s += `<line class="avg" x1="${pl}" x2="${W - pr}" y1="${y(avg)}" y2="${y(avg)}"/></svg>`;
+    let t = `<table class="table-view"><thead><tr><th>Mois</th><th>CA</th><th>Clientes</th><th>Variation</th></tr></thead><tbody>`;
+    idx.forEach(k => { t += `<tr><td>${mName(MONTHS[k])}${k === LAST ? ' (en cours)' : ''}</td><td>${fcfa(CA[k])}</td><td>${CLIENTS[k]}</td><td>${k > 0 && k !== LAST ? (pct(CA[k], CA[k - 1]) >= 0 ? '+' : '') + pct(CA[k], CA[k - 1]).toFixed(1).replace('.', ',') + ' %' : '—'}</td></tr>`; });
+    t += `</tbody></table>`;
+    const tip = $('tip');
+    $('chart').innerHTML = s + t; $('chart').appendChild(tip);
+
+    $('chart').querySelectorAll('.hit').forEach(h => {
+        const show = () => {
+            const k = +h.dataset.k, box = $('chart').getBoundingClientRect(), r = h.getBoundingClientRect();
+            const v = k > 0 && k !== LAST ? pct(CA[k], CA[k - 1]) : null;
+            tip.innerHTML = `<b>${fcfa(CA[k])}</b><span>${mName(MONTHS[k])}${k === LAST ? ' · en cours' : ''}${v !== null ? ' · ' + (v >= 0 ? '▲ +' : '▼ −') + Math.abs(v).toFixed(1).replace('.', ',') + ' %' : ''}</span>`;
+            const barTop = box.top + (y(CA[k]) / H) * box.height;
+            tip.style.left = (r.left - box.left + r.width / 2) + 'px';
+            tip.style.top = (barTop - box.top) + 'px';
+            tip.style.opacity = 1;
+        };
+        h.addEventListener('pointerenter', show); h.addEventListener('focus', show);
+        h.addEventListener('pointerleave', () => tip.style.opacity = 0); h.addEventListener('blur', () => tip.style.opacity = 0);
+        h.addEventListener('click', () => { sel = +h.dataset.k; renderChart(); renderKpis(); });
+        h.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); h.click(); } });
+    });
+}
+function renderDays() {
+    const max = Math.max(...DAYS.map(d => d[1]));
+    $('days').innerHTML = DAYS.map(([d, v]) => `<div class="day" title="${d} : ${fcfa(v)}"><b>${Math.round(v / 1000)}k</b><i style="height:${v / max * 100}%"></i>${d}</div>`).join('');
+}
+$('range').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return; range = +b.dataset.r;
+    [...$('range').children].forEach(x => x.classList.toggle('on', x === b));
+    if (sel < LAST - range + 1) sel = LAST - 1;
+    renderChart(); renderKpis();
+});
+$('toggleTable').addEventListener('click', () => {
+    const on = $('chart').classList.toggle('show-table');
+    $('toggleTable').textContent = on ? 'Voir le graphique' : 'Voir en tableau';
+});
+
+/* ════════ AGENDA ════════ */
+function renderAgenda() {
+    const hours = ['09h', '10h', '11h', '12h', '13h', '14h', '15h', '16h'];
+    const APPTS = [
+        [{ s: 0, d: 3, n: 'Kadi S.', t: 'Knotless' }, { s: 4, d: 1.5, n: 'Nadia O.', t: 'Brushing' }, { s: 6, d: 1, n: 'Bintou', t: 'Coupe' }],
+        [{ s: 1, d: 1, n: 'Mme Yao', t: 'Défrisage' }, { s: 2.5, d: 1.5, n: 'Adjoua K.', t: 'Soin kératine' }, { s: 5, d: 2, n: 'Rose M.', t: 'Pose perruque' }],
+        [{ s: 0.5, d: 1, n: 'Sarah', t: 'Manucure' }, { s: 2, d: 1, n: 'Inès T.', t: 'Pose gel' }, { s: 4.5, d: 1, n: 'Clarisse', t: 'Pédicure' }],
+    ];
+    let h = `<div></div>` + STAFF.map(s => `<div class="ag-col-h"><span class="av" style="background:${s.c}">${s.n[0]}</span>${s.n}</div>`).join('');
+    h += `<div>${hours.map(x => `<div class="ag-time">${x}</div>`).join('')}</div>`;
+    STAFF.forEach((s, c) => {
+        h += `<div class="ag-col">${hours.map(() => '<div class="slotline"></div>').join('')}`;
+        APPTS[c].forEach(a => { h += `<div class="appt" style="top:${a.s * 52 + 3}px;height:${a.d * 52 - 6}px;background:${s.c}1A;border-color:${s.c}"><b>${a.n}</b>${a.t}</div>`; });
+        h += `</div>`;
+    });
+    $('agenda').innerHTML = h;
+}
+
+/* ════════ DIVERS ════════ */
+$('burger').addEventListener('click', () => $('nav').classList.toggle('open'));
+document.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => $('nav').classList.remove('open')));
+addEventListener('scroll', () => $('nav').classList.toggle('scrolled', scrollY > 10), { passive: true });
+const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add('on'); io.unobserve(en.target); } }), { threshold: .1 });
+document.querySelectorAll('.rv').forEach((el, i) => { el.style.transitionDelay = (i % 4) * 0.06 + 's'; io.observe(el); });
+
+renderCats(); renderServices(); renderStaff(); renderTicket(); renderJournal();
+[...$('range').children].forEach(x => x.classList.toggle('on', +x.dataset.r === range));
+renderChart(); renderKpis(); renderDays(); renderAgenda();
+let rw = innerWidth; addEventListener('resize', () => { if (Math.abs(innerWidth - rw) > 40) { rw = innerWidth; renderChart(); } });
+</script>
+</body>
+</html>
