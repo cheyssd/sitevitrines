@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laël Koffi — Coach sportif</title>
+<meta name="description" content="Laël Koffi, coach sportif en France. Sport, discipline et mindset : coaching individuel, programmes en ligne, analyse de morphotype et nutrition.">
+<script>
+  // thème appliqué avant l'affichage (évite le flash)
+  (function(){
+    var t = null;
+    try { t = localStorage.getItem('lael-theme'); } catch(e) {}
+    if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#efede8;
+    --paper-2:#e4e1da;
+    --ink:#0e0e0d;
+    --ink-2:#1a1a18;
+    --gray:#6d6b66;
+    --line:rgba(14,14,13,.14);
+    --line-inv:rgba(255,255,255,.12);
+    --volt:#d7ff3c;
+    --brick:#c4653d;
+    --sans:'Archivo',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --black:#0e0e0d;
+    --fg-2:#2b2a27;
+    --night:#0e0e0d;
+    --night-fg:#efede8;
+    --header-bg:rgba(239,237,232,.86);
+  }
+  :root[data-theme="dark"]{
+    --paper:#121211;
+    --paper-2:#191917;
+    --ink:#ecebe6;
+    --ink-2:#d6d4cd;
+    --gray:#9a9891;
+    --line:rgba(255,255,255,.13);
+    --fg-2:#c9c7c0;
+    --night:#060606;
+    --night-fg:#ecebe6;
+    --header-bg:rgba(18,18,17,.86);
+    color-scheme:dark;
+  }
+  body{transition:background .4s,color .4s}
+  /* la section lime garde toujours ses couleurs claires */
+  .morpho{--ink:#0e0e0d;--paper:#efede8;--gray:#4d4c47;--line:rgba(14,14,13,.14);--fg-2:#2b2a27;color:var(--ink)}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.55;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  img{display:block;max-width:100%}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;color:inherit}
+  .wrap{width:min(1280px,100% - 48px);margin-inline:auto}
+
+  /* typo */
+  .display{font-weight:900;font-stretch:125%;text-transform:uppercase;line-height:.88;letter-spacing:-.02em}
+  .mono{font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase}
+  .label{font-family:var(--mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gray);display:inline-flex;gap:8px;align-items:center}
+  .label::before{content:"[";}
+  .label::after{content:"]";}
+  .mark{position:relative;white-space:nowrap;z-index:0}
+  .mark::after{content:"";position:absolute;left:-.06em;right:-.06em;bottom:.04em;height:.42em;background:var(--volt);z-index:-1;transform:scaleX(0);transform-origin:left;transition:transform 1s cubic-bezier(.7,0,.2,1) .5s}
+  .in .mark::after,.mark.in::after{transform:scaleX(1)}
+  [data-theme="dark"] .mark{color:var(--black)}
+  [data-theme="dark"] .mark::after{bottom:-.02em;height:.92em}
+
+  /* panneaux béton (rappel de la façade de la photo) */
+  .panels{position:relative}
+  .panels::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+    background-size:calc(100% / 6) 220px;opacity:.45;
+    mask-image:linear-gradient(180deg,#000,transparent 85%)}
+
+  /* boutons */
+  .btn{display:inline-flex;align-items:center;gap:12px;padding:17px 26px;font-weight:700;font-size:.95rem;border:2px solid var(--ink);transition:transform .2s,box-shadow .2s,background .2s;cursor:pointer;background:none}
+  .btn .arr{transition:transform .25s}
+  .btn:hover .arr{transform:translate(3px,-3px)}
+  .btn-volt{background:var(--volt);color:var(--black);box-shadow:5px 5px 0 var(--ink)}
+  .btn-volt:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink)}
+  .btn-ink{background:var(--ink);color:var(--paper)}
+  .btn-ink:hover{background:var(--ink-2)}
+  .link{font-weight:700;border-bottom:2px solid var(--ink);padding-bottom:2px;display:inline-flex;gap:8px;align-items:center}
+  .link:hover{background:var(--volt);color:var(--black)}
+
+  /* ---------- TICKER ---------- */
+  .ticker{background:var(--night);color:var(--night-fg);border-bottom:1px solid var(--line);overflow:hidden;height:36px;display:flex;align-items:center}
+  .ticker-track{display:flex;gap:44px;white-space:nowrap;animation:tick 40s linear infinite;font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase}
+  .ticker-track span{display:flex;align-items:center;gap:10px}
+  .ticker-track span::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--volt)}
+  @keyframes tick{to{transform:translateX(-50%)}}
+
+  /* ---------- HEADER ---------- */
+  header{position:sticky;top:0;z-index:40;background:var(--header-bg);transition:background .4s;backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav{display:flex;justify-content:space-between;align-items:center;height:72px}
+  .logo{display:flex;flex-direction:column;line-height:.9;font-weight:900;font-stretch:125%;font-size:1.05rem;letter-spacing:-.01em}
+  .logo small{font-family:var(--mono);font-weight:500;font-size:.58rem;letter-spacing:.14em;color:var(--gray);margin-top:5px;font-stretch:100%}
+  .nav ul{list-style:none;display:flex;gap:6px}
+  .nav ul a{font-family:var(--mono);font-size:.76rem;text-transform:uppercase;letter-spacing:.05em;padding:8px 12px;transition:background .2s}
+  .nav ul a:hover{background:var(--volt);color:var(--black)}
+  .nav .btn{padding:11px 18px;font-size:.84rem;box-shadow:3px 3px 0 var(--ink)}
+  .nav-r{display:flex;gap:12px;align-items:center}
+  .theme{width:44px;height:44px;border:2px solid var(--ink);background:transparent;cursor:pointer;display:grid;place-items:center;transition:background .2s}
+  .theme:hover{background:var(--volt);color:var(--black)}
+  .theme svg{width:18px;height:18px}
+  .theme .sun{display:none}
+  [data-theme="dark"] .theme .sun{display:block}
+  [data-theme="dark"] .theme .moon{display:none}
+  .burger{display:none;width:44px;height:44px;border:2px solid var(--ink);background:var(--volt);cursor:pointer}
+  .burger span{display:block;width:18px;height:2px;background:var(--black);margin:4px auto}
+
+  /* ---------- HERO ---------- */
+  .hero{padding:64px 0 0;position:relative;overflow:hidden}
+  .hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:end;min-height:min(680px,calc(100svh - 230px))}
+  .hero-text{position:relative;z-index:2;padding-bottom:10px}
+  .hero h1{font-size:clamp(3.1rem,7vw,6.8rem);margin:26px 0 32px}
+  .hero p.lead{font-size:1.15rem;max-width:520px;color:var(--fg-2)}
+
+  /* photo du hero : grande, à droite, fondue dans le fond pour garder le focus sur Laël */
+  .hero .photo{position:absolute;top:0;right:0;bottom:0;width:min(58vw,980px);z-index:1}
+  .hero .photo-frame{border:0;background:none;aspect-ratio:auto;height:100%;
+    --fade:radial-gradient(ellipse 58% 68% at 55% 46%,#000 30%,rgba(0,0,0,.6) 55%,rgba(0,0,0,.18) 72%,transparent 86%);
+    --fade-y:linear-gradient(180deg,transparent 0,#000 16%,#000 78%,transparent 100%);
+    -webkit-mask-image:var(--fade),var(--fade-y);-webkit-mask-composite:source-in;
+            mask-image:var(--fade),var(--fade-y);mask-composite:intersect}
+  .hero .photo-frame img{object-position:50% 18%}
+  .hero .sticker{top:14%;left:16%;}
+  .hero .log{right:7%;bottom:24%}
+  .hero-ctas{display:flex;flex-wrap:wrap;gap:28px;align-items:center;margin-top:38px}
+
+  .photo{position:relative}
+  .photo-frame{position:relative;aspect-ratio:920/1190;overflow:hidden;background:#bbb;border:2px solid var(--ink)}
+  .photo-frame img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.12) brightness(1.02);transform:scale(1.04);transition:filter .8s,transform 1.2s}
+  .photo:hover .photo-frame img{filter:grayscale(.15) contrast(1.05);transform:scale(1)}
+  .sticker{position:absolute;top:-14px;left:-14px;background:var(--volt);color:var(--black);border:2px solid var(--ink);padding:10px 14px;font-weight:900;font-stretch:125%;text-transform:uppercase;font-size:1.05rem;line-height:1;transform:rotate(-4deg);z-index:2}
+  .sticker small{display:block;font-family:var(--mono);font-weight:500;font-size:.6rem;letter-spacing:.1em;margin-top:5px;font-stretch:100%}
+  .log{position:absolute;right:-22px;bottom:34px;width:250px;background:var(--paper);border:2px solid var(--ink);box-shadow:6px 6px 0 var(--ink);padding:14px 16px;font-family:var(--mono);font-size:.72rem;z-index:2}
+  .log-head{display:flex;justify-content:space-between;border-bottom:1px dashed var(--ink);padding-bottom:8px;margin-bottom:6px;font-weight:700}
+  .log-row{display:flex;justify-content:space-between;gap:8px;padding:5px 0;opacity:0;transform:translateX(10px);transition:.5s}
+  .log-row b{font-weight:700}
+  .log-row .chk{background:var(--volt);color:var(--black);padding:0 5px;border:1px solid var(--ink)}
+  .log.run .log-row{opacity:1;transform:none}
+  .log.run .log-row:nth-child(3){transition-delay:.35s}
+  .log.run .log-row:nth-child(4){transition-delay:.7s}
+  .log.run .log-row:nth-child(5){transition-delay:1.05s}
+  .log.run .log-row:nth-child(2){transition-delay:0s}
+
+  .facts{display:grid;grid-template-columns:repeat(4,1fr);border-top:2px solid var(--ink);margin-top:40px;position:relative;z-index:2;background:var(--paper);transition:background .4s}
+  .fact{padding:22px 20px 26px 0;border-right:1px solid var(--line);display:flex;gap:14px;align-items:baseline}
+  .fact+.fact{padding-left:20px}
+  .fact:last-child{border-right:0}
+  .fact .mono{color:var(--gray)}
+  .fact b{font-weight:700;font-size:1rem;line-height:1.25}
+
+  /* ---------- MANIFESTE ---------- */
+  .manifesto{background:var(--night);color:var(--night-fg);border-block:1px solid var(--line);padding:150px 0 140px;margin-top:0}
+  .manifesto .label{color:#8f8d87}
+  .manifesto p.words{font-size:clamp(2rem,4.6vw,4.3rem);font-weight:800;font-stretch:112%;line-height:1.06;letter-spacing:-.02em;margin-top:30px;max-width:1150px}
+  .manifesto .w{color:#3a3936;transition:color .35s}
+  .manifesto .w.lit{color:var(--night-fg)}
+  .manifesto .w.v.lit{color:var(--volt)}
+  .manifesto .sign{margin-top:46px;display:flex;align-items:center;gap:16px;font-family:var(--mono);font-size:.8rem;color:#8f8d87;text-transform:uppercase;letter-spacing:.08em}
+  .manifesto .sign::before{content:"";width:48px;height:2px;background:var(--volt)}
+
+  /* ---------- ABOUT ---------- */
+  .about{padding:140px 0}
+  .about-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:80px;align-items:center}
+  .about-photo{position:relative}
+  .about-photo .photo-frame{aspect-ratio:660/650}
+  .about-photo .tag{position:absolute;bottom:-18px;right:18px;background:var(--ink);color:var(--paper);padding:10px 14px;font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;z-index:2}
+  .about h2{font-size:clamp(2.4rem,4.8vw,4.4rem);margin:22px 0 28px}
+  .about-text p{font-size:1.08rem;color:var(--fg-2);max-width:620px}
+  .about-text p+p{margin-top:16px}
+  .values{margin-top:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:2px solid var(--ink)}
+  .value{padding:20px 18px 0 0}
+  .value+.value{padding-left:18px;border-left:1px solid var(--line)}
+  .value h4{font-weight:800;font-stretch:115%;text-transform:uppercase;font-size:1.02rem;margin:8px 0 6px}
+  .value p{font-size:.9rem;color:var(--gray)}
+
+  /* ---------- OFFRES ---------- */
+  .offers{padding:40px 0 140px}
+  .sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;margin-bottom:46px}
+  .sec-head h2{font-size:clamp(2.6rem,6vw,5.4rem);margin-top:18px}
+  .sec-head p{max-width:360px;color:var(--gray)}
+  .rows{border-top:2px solid var(--ink)}
+  .row{display:grid;grid-template-columns:90px 1.3fr 1fr 60px;align-items:center;gap:20px;padding:30px 18px;border-bottom:1px solid var(--line);position:relative;transition:background .3s,padding .3s}
+  .row::before{content:"";position:absolute;inset:0;background:var(--volt);transform:scaleY(0);transform-origin:bottom;transition:transform .35s cubic-bezier(.7,0,.2,1);z-index:-1}
+  .row{z-index:0}
+  .row:hover::before{transform:scaleY(1)}
+  .row:hover,.row:hover p,.row:hover .n{color:var(--black)}
+  .row .n{font-family:var(--mono);font-size:.85rem;color:var(--gray)}
+  .row h3{font-weight:900;font-stretch:125%;text-transform:uppercase;font-size:clamp(1.4rem,2.8vw,2.4rem);line-height:.95;letter-spacing:-.02em}
+  .row h3 .pill{font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.08em;background:var(--black);color:var(--volt);padding:4px 8px;vertical-align:middle;margin-left:10px;font-stretch:100%}
+  .row p{color:var(--fg-2);font-size:.95rem}
+  .row .go{width:52px;height:52px;border:2px solid var(--ink);display:grid;place-items:center;font-size:1.2rem;transition:transform .3s,background .3s}
+  .row:hover .go{background:var(--black);border-color:var(--black);color:var(--volt);transform:rotate(-45deg)}
+
+  /* ---------- SEMAINE ---------- */
+  .week{padding:130px 0;background:var(--paper-2);border-block:1px solid var(--line)}
+  .week-grid{display:grid;grid-template-columns:repeat(7,1fr);border:2px solid var(--ink);background:var(--paper)}
+  .day{border-right:1px solid var(--line);min-height:250px;display:flex;flex-direction:column}
+  .day:last-child{border-right:0}
+  .day-h{padding:12px 14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;font-family:var(--mono);font-size:.72rem;text-transform:uppercase}
+  .day-h b{font-weight:700}
+  .day-b{padding:14px;display:flex;flex-direction:column;gap:10px;flex:1}
+  .chip{border:1.5px solid var(--ink);padding:10px;font-size:.82rem;font-weight:600;line-height:1.25;position:relative;background:var(--paper);transition:background .3s}
+  .chip small{display:block;font-family:var(--mono);font-size:.62rem;font-weight:400;color:var(--gray);margin-top:4px;text-transform:uppercase;letter-spacing:.04em}
+  .chip.dark{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .chip.dark small{color:#9b9993}
+  .chip.rest{border-style:dashed;color:var(--gray);font-weight:500}
+  .chip.volt{background:var(--volt);color:var(--black)}
+  .chip.volt small{color:#3d3c37}
+  .chip .tick{position:absolute;top:-8px;right:-8px;width:20px;height:20px;background:var(--volt);color:var(--black);border:1.5px solid var(--ink);display:grid;place-items:center;font-size:.7rem;font-weight:900;transform:scale(0);transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+  .week-grid.run .chip .tick{transform:scale(1)}
+  .week-legend{display:flex;gap:30px;flex-wrap:wrap;margin-top:22px;font-family:var(--mono);font-size:.72rem;text-transform:uppercase;color:var(--gray)}
+  .week-legend span{display:flex;gap:8px;align-items:center}
+  .week-legend i{width:14px;height:14px;border:1.5px solid var(--ink);display:inline-block}
+
+  /* ---------- MORPHOTYPE ---------- */
+  .morpho{background:var(--volt);padding:130px 0;border-bottom:2px solid var(--ink);position:relative;overflow:hidden}
+  .morpho-bg{position:absolute;right:-2vw;top:50%;transform:translateY(-50%);font-weight:900;font-stretch:125%;font-size:28vw;line-height:.8;color:rgba(14,14,13,.06);pointer-events:none;letter-spacing:-.04em}
+  .morpho-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:70px;align-items:start;position:relative}
+  .morpho .label{color:var(--ink)}
+  .morpho h2{font-size:clamp(2.6rem,5.4vw,5rem);margin:20px 0 24px}
+  .morpho-intro p{font-size:1.08rem;max-width:440px}
+  .types{display:flex;gap:10px;margin-top:36px}
+  .type{flex:1;border:2px solid var(--ink);padding:14px 12px;text-align:center;background:rgba(255,255,255,.25)}
+  .type svg{height:84px;width:auto;margin:0 auto 10px;display:block}
+  .type b{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em}
+  .type.hl{background:var(--ink);color:var(--volt)}
+  .type.hl svg{fill:var(--volt)}
+  .quiz{background:var(--paper);border:2px solid var(--ink);box-shadow:10px 10px 0 var(--ink)}
+  .quiz-top{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:2px solid var(--ink);font-family:var(--mono);font-size:.74rem;text-transform:uppercase}
+  .progress{display:flex;gap:5px}
+  .progress i{width:28px;height:8px;border:1.5px solid var(--ink);transition:background .3s}
+  .progress i.on{background:var(--ink)}
+  .quiz-body{padding:30px 28px 32px}
+  .q{display:none}
+  .q.active{display:block;animation:slide .4s ease}
+  @keyframes slide{from{opacity:0;transform:translateX(16px)}}
+  .q h3{font-weight:800;font-stretch:110%;font-size:1.5rem;line-height:1.15;margin-bottom:22px}
+  .opt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:1.5px solid var(--ink);background:var(--paper);padding:15px 16px;font-size:.98rem;font-weight:500;cursor:pointer;margin-bottom:10px;transition:background .2s,transform .2s}
+  .opt:hover{background:var(--volt);transform:translateX(4px)}
+  .opt .k{font-family:var(--mono);font-size:.72rem;width:26px;height:26px;border:1.5px solid var(--ink);display:grid;place-items:center;flex:none}
+  .res h3{font-size:clamp(2rem,4vw,2.8rem);font-weight:900;font-stretch:125%;text-transform:uppercase;line-height:.95;margin:10px 0 16px}
+  .res p{color:#3b3a36;margin-bottom:26px}
+  .res .again{background:none;border:0;font-family:var(--mono);font-size:.74rem;text-transform:uppercase;margin-left:22px;cursor:pointer;text-decoration:underline}
+
+  /* ---------- DAILY FUEL ---------- */
+  .fuel{background:var(--night);color:var(--night-fg);padding:130px 0;border-block:1px solid var(--line)}
+  .fuel-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
+  .fuel-img{position:relative;border:2px solid var(--night-fg);overflow:hidden;aspect-ratio:1440/1190}
+  .fuel-img img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.15) brightness(.85)}
+  .fuel-img h2{position:absolute;left:24px;bottom:18px;font-size:clamp(3rem,7vw,6.2rem);color:var(--volt);mix-blend-mode:normal;text-shadow:0 4px 30px rgba(0,0,0,.4)}
+  .fuel-img .rec{position:absolute;top:18px;left:18px;font-family:var(--mono);font-size:.7rem;display:flex;gap:8px;align-items:center;text-transform:uppercase;letter-spacing:.08em;background:rgba(0,0,0,.5);padding:6px 10px}
+  .fuel-img .rec::before{content:"";width:8px;height:8px;border-radius:50%;background:#ff3b30;animation:blink 1.2s infinite}
+  @keyframes blink{50%{opacity:.2}}
+  .fuel .label{color:#8f8d87}
+  .fuel-text>p{color:#b7b4ad;font-size:1.06rem;margin:20px 0 34px;max-width:470px}
+  .soc{display:grid;grid-template-columns:1fr auto;align-items:center;padding:24px 0;border-top:1px solid var(--line-inv);transition:padding .3s,color .3s}
+  .soc:last-child{border-bottom:1px solid var(--line-inv)}
+  .soc b{font-weight:900;font-stretch:125%;text-transform:uppercase;font-size:clamp(1.6rem,3vw,2.4rem);line-height:1;letter-spacing:-.02em}
+  .soc span{display:block;font-family:var(--mono);font-size:.74rem;color:#8f8d87;margin-top:6px}
+  .soc em{font-style:normal;font-size:1.6rem;transition:transform .3s}
+  .soc:hover{padding-left:14px;color:var(--volt)}
+  .soc:hover em{transform:translate(4px,-4px)}
+
+  /* ---------- FAQ ---------- */
+  .faq{padding:130px 0}
+  .faq-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:70px}
+  .faq h2{font-size:clamp(2.4rem,4.8vw,4.2rem);margin-top:18px}
+  details{border-top:2px solid var(--ink)}
+  details:last-child{border-bottom:2px solid var(--ink)}
+  summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:20px;align-items:center;padding:24px 0;font-weight:700;font-size:1.12rem}
+  summary::-webkit-details-marker{display:none}
+  summary i{font-style:normal;width:34px;height:34px;border:2px solid var(--ink);display:grid;place-items:center;flex:none;transition:transform .3s,background .3s;font-weight:400}
+  details[open] summary i{transform:rotate(45deg);background:var(--volt)}
+  details[open] summary i{color:var(--black)}
+  details p{padding:0 50px 26px 0;color:var(--fg-2)}
+
+  /* ---------- CONTACT ---------- */
+  .contact{padding:0 0 130px}
+  .contact-box{border:2px solid var(--ink);display:grid;grid-template-columns:1fr 1.15fr;background:var(--paper)}
+  .contact-l{padding:50px 46px;background:var(--night);color:var(--night-fg);border-right:2px solid var(--ink);display:flex;flex-direction:column}
+  .contact-l .label{color:#8f8d87}
+  .contact-l h2{font-size:clamp(2.4rem,4.6vw,4rem);margin:20px 0 22px}
+  .contact-l h2 .v{color:var(--volt)}
+  .contact-l p{color:#b7b4ad}
+  .contact-l .direct{margin-top:auto;padding-top:40px;display:flex;flex-direction:column;gap:12px;font-family:var(--mono);font-size:.82rem}
+  .contact-l .direct a:hover{color:var(--volt)}
+  form{padding:46px;display:grid;grid-template-columns:1fr 1fr;gap:26px 24px}
+  .f{display:flex;flex-direction:column;gap:6px}
+  .f.full{grid-column:1/-1}
+  .f label{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--gray)}
+  .f input,.f textarea{background:transparent;border:0;border-bottom:2px solid var(--ink);padding:10px 0;font:inherit;font-size:1.05rem;color:var(--ink);border-radius:0}
+  .f input:focus,.f textarea:focus{outline:none;border-color:var(--brick)}
+  .f textarea{min-height:90px;resize:vertical}
+  .goals{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+  .goals input{position:absolute;opacity:0;pointer-events:none}
+  .goals label{font-family:var(--sans);text-transform:none;letter-spacing:0;font-size:.9rem;color:var(--ink);border:1.5px solid var(--ink);padding:9px 14px;cursor:pointer;transition:background .2s}
+  .goals input:checked+label{background:var(--volt);color:var(--black);border-color:var(--volt)}
+  :root:not([data-theme="dark"]) .goals input:checked+label{background:var(--black);color:var(--volt);border-color:var(--black)}
+  .goals input:focus-visible+label{outline:2px solid var(--brick);outline-offset:2px}
+  form .btn{grid-column:1/-1;justify-self:start;margin-top:6px}
+  .ok{grid-column:1/-1;display:none;font-family:var(--mono);font-size:.8rem;background:var(--volt);color:var(--black);border:1.5px solid var(--ink);padding:12px 14px}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--night);color:var(--night-fg);border-top:1px solid var(--line);padding:60px 0 30px;overflow:hidden}
+  .foot-big{font-weight:900;font-stretch:125%;text-transform:uppercase;font-size:clamp(3.2rem,12.4vw,12rem);line-height:.82;letter-spacing:-.04em;white-space:nowrap}
+  .foot-big span{color:var(--volt)}
+  .foot-row{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:40px;padding-top:22px;border-top:1px solid var(--line-inv);font-family:var(--mono);font-size:.72rem;text-transform:uppercase;color:#8f8d87;letter-spacing:.05em}
+  .foot-row nav{display:flex;gap:22px}
+  .foot-row a:hover{color:var(--volt)}
+
+  /* reveal */
+  .rv{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1)}
+  .rv.in{opacity:1;transform:none}
+  .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:1080px){
+    .week-grid{grid-template-columns:repeat(4,1fr)}
+    .day{border-bottom:1px solid var(--line)}
+    .day:nth-child(4){border-right:0}
+  }
+  @media (max-width:900px){
+    .nav ul,.nav-r>.btn{display:none}
+    .burger{display:block}
+    .nav ul.open{display:flex;flex-direction:column;position:absolute;top:72px;left:0;right:0;background:var(--paper);border-bottom:2px solid var(--ink);padding:10px 24px 20px;gap:0}
+    .nav ul.open a{display:block;padding:15px 0;border-bottom:1px solid var(--line);font-size:.9rem}
+    .hero-grid,.about-grid,.morpho-grid,.fuel-grid,.faq-grid,.contact-box{grid-template-columns:1fr}
+    .hero-grid{gap:20px;min-height:0}
+    .hero .photo{position:relative;width:auto;height:min(620px,120vw);margin:0 -24px}
+    .hero .sticker{left:8%}
+    .hero .log{right:5%;bottom:14%}
+    .facts{grid-template-columns:1fr 1fr}
+    .fact:nth-child(2){border-right:0}
+    .fact:nth-child(-n+2){border-bottom:1px solid var(--line)}
+    .fact:nth-child(3){padding-left:0}
+    .about-grid{gap:60px}
+    .about-photo{max-width:460px}
+    .row{grid-template-columns:50px 1fr 52px}
+    .row p{grid-column:2/3;grid-row:2}
+    .row .go{grid-row:1/3;grid-column:3}
+    form{padding:34px 24px}
+    .contact-l{padding:40px 24px}
+  }
+  @media (max-width:600px){
+    .wrap{width:calc(100% - 32px)}
+    .hero{padding-top:44px}
+    .facts{grid-template-columns:1fr}
+    .fact{border-right:0!important;padding-left:0!important;border-bottom:1px solid var(--line)}
+    .values{grid-template-columns:1fr}
+    .value+.value{padding-left:0;border-left:0;border-top:1px solid var(--line);margin-top:18px}
+    .week-grid{grid-template-columns:1fr 1fr}
+    .day{border-right:1px solid var(--line)!important;min-height:auto}
+    .day:nth-child(even){border-right:0!important}
+    .log{width:210px}
+    .hero .photo{margin:0 -16px}
+    .types{flex-wrap:wrap}
+    .quiz-body{padding:24px 18px}
+    form{grid-template-columns:1fr}
+    .row{padding:24px 6px;gap:14px}
+    details p{padding-right:0}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .rv{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= TICKER ================= -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span>Coaching en France &amp; à distance</span><span>Séance découverte offerte</span><span>Analyse morphotype disponible</span><span>Sport · Discipline · Mindset</span><span>Daily Fuel</span>
+    <span>Coaching en France &amp; à distance</span><span>Séance découverte offerte</span><span>Analyse morphotype disponible</span><span>Sport · Discipline · Mindset</span><span>Daily Fuel</span>
+  </div>
+</div>
+
+<!-- ================= HEADER ================= -->
+<header>
+  <div class="wrap nav">
+    <a href="#" class="logo">LAËL<br>KOFFI<small>COACH SPORTIF</small></a>
+    <ul id="menu">
+      <li><a href="#laEl">Qui je suis</a></li>
+      <li><a href="#offres">Offres</a></li>
+      <li><a href="#semaine">La méthode</a></li>
+      <li><a href="#morphotype">Morphotype</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <div class="nav-r">
+      <button class="theme" id="theme" aria-label="Changer de thème (clair / sombre)">
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1"/></svg>
+      </button>
+      <a href="#contact" class="btn btn-volt">Séance offerte <span class="arr">↗</span></a>
+      <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hero panels">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <span class="label rv">Coach sportif · France</span>
+        <h1 class="display rv d1">Deviens<br>ta <span class="mark">meilleure</span><br>version.</h1>
+        <p class="lead rv d2">Sport, discipline et mindset. Je construis avec toi un programme qui part de ton corps, de tes objectifs et de ta vraie vie, et je t'aide à le tenir.</p>
+        <div class="hero-ctas rv d3">
+          <a href="#contact" class="btn btn-volt">Réserver ma séance offerte <span class="arr">↗</span></a>
+          <a href="#morphotype" class="link">Quel est mon morphotype ? →</a>
+        </div>
+      </div>
+
+      <div class="photo rv d2">
+        <div class="sticker">Daily Fuel<small>Jour 128 · on lâche rien</small></div>
+        <div class="photo-frame"><img src="img/lael-hero.jpg" alt="Laël Koffi, coach sportif, en tenue d'entraînement"></div>
+        <div class="log" id="log">
+          <div class="log-head"><span>LOG DU JOUR</span><span id="log-date">--/--</span></div>
+          <div class="log-row"><span>Séance force</span><b class="chk">OK</b></div>
+          <div class="log-row"><span>Calories</span><b>2 850 kcal</b></div>
+          <div class="log-row"><span>Running</span><b>6,2 km</b></div>
+          <div class="log-row"><span>Mindset</span><b class="chk">ON</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="facts">
+      <div class="fact rv"><span class="mono">01</span><b>Programmes 100% sur-mesure</b></div>
+      <div class="fact rv d1"><span class="mono">02</span><b>En salle ou à distance</b></div>
+      <div class="fact rv d2"><span class="mono">03</span><b>Entraînement adapté à ton morphotype</b></div>
+      <div class="fact rv d3"><span class="mono">04</span><b>Suivi calories &amp; habitudes</b></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MANIFESTE ================= -->
+<section class="manifesto">
+  <div class="wrap">
+    <span class="label">Manifeste</span>
+    <p class="words" id="words">La motivation te fait commencer. <span data-v>La discipline te fait continuer.</span> Mon rôle, c'est que tu ne t'arrêtes plus jamais au troisième jour.</p>
+    <div class="sign">Laël Koffi</div>
+  </div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section class="about" id="laEl">
+  <div class="wrap about-grid">
+    <div class="about-photo rv">
+      <div class="photo-frame"><img src="img/lael-buste.jpg" alt="Portrait de Laël Koffi"></div>
+      <span class="tag">Laël · Coach</span>
+    </div>
+    <div class="about-text">
+      <span class="label rv">Qui je suis</span>
+      <h2 class="display rv d1">Pas un influenceur.<br>Un coach qui <span class="mark">s'entraîne</span>.</h2>
+      <p class="rv d2">Je m'appelle Laël. Musculation, running, nutrition : je vis ce que je transmets, tous les jours. Je tracke mes calories, je planifie mes séances, je fais le travail même quand l'envie n'est pas là.</p>
+      <p class="rv d2">C'est exactement ce que je t'apprends : une méthode simple, adaptée à ton corps, et les habitudes pour aller au bout.</p>
+      <div class="values rv d3">
+        <div class="value"><span class="mono" style="color:var(--gray)">Sport</span><h4>Du concret</h4><p>Des séances efficaces, pensées pour ton niveau.</p></div>
+        <div class="value"><span class="mono" style="color:var(--gray)">Discipline</span><h4>Du suivi</h4><p>Des repères chiffrés pour voir tes progrès.</p></div>
+        <div class="value"><span class="mono" style="color:var(--gray)">Mindset</span><h4>Du mental</h4><p>La confiance se construit séance après séance.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= OFFRES ================= -->
+<section class="offers" id="offres">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="rv"><span class="label">Offres</span><h2 class="display">Comment<br>on bosse</h2></div>
+      <p class="rv d1">Quatre façons de travailler ensemble. On choisit la bonne pendant la séance découverte.</p>
+    </div>
+    <div class="rows">
+      <a href="#contact" class="row rv"><span class="n">/01</span><h3>Coaching individuel</h3><p>En face à face. Je corrige, je pousse, j'adapte chaque séance en direct.</p><span class="go">→</span></a>
+      <a href="#contact" class="row rv"><span class="n">/02</span><h3>Programme en ligne</h3><p>Ton plan dans la poche, des vidéos d'exercices et un bilan chaque semaine.</p><span class="go">→</span></a>
+      <a href="#morphotype" class="row rv"><span class="n">/03</span><h3>Analyse morphotype<span class="pill">NOUVEAU</span></h3><p>On identifie ton profil pour arrêter les programmes qui ne sont pas faits pour toi.</p><span class="go">→</span></a>
+      <a href="#contact" class="row rv"><span class="n">/04</span><h3>Nutrition &amp; Daily Fuel</h3><p>Calories, macros et habitudes simples, sans régime extrême.</p><span class="go">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SEMAINE TYPE ================= -->
+<section class="week" id="semaine">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="rv"><span class="label">La méthode</span><h2 class="display">Une semaine<br>avec moi</h2></div>
+      <p class="rv d1">Pas de flou. Tu sais chaque jour ce que tu as à faire, et moi je vérifie que c'est fait.</p>
+    </div>
+    <div class="week-grid rv" id="week">
+      <div class="day"><div class="day-h"><b>Lun</b><span>01</span></div><div class="day-b">
+        <div class="chip dark">Séance force<small>Haut du corps</small><span class="tick">✓</span></div>
+        <div class="chip">Log calories<small>Daily Fuel</small><span class="tick">✓</span></div></div></div>
+      <div class="day"><div class="day-h"><b>Mar</b><span>02</span></div><div class="day-b">
+        <div class="chip">Running<small>Endurance · 30 min</small><span class="tick">✓</span></div></div></div>
+      <div class="day"><div class="day-h"><b>Mer</b><span>03</span></div><div class="day-b">
+        <div class="chip dark">Séance force<small>Bas du corps</small><span class="tick">✓</span></div>
+        <div class="chip">Check-in<small>Message avec Laël</small><span class="tick">✓</span></div></div></div>
+      <div class="day"><div class="day-h"><b>Jeu</b><span>04</span></div><div class="day-b">
+        <div class="chip rest">Repos actif<small>Marche · mobilité</small></div></div></div>
+      <div class="day"><div class="day-h"><b>Ven</b><span>05</span></div><div class="day-b">
+        <div class="chip dark">Full body<small>Intensité</small><span class="tick">✓</span></div></div></div>
+      <div class="day"><div class="day-h"><b>Sam</b><span>06</span></div><div class="day-b">
+        <div class="chip">Running<small>Fractionné</small><span class="tick">✓</span></div></div></div>
+      <div class="day"><div class="day-h"><b>Dim</b><span>07</span></div><div class="day-b">
+        <div class="chip volt">Bilan semaine<small>Ajustements</small><span class="tick">✓</span></div></div></div>
+    </div>
+    <div class="week-legend"><span><i style="background:var(--ink)"></i>Entraînement</span><span><i></i>Suivi &amp; cardio</span><span><i style="border-style:dashed"></i>Récupération</span><span><i style="background:var(--volt)"></i>Bilan avec Laël</span></div>
+  </div>
+</section>
+
+<!-- ================= MORPHOTYPE ================= -->
+<section class="morpho" id="morphotype">
+  <div class="morpho-bg" aria-hidden="true">MORPHO</div>
+  <div class="wrap morpho-grid">
+    <div class="morpho-intro">
+      <span class="label rv">Disponible maintenant</span>
+      <h2 class="display rv d1">Ton corps a<br>son propre<br>mode d'emploi.</h2>
+      <p class="rv d2">Ecto, méso ou endomorphe : ton morphotype change tout, de la manière de t'entraîner à ce que tu mets dans ton assiette. Fais le test rapide, puis on affine ensemble.</p>
+      <div class="types rv d3" id="types">
+        <div class="type" data-t="e"><svg viewBox="0 0 60 120"><circle cx="30" cy="12" r="9"/><path d="M24 24h12l3 40-3 54h-5l-1-40-1 40h-5l-3-54z"/></svg><b>Ecto</b></div>
+        <div class="type" data-t="m"><svg viewBox="0 0 60 120"><circle cx="30" cy="12" r="9"/><path d="M12 24h36l-6 34 2 60h-8l-6-46-6 46h-8l2-60z"/></svg><b>Méso</b></div>
+        <div class="type" data-t="n"><svg viewBox="0 0 60 120"><circle cx="30" cy="12" r="10"/><path d="M16 25h28c6 10 8 24 4 36l-2 57h-9l-7-44-7 44h-9l-2-57c-4-12-2-26 4-36z"/></svg><b>Endo</b></div>
+      </div>
+    </div>
+
+    <div class="quiz rv d1">
+      <div class="quiz-top"><span id="qcount">Question 1/3</span><span class="progress"><i class="on"></i><i></i><i></i></span></div>
+      <div class="quiz-body">
+        <div class="q active">
+          <h3>Ta silhouette naturelle, sans entraînement ?</h3>
+          <button class="opt" data-v="e"><span class="k">A</span>Fine, élancée, des membres longs</button>
+          <button class="opt" data-v="m"><span class="k">B</span>Athlétique, épaules plus larges que la taille</button>
+          <button class="opt" data-v="n"><span class="k">C</span>Plutôt ronde, ossature large</button>
+        </div>
+        <div class="q">
+          <h3>Quand tu manges plus que d'habitude pendant une semaine…</h3>
+          <button class="opt" data-v="e"><span class="k">A</span>Je ne prends presque rien</button>
+          <button class="opt" data-v="m"><span class="k">B</span>Je prends un peu, surtout du muscle</button>
+          <button class="opt" data-v="n"><span class="k">C</span>Je prends vite, surtout au ventre</button>
+        </div>
+        <div class="q">
+          <h3>Entoure ton poignet avec le pouce et le majeur :</h3>
+          <button class="opt" data-v="e"><span class="k">A</span>Les doigts se chevauchent</button>
+          <button class="opt" data-v="m"><span class="k">B</span>Ils se touchent tout juste</button>
+          <button class="opt" data-v="n"><span class="k">C</span>Ils ne se touchent pas</button>
+        </div>
+        <div class="q res">
+          <span class="label">Résultat</span>
+          <h3 id="r-title"></h3>
+          <p id="r-text"></p>
+          <a href="#contact" class="btn btn-volt">Réserver mon analyse complète <span class="arr">↗</span></a>
+          <button class="again" id="again">Refaire le test</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DAILY FUEL / RESEAUX ================= -->
+<section class="fuel">
+  <div class="wrap fuel-grid">
+    <div class="fuel-img rv">
+      <img src="img/lael-large.jpg" alt="Laël Koffi à l'entraînement en extérieur">
+      <span class="rec">En direct sur mes réseaux</span>
+      <h2 class="display">Daily<br>Fuel</h2>
+    </div>
+    <div class="fuel-text">
+      <span class="label rv">Contenu gratuit</span>
+      <p class="rv d1">Mes séances, ce que je mange, mes runs et le mental derrière. Je partage tout, chaque jour. Viens voir comment je bosse avant de bosser avec moi.</p>
+      <div>
+        <a class="soc rv d1" href="https://www.instagram.com/lael_shrp" target="_blank" rel="noopener"><div><b>Instagram</b><span>@lael_shrp</span></div><em>↗</em></a>
+        <a class="soc rv d2" href="https://www.tiktok.com/@lael.koffi" target="_blank" rel="noopener"><div><b>TikTok</b><span>@lael.koffi</span></div><em>↗</em></a>
+        <a class="soc rv d3" href="https://www.youtube.com/@lael_koffi" target="_blank" rel="noopener"><div><b>YouTube</b><span>@lael_koffi</span></div><em>↗</em></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section class="faq panels" id="faq">
+  <div class="wrap faq-grid">
+    <div class="rv"><span class="label">FAQ</span><h2 class="display">Tu te<br>poses des<br>questions&nbsp;?</h2></div>
+    <div class="rv d1">
+      <details open><summary>Je suis débutant, c'est pour moi ?<i>+</i></summary><p>Oui. Le programme part de ton niveau réel, pas de celui que tu aimerais avoir. On commence simple et on monte progressivement.</p></details>
+      <details><summary>Le coaching à distance, ça marche vraiment ?<i>+</i></summary><p>Oui, si le suivi est sérieux. Tu reçois ton programme, des vidéos pour chaque exercice, et on fait le point chaque semaine pour ajuster.</p></details>
+      <details><summary>C'est quoi exactement l'analyse morphotype ?<i>+</i></summary><p>On identifie ton type de corps pour adapter le volume d'entraînement, le cardio et l'alimentation. Ça évite de suivre des programmes qui ne sont pas faits pour toi.</p></details>
+      <details><summary>Je dois aller en salle ?<i>+</i></summary><p>Pas forcément. Le programme s'adapte au matériel que tu as : salle, maison ou extérieur.</p></details>
+      <details><summary>Comment se passe la séance découverte ?<i>+</i></summary><p>On échange sur tes objectifs, ton quotidien et ton niveau. Je te dis ensuite honnêtement quelle formule te correspond. C'est offert et sans engagement.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="contact-box rv">
+      <div class="contact-l">
+        <span class="label">Contact</span>
+        <h2 class="display">Jour 1,<br><span class="v">c'est quand&nbsp;?</span></h2>
+        <p>Laisse-moi tes infos, je te réponds sous 24h pour caler ta séance découverte offerte.</p>
+        <!-- À compléter : email / téléphone de Laël -->
+        <div class="direct">
+          <a href="https://www.instagram.com/lael_shrp" target="_blank" rel="noopener">→ DM Instagram @lael_shrp</a>
+          <a href="mailto:contact@laelkoffi.fr">→ contact@laelkoffi.fr</a>
+        </div>
+      </div>
+      <form id="form">
+        <div class="f"><label for="f1">Prénom</label><input id="f1" required autocomplete="given-name"></div>
+        <div class="f"><label for="f2">Email ou téléphone</label><input id="f2" required></div>
+        <div class="f full"><label>Ton objectif</label>
+          <div class="goals">
+            <input type="radio" name="g" id="g1" checked><label for="g1">Prendre du muscle</label>
+            <input type="radio" name="g" id="g2"><label for="g2">Perdre du poids</label>
+            <input type="radio" name="g" id="g3"><label for="g3">Courir mieux</label>
+            <input type="radio" name="g" id="g4"><label for="g4">Reprendre le sport</label>
+            <input type="radio" name="g" id="g5"><label for="g5">Mon morphotype</label>
+          </div>
+        </div>
+        <div class="f full"><label for="f3">Dis-m'en un peu plus</label><textarea id="f3" placeholder="Ton niveau, tes dispos, ce qui t'a bloqué jusqu'ici…"></textarea></div>
+        <button class="btn btn-volt" type="submit">Envoyer <span class="arr">↗</span></button>
+        <div class="ok" id="ok">✓ Reçu. Je te réponds très vite. Le plus dur est fait.</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="wrap">
+    <div class="foot-big">Laël Koffi<span>.</span></div>
+    <div class="foot-row">
+      <span>© 2026 Laël Koffi · Coach sportif · France</span>
+      <nav>
+        <a href="https://www.instagram.com/lael_shrp" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.tiktok.com/@lael.koffi" target="_blank" rel="noopener">TikTok</a>
+        <a href="https://www.youtube.com/@lael_koffi" target="_blank" rel="noopener">YouTube</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // menu mobile
+  const menu = document.getElementById('menu');
+  document.getElementById('burger').addEventListener('click', () => menu.classList.toggle('open'));
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => menu.classList.remove('open')));
+
+  // mode clair / sombre
+  document.getElementById('theme').addEventListener('click', () => {
+    const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem('lael-theme', next); } catch(e) {}
+  });
+
+  // date du log
+  const d = new Date();
+  document.getElementById('log-date').textContent = String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0');
+
+  // apparitions
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('in');
+    io.unobserve(e.target);
+  }), {threshold:.15});
+  document.querySelectorAll('.rv, .mark').forEach(el => io.observe(el));
+
+  const once = (el, cls, t=.4) => new IntersectionObserver((es, o) => es.forEach(e => {
+    if (e.isIntersecting) { el.classList.add(cls); o.disconnect(); }
+  }), {threshold:t}).observe(el);
+  once(document.getElementById('log'), 'run', .6);
+  once(document.getElementById('week'), 'run', .35);
+
+  // manifeste : les mots s'allument au scroll
+  const box = document.getElementById('words');
+  const wrapWords = (node, volt) => {
+    [...node.childNodes].forEach(n => {
+      if (n.nodeType === 3) {
+        const frag = document.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach(t => {
+          if (!t.trim()) { frag.append(t); return; }
+          const s = document.createElement('span');
+          s.className = 'w' + (volt ? ' v' : '');
+          s.textContent = t;
+          frag.append(s);
+        });
+        n.replaceWith(frag);
+      } else wrapWords(n, n.hasAttribute('data-v'));
+    });
+  };
+  wrapWords(box, false);
+  const words = box.querySelectorAll('.w');
+  const light = () => {
+    const r = box.getBoundingClientRect();
+    const p = Math.min(1, Math.max(0, (innerHeight * .85 - r.top) / (r.height + innerHeight * .35)));
+    const n = Math.round(p * words.length);
+    words.forEach((w, i) => w.classList.toggle('lit', i < n));
+  };
+  addEventListener('scroll', light, {passive:true}); light();
+
+  // test morphotype
+  const qs = [...document.querySelectorAll('.q')];
+  const bars = document.querySelectorAll('.progress i');
+  const count = document.getElementById('qcount');
+  const profiles = {
+    e:{t:'Plutôt ectomorphe', d:"Métabolisme rapide, tu as du mal à prendre. On mise sur des charges lourdes, des séances courtes et un apport calorique bien suivi pour enfin construire du muscle."},
+    m:{t:'Plutôt mésomorphe', d:"Tu réponds vite à l'entraînement. On combine force et volume pour sculpter, et on garde une alimentation propre pour rester sec toute l'année."},
+    n:{t:'Plutôt endomorphe', d:"Gros potentiel de force. On associe musculation, cardio malin et habitudes alimentaires durables : les résultats arrivent vite quand c'est bien cadré."}
+  };
+  let step = 0, answers = [];
+  const show = i => {
+    qs.forEach((q, k) => q.classList.toggle('active', k === i));
+    bars.forEach((b, k) => b.classList.toggle('on', k <= Math.min(i, 2)));
+    count.textContent = i < 3 ? `Question ${i+1}/3` : 'Terminé';
+  };
+  qs.slice(0,3).forEach(q => q.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
+    answers[step] = b.dataset.v;
+    step++;
+    if (step === 3) {
+      const c = answers.reduce((a, v) => (a[v] = (a[v]||0) + 1, a), {});
+      const top = Object.keys(c).sort((a, b) => c[b] - c[a] || answers.indexOf(a) - answers.indexOf(b))[0];
+      document.getElementById('r-title').textContent = profiles[top].t;
+      document.getElementById('r-text').textContent = profiles[top].d;
+      document.querySelectorAll('.type').forEach(t => t.classList.toggle('hl', t.dataset.t === top));
+    }
+    show(step);
+  })));
+  document.getElementById('again').addEventListener('click', () => {
+    step = 0; answers = [];
+    document.querySelectorAll('.type').forEach(t => t.classList.remove('hl'));
+    show(0);
+  });
+
+  // formulaire (démo — à brancher sur Formspree / EmailJS)
+  document.getElementById('form').addEventListener('submit', e => {
+    e.preventDefault();
+    document.getElementById('ok').style.display = 'block';
+    e.target.reset();
+  });
+</script>
+</body>
+</html>
