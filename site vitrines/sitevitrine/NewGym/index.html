@@ -608,7 +608,16 @@
   #veilleV .ghost div{display:flex;gap:.4em;width:max-content;font-family:var(--display);font-weight:700;font-size:clamp(5rem,14vw,12rem);line-height:1;text-transform:uppercase;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.05);animation:vSlide 60s linear infinite}
   @keyframes vSlide{to{transform:translateX(-50%)}}
 
-  @media (max-width: 600px) { #veilleV .motto { display: none; } }
+  /* téléphone / écran étroit */
+  @media (max-width: 600px) {
+    #veilleV .motto { display: none; }
+    #veilleV .appel { gap: .8em; padding: .45em 1.4em .45em .45em; }
+    #veilleV .appel .cible { width: 58px; }
+    #veilleV .appel strong { font-size: 26px; }
+    #veilleV .appel span { font-size: 12px; white-space: nowrap; }
+    /* le cadenas admin passe en haut au centre, là où il ne gêne rien */
+    .badge-admin { left: auto; right: 16px; bottom: auto; top: 58px; width: 36px; height: 36px; }
+  }
 
   /* bascule horizontal / vertical */
   @media (orientation: portrait) {
