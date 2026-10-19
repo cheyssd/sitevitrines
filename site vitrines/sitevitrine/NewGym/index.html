@@ -152,19 +152,21 @@
     text-align: center; min-height: 0; padding-top: 1vh;
   }
   #base .logo-img {
-    height: min(42vh, 46vmin); width: auto; flex: none;
+    height: min(36vh, 46vmin); width: auto; flex: none;
     animation: flotte 6s ease-in-out infinite;
   }
   @keyframes flotte { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-1.2vmin) } }
   #base .salut-ligne {
-    margin-top: 4vh;
+    margin-top: 3vh;
     font-family: "Clash Display", var(--titre);
     font-weight: 700; line-height: .9;
-    font-size: clamp(30px, 5.5vmin, 64px);
+    font-size: clamp(26px, min(5.5vmin, 7vh), 64px);
     text-transform: uppercase;
     letter-spacing: .02em;
   }
-  #base .message { margin-top: 1.2vh; max-width: 26em; min-height: 2.6em; }
+  #base .message { margin-top: 1.2vh; max-width: 26em; min-height: 2.6em; font-size: clamp(16px, min(3.3vmin, 4vh), 38px); }
+  #base .bas { padding-top: 1.5vh; }
+  #base .appel strong { font-size: clamp(22px, min(4vmin, 5.5vh), 46px); }
 
   #base .bas { display: flex; justify-content: center; }
   #base .appel {
@@ -605,6 +607,8 @@
   #veilleV .ghost{position:absolute;left:0;right:0;top:50%;z-index:0;overflow:hidden;pointer-events:none}
   #veilleV .ghost div{display:flex;gap:.4em;width:max-content;font-family:var(--display);font-weight:700;font-size:clamp(5rem,14vw,12rem);line-height:1;text-transform:uppercase;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.05);animation:vSlide 60s linear infinite}
   @keyframes vSlide{to{transform:translateX(-50%)}}
+
+  @media (max-width: 600px) { #veilleV .motto { display: none; } }
 
   /* bascule horizontal / vertical */
   @media (orientation: portrait) {
