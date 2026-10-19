@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vos photos — Magic Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --fond:#f7f4ef;
+    --papier:#ffffff;
+    --encre:#141210;
+    --doux:#6f6a63;
+    --ligne:rgba(20,18,16,.12);
+    --jaune:#f5b829; --rose:#e8467c; --violet:#7a3fd1;
+    --arc:linear-gradient(90deg,#f5b829,#e8467c 55%,#7a3fd1);
+    --serif:'Instrument Serif',Georgia,serif;
+    --sans:'Manrope',system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--fond);color:var(--encre);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  img{display:block;max-width:100%}
+  button{font:inherit;color:inherit;cursor:pointer}
+  .wrap{width:min(1240px,100% - 40px);margin-inline:auto}
+
+  /* ---------- barre du haut ---------- */
+  .top{position:sticky;top:0;z-index:30;background:rgba(247,244,239,.86);backdrop-filter:blur(14px);border-bottom:1px solid var(--ligne)}
+  .top .wrap{display:flex;align-items:center;gap:16px;height:68px}
+  .top .logo{height:30px;width:auto;mix-blend-mode:multiply}
+  .top .prive{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--doux);padding-left:16px;border-left:1px solid var(--ligne)}
+  .chrono{margin-left:auto;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;background:var(--papier);border:1px solid var(--ligne);font-size:13px;font-weight:700}
+  .chrono i{width:8px;height:8px;border-radius:50%;background:var(--rose);box-shadow:0 0 0 0 rgba(232,70,124,.5);animation:ping 2s infinite}
+  @keyframes ping{80%,100%{box-shadow:0 0 0 10px rgba(232,70,124,0)}}
+  .chrono b{font-variant-numeric:tabular-nums}
+
+  /* ---------- hero ---------- */
+  .hero{padding:30px 0 6px}
+  .hero-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:30px;align-items:center}
+  .hero .meta{margin:22px 0 22px}
+  /* pile de photos qui se déplie au défilement */
+  .pile{position:relative;display:block;height:360px;perspective:1400px;z-index:1}
+  .qualite,#galerie{position:relative;z-index:2}
+  .pile figure{position:absolute;left:50%;top:50%;width:210px;aspect-ratio:4/5;margin:-131px 0 0 -105px;background:#fff;padding:8px 8px 26px;border-radius:6px;
+    box-shadow:0 24px 50px -18px rgba(20,18,16,.45),0 2px 6px rgba(20,18,16,.08);will-change:transform;transition:transform .25s ease-out}
+  .pile figure img{width:100%;height:100%;object-fit:cover;border-radius:2px}
+  .pile figure{cursor:zoom-in}
+  .pile::after{content:"Touchez une photo pour la revoir en grand";position:absolute;left:0;right:0;bottom:-6px;text-align:center;font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--doux)}
+  .pile figure:nth-child(5){box-shadow:0 34px 70px -20px rgba(20,18,16,.55)}
+  .kicker{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--doux)}
+  .kicker::before{content:"";width:28px;height:3px;border-radius:3px;background:var(--arc)}
+  .hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(44px,6vw,80px);line-height:.95;letter-spacing:-.02em;margin:12px 0 12px}
+  .hero h1 em{font-style:italic;background:var(--arc);-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.08em}
+  .hero p.lead{font-size:17px;line-height:1.6;color:var(--doux);max-width:440px}
+  .meta{display:flex;gap:28px;margin:0}
+  .meta div b{display:block;font-family:var(--serif);font-size:34px;font-weight:400;line-height:1}
+  .meta div span{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--doux)}
+  .actions{display:flex;flex-wrap:wrap;gap:12px}
+  .btn{display:inline-flex;align-items:center;gap:10px;height:54px;padding:0 24px;border-radius:999px;border:1.5px solid var(--encre);background:transparent;font-weight:700;font-size:15px;transition:transform .15s,background .2s,color .2s}
+  .btn svg{width:18px;height:18px}
+  .btn.plein{background:var(--encre);color:#fff}
+  .btn:active{transform:scale(.97)}
+  .btn.plein:hover{background:#2a2622}
+  .couverture{position:relative;aspect-ratio:4/5;border-radius:28px;overflow:hidden;background:#ddd;box-shadow:0 40px 80px -40px rgba(20,18,16,.5)}
+  .couverture img{width:100%;height:100%;object-fit:cover;animation:zoom 14s ease-in-out infinite alternate}
+  @keyframes zoom{to{transform:scale(1.06)}}
+  .couverture::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.45))}
+  .couverture .sig{position:absolute;left:24px;bottom:22px;z-index:2;color:#fff;font-family:var(--serif);font-style:italic;font-size:26px}
+  .couverture .sig small{display:block;font-family:var(--sans);font-style:normal;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.85}
+
+  /* ---------- choix de la qualité ---------- */
+  .qualite{background:var(--papier);border:1px solid var(--ligne);border-radius:24px;padding:18px 20px;margin:22px 0 26px;display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center}
+  .qualite h3{font-family:var(--serif);font-weight:400;font-size:28px;line-height:1.05}
+  .qualite h3 small{display:block;font-family:var(--sans);font-size:13px;color:var(--doux);font-weight:500;margin-top:6px;max-width:250px;line-height:1.45}
+  .choix{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .opt{text-align:left;border:1.5px solid var(--ligne);background:var(--fond);border-radius:18px;padding:14px 16px;transition:border-color .2s,background .2s}
+  .opt b{display:flex;align-items:center;gap:8px;font-size:15px}
+  .opt b i{width:16px;height:16px;border-radius:50%;border:2px solid var(--ligne);flex:none}
+  .opt small{display:block;font-size:12.5px;color:var(--doux);margin-top:4px;line-height:1.4}
+  .opt .poids{display:inline-block;margin-top:8px;font-size:12px;font-weight:800;background:var(--papier);border-radius:999px;padding:3px 10px}
+  .opt.on{border-color:var(--encre);background:var(--papier)}
+  .opt.on b i{border:5px solid var(--encre)}
+  .opt .reco{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--arc);padding:2px 8px;border-radius:999px;margin-left:auto}
+
+  /* ---------- avis ---------- */
+  .avis{margin:48px 0 0;background:var(--encre);color:#fff;border-radius:28px;padding:36px 40px;display:grid;grid-template-columns:1fr 1fr;gap:48px;position:relative;overflow:hidden}
+  .avis::before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;right:-120px;top:-160px;background:var(--arc);filter:blur(80px);opacity:.35}
+  .avis > *{position:relative}
+  .avis h2{font-family:var(--serif);font-weight:400;font-size:clamp(40px,5vw,62px);line-height:1}
+  .avis h2 em{font-style:italic;color:#f5b829}
+  .avis p{color:rgba(255,255,255,.7);margin-top:14px;line-height:1.6;max-width:380px}
+  .etoiles{display:flex;gap:8px;margin-bottom:16px}
+  .etoiles button{width:52px;height:52px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);display:grid;place-items:center;transition:transform .15s,background .2s}
+  .etoiles button svg{width:26px;height:26px;fill:none;stroke:rgba(255,255,255,.55);stroke-width:1.6;transition:fill .2s,stroke .2s}
+  .etoiles button.on{background:rgba(245,184,41,.15);border-color:rgba(245,184,41,.5)}
+  .etoiles button.on svg{fill:#f5b829;stroke:#f5b829}
+  .etoiles button:active{transform:scale(.9)}
+  .note-txt{font-size:14px;font-weight:700;color:#f5b829;min-height:20px;margin-bottom:14px}
+  .avis textarea{width:100%;min-height:110px;resize:vertical;border-radius:16px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:#fff;font:500 15px var(--sans);padding:14px 16px;outline:none}
+  .avis textarea:focus{border-color:rgba(255,255,255,.5)}
+  .avis .btn{border-color:#fff;margin-top:14px}
+  .avis .btn.plein{background:#fff;color:var(--encre)}
+  .merci{display:none;padding:26px;border-radius:20px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15)}
+  .merci b{font-family:var(--serif);font-weight:400;font-size:32px;display:block}
+  .merci p{margin-top:6px}
+
+  /* ---------- revenir ---------- */
+  .revenir{margin:16px 0 48px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .rv{background:var(--papier);border:1px solid var(--ligne);border-radius:22px;padding:20px 22px}
+  .rv .ico{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:var(--fond);margin-bottom:16px}
+  .rv .ico svg{width:22px;height:22px}
+  .rv h3{font-family:var(--serif);font-weight:400;font-size:28px;line-height:1.05}
+  .rv p{font-size:14px;color:var(--doux);margin:8px 0 16px;line-height:1.55}
+  .rv a{font-weight:800;font-size:14px;color:var(--encre);text-decoration:none;border-bottom:2px solid;padding-bottom:2px}
+  .rv.code{background:var(--arc);color:#fff;border:0}
+  .rv.code p{color:rgba(255,255,255,.9)}
+  .rv.code .ico{background:rgba(255,255,255,.2)}
+  .rv.code .code-promo{display:inline-block;font-family:var(--serif);font-size:30px;letter-spacing:.06em;background:rgba(255,255,255,.18);border:1.5px dashed rgba(255,255,255,.7);border-radius:12px;padding:4px 14px}
+  footer{border-top:1px solid var(--ligne);padding:26px 0 34px;font-size:13px;color:var(--doux)}
+  footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+  /* ---------- visionneuse ---------- */
+  .lb{position:fixed;inset:0;z-index:50;background:rgba(12,11,10,.96);display:none;grid-template-rows:auto 1fr auto;color:#fff}
+  .lb.on{display:grid;animation:fondu .25s}
+  @keyframes fondu{from{opacity:0}}
+  .lb-haut{display:flex;align-items:center;gap:12px;padding:16px 20px}
+  .lb-haut span{font-weight:700;font-size:14px;opacity:.8}
+  .lb-haut .esp{flex:1}
+  .rond{width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);display:grid;place-items:center;color:#fff}
+  .rond svg{width:20px;height:20px}
+  .rond.on svg{fill:var(--rose);stroke:var(--rose)}
+  .lb-img{display:grid;place-items:center;padding:0 80px;min-height:0;position:relative}
+  .lb-img img{max-width:100%;max-height:calc(100vh - 170px);max-height:calc(100dvh - 170px);width:auto;height:auto;object-fit:contain;border-radius:8px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+  .lb-img .prec,.lb-img .suiv{position:absolute;top:50%;transform:translateY(-50%)}
+  .lb-img .prec{left:18px} .lb-img .suiv{right:18px}
+  .lb-bas{display:flex;justify-content:center;gap:10px;padding:16px 20px 22px;flex-wrap:wrap}
+  .lb-bas .btn{border-color:rgba(255,255,255,.35);color:#fff;height:48px}
+  .lb-bas .btn.plein{background:#fff;color:var(--encre);border-color:#fff}
+
+  /* ---------- toast + progression ---------- */
+  .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,40px);opacity:0;z-index:60;background:var(--encre);color:#fff;padding:14px 20px;border-radius:16px;font-weight:700;font-size:14px;box-shadow:0 20px 50px rgba(0,0,0,.3);transition:.3s;display:flex;align-items:center;gap:12px;min-width:280px}
+  .toast.on{opacity:1;transform:translate(-50%,0)}
+  .toast .piste{flex:1;height:6px;border-radius:6px;background:rgba(255,255,255,.15);overflow:hidden}
+  .toast .piste i{display:block;height:100%;width:0;background:var(--arc);transition:width .2s}
+
+  /* ---------- galerie expirée ---------- */
+  .expire{display:none;min-height:calc(100vh - 68px);place-items:center;text-align:center;padding:40px 20px}
+  .expire h1{font-family:var(--serif);font-weight:400;font-size:clamp(46px,7vw,88px);line-height:1}
+  .expire p{color:var(--doux);margin:16px auto 28px;max-width:440px;line-height:1.6}
+  body.perimee .expire{display:grid}
+  body.perimee main,body.perimee .chrono{display:none}
+
+  html,body{overflow-x:clip}
+  .hero-grid>*,.avis>*,.qualite>*{min-width:0}
+  .top .wrap>*{flex:none}
+  @media (max-width:900px){
+    .hero-grid,.avis,.qualite{grid-template-columns:1fr}
+    .hero-grid{gap:6px}
+    .pile{height:270px;order:-1}
+    .pile figure{width:150px;margin:-93px 0 0 -75px;padding:6px 6px 20px}
+    .pile::after{bottom:-14px}
+    .pile{margin-bottom:22px}
+    .choix{grid-template-columns:1fr 1fr}
+    .revenir{grid-template-columns:1fr}
+    .avis{padding:34px 24px}
+    .lb-img{padding:0 10px}
+    .lb-img .prec,.lb-img .suiv{display:none}
+  }
+  @media (max-width:600px){
+    .top .prive{display:none}
+    .choix{grid-template-columns:1fr 1fr;gap:8px}
+    .opt{padding:12px}
+    .opt small{display:none}
+    .opt .reco{display:none}
+    .qualite h3 small{display:none}
+    .grille{columns:2;column-gap:10px}
+    .ph{margin-bottom:10px;border-radius:12px}
+    .barre-galerie{flex-direction:column;align-items:start}
+    .barre-galerie h2{font-size:36px}
+    .meta{gap:18px}
+    .chrono span{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.ph{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <img class="logo" src="assets/logo-magic.png" alt="Magic Studio">
+    <span class="prive">Galerie privée</span>
+    <div class="chrono" title="Vos photos sont supprimées automatiquement après ce délai"><i></i><span>Disponible encore</span><b id="chrono">—</b></div>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="kicker">Vos photos sont prêtes</span>
+        <h1 id="titre">Famille<br><em>Kouassi</em></h1>
+        <p class="lead">Merci d'avoir choisi Magic Studio. Votre séance, en pleine qualité, telle qu'elle est sortie de notre appareil.</p>
+        <div class="meta">
+          <div><b id="mNb">24</b><span>photos</span></div>
+          <div><b id="mDate">12 oct.</b><span>séance</span></div>
+        </div>
+        <div class="actions">
+          <button class="btn plein" id="toutDl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"/></svg>Tout télécharger</button>
+        </div>
+      </div>
+      <div class="pile" id="pile" aria-label="Vos photos"></div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <!-- QUALITÉ -->
+    <section class="qualite" id="qualite">
+      <h3>Choisissez<br>votre qualité<small>Valable pour tous vos téléchargements. Vous pouvez en changer à tout moment.</small></h3>
+      <div class="choix" id="choix"></div>
+    </section>
+
+
+    <!-- AVIS -->
+    <section class="avis" id="avis">
+      <div>
+        <h2>Alors,<br>ça vous <em>plaît&nbsp;?</em></h2>
+        <p>Votre avis compte énormément pour nous. Il ne prend que quelques secondes et aide d'autres familles à nous découvrir.</p>
+      </div>
+      <div>
+        <div id="formAvis">
+          <div class="etoiles" id="etoiles"></div>
+          <div class="note-txt" id="noteTxt"></div>
+          <textarea id="avisTxt" placeholder="Un mot sur votre séance, le photographe, l'accueil… (facultatif)"></textarea>
+          <button class="btn plein" id="envoyerAvis">Envoyer mon avis</button>
+        </div>
+        <div class="merci" id="merci"><b>Merci infiniment ✨</b><p>Votre avis a bien été envoyé à l'équipe Magic Studio.</p></div>
+      </div>
+    </section>
+
+    <!-- REVENIR -->
+    <section class="revenir">
+      <div class="rv code">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 21V7M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z"/></svg></div>
+        <h3>-10 % sur votre<br>prochaine séance</h3>
+        <p>Un cadeau pour vous remercier. Présentez ce code lors de votre réservation.</p>
+        <span class="code-promo" id="codePromo">MAGIC10</span>
+      </div>
+      <div class="rv" id="reserver-bloc">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+        <h3>Une nouvelle<br>séance ?</h3>
+        <p>Anniversaire, mariage, grossesse, portrait pro… On vous attend au studio.</p>
+        <a href="#" id="reserver">Réserver par WhatsApp →</a>
+      </div>
+      <div class="rv">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5v.01"/></svg></div>
+        <h3>Partagez<br>vos photos</h3>
+        <p>Postez votre photo préférée et identifiez-nous : on adore voir nos clients sur les réseaux.</p>
+        <a href="#">Suivre Magic Studio →</a>
+      </div>
+    </section>
+  </div>
+</main>
+
+<!-- GALERIE EXPIRÉE -->
+<section class="expire">
+  <div>
+    <span class="kicker">Lien expiré</span>
+    <h1>Cette galerie<br>n'est plus <em style="font-style:italic">disponible</em></h1>
+    <p>Pour protéger votre vie privée, les photos sont supprimées automatiquement après le délai de téléchargement. Contactez le studio si vous avez besoin d'aide.</p>
+    <a class="btn plein" href="#" style="text-decoration:none">Contacter Magic Studio</a>
+  </div>
+</section>
+
+<footer><div class="wrap"><span>© Magic Studio · Photographe</span><span id="piedExp"></span></div></footer>
+
+<!-- VISIONNEUSE -->
+<div class="lb" id="lb">
+  <div class="lb-haut">
+    <span id="lbNum"></span><span class="esp"></span>
+    <button class="rond" id="lbFermer" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
+  <div class="lb-img">
+    <button class="rond prec" id="lbPrec" aria-label="Précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <img id="lbImg" alt="">
+    <button class="rond suiv" id="lbSuiv" aria-label="Suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>
+  </div>
+  <div class="lb-bas">
+    <button class="btn plein" id="lbDl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"/></svg><span id="lbDlTxt">Télécharger</span></button>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span id="toastTxt"></span><div class="piste"><i id="toastBar"></i></div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+(async () => {
+/* ================= RÉGLAGES DE LA GALERIE (exemple) ================= */
+const GALERIE = {
+  client: { titre: "Famille", nom: "Kouassi", seance: "Séance famille" },
+  date: "2026-10-12",
+  duree: 3,                       // jours avant suppression automatique
+  photos: [838, 1027, 64, 836, 129, 996, 777, 856, 660, 646, 823, 978, 1005, 399, 628, 1012, 669, 633, 804, 1011, 375, 91, 342, 883], // photos de démonstration (picsum.photos)
+};
+const QUALITES = [
+  { id: "originale", nom: "Originale", desc: "Le fichier brut de l'appareil, pour les tirages géants.", larg: 5000, mo: 12 },
+  { id: "4k", nom: "Ultra HD 4K", desc: "Une netteté incroyable, sur TV 4K comme en grand tirage.", larg: 3840, mo: 6.5 },
+  { id: "haute", nom: "Haute qualité", desc: "Parfaite sur écran et pour des tirages classiques.", larg: 2000, mo: 2.8, reco: true },
+  { id: "legere", nom: "Légère", desc: "Pour partager vite, sans encombrer votre téléphone.", larg: 1080, mo: 0.6 },
+];
+
+const $ = id => document.getElementById(id);
+const params = new URLSearchParams(location.search);
+const url = (id, w, h) => `https://picsum.photos/id/${id}/${w}/${h ? h : Math.round(w * 1.25)}`;
+let qualite = "haute", favoris = new Set(), filtre = "tout", courant = 0;
+let LOCAL = null, META = null, finFixe = null;
+const lireLS = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } };
+const ecrireLS = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+const majMeta = fn => { if (!META) return; const gs = lireLS("ms_galeries", []); const g = gs.find(x => x.code === META.code); if (g) { fn(g); ecrireLS("ms_galeries", gs); } };
+if (params.has("g")) {
+  META = lireLS("ms_galeries", []).find(x => x.code === params.get("g").toUpperCase());
+  if (!META) { document.body.classList.add("perimee"); }
+  else {
+    const mots = META.nom.split(" ");
+    GALERIE.client = mots.length > 1 ? { titre: mots[0], nom: mots.slice(1).join(" "), seance: META.type } : { titre: "Bonjour", nom: META.nom, seance: META.type };
+    GALERIE.date = new Date(META.creee).toISOString().slice(0, 10);
+    GALERIE.duree = META.duree;
+    finFixe = META.creee + META.duree * 864e5;
+    if (META.demo) GALERIE.photos = GALERIE.photos.slice(0, META.nb);
+    else {
+      const idb = new Promise(ok => {
+        const r = indexedDB.open("magicstudio", 1);
+        r.onupgradeneeded = () => r.result.createObjectStore("photos");
+        r.onsuccess = () => { const q = r.result.transaction("photos").objectStore("photos").get(META.code); q.onsuccess = () => ok(q.result || null); q.onerror = () => ok(null); };
+        r.onerror = () => ok(null);
+      });
+      LOCAL = await Promise.race([idb, new Promise(ok => setTimeout(() => ok(null), 2500))]) || lireLS("ms_photos_" + META.code, null);
+      if (LOCAL) GALERIE.photos = LOCAL.map((_, i) => i);
+    }
+    majMeta(g => g.ouvert = (g.ouvert || 0) + 1);
+  }
+}
+const CLE_FAV = "ms_fav_" + (META ? META.code : "demo");
+/* source d'une photo : celle déposée par le photographe, sinon la photo d'exemple */
+const src = (i, w, h) => LOCAL ? LOCAL[i] : url(GALERIE.photos[i], w, h);
+favoris = new Set(lireLS(CLE_FAV, []));
+
+/* ---------- en-tête ---------- */
+$("titre").innerHTML = `${GALERIE.client.titre}<br><em>${GALERIE.client.nom}</em>`;
+$("mNb").textContent = GALERIE.photos.length;
+const dSeance = new Date(GALERIE.date + "T10:00:00");
+$("mDate").textContent = dSeance.toLocaleDateString("fr-FR", { day: "numeric", month: "short" });
+
+/* ---------- pile « univers Magic Studio » : ouverte en haut, se referme en descendant ---------- */
+// les photos du client, en tirages ; la 1re de la séance est sur le dessus
+const NB_PILE = Math.min(5, GALERIE.photos.length);
+const PILE_IDX = Array.from({ length: NB_PILE }, (_, k) => Math.round((NB_PILE - 1 - k) * (GALERIE.photos.length - 1) / Math.max(1, NB_PILE - 1)));
+$("pile").innerHTML = PILE_IDX.map(i => `<figure data-i="${i}"><img src="${src(i, 420, 525)}" alt="Photo ${i + 1}"></figure>`).join("");
+$("pile").addEventListener("click", e => { const f = e.target.closest("figure"); if (f) ouvrirLb(+f.dataset.i); });
+const cartes = [...$("pile").children];
+const RANGE = [[-14, 6, -8], [10, -4, 6], [-6, 10, -3], [8, 2, 4], [0, 0, 0]].slice(5 - NB_PILE);            // pile refermée
+const OUVERT = [[-2.1, .16, -14], [2.1, .16, 14], [-1.05, .02, -7], [1.05, .02, 7], [0, -.06, 0]].slice(5 - NB_PILE); // éventail
+const lisse = t => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+function poserPile(e) {   // e = 1 : ouverte · e = 0 : refermée
+  const larg = cartes[0]?.offsetWidth || 200;
+  const maxX = Math.min(1, ($("pile").offsetWidth / 2 - larg / 2 - 10) / (larg * 2.1));
+  cartes.forEach((c, k) => {
+    const [x0, y0, r0] = RANGE[k], [x1, y1, r1] = OUVERT[k];
+    c.style.transform = `translate(${x0 + (x1 * larg * maxX - x0) * e}px, ${y0 + (y1 * larg - y0) * e}px) rotate(${r0 + (r1 - r0) * e}deg) scale(${1 - (cartes.length - 1 - k) * .015 * (1 - e)})`;
+  });
+}
+let introFinie = false;
+function fermerAuDefilement() {
+  if (!introFinie) return;
+  const p = Math.max(0, Math.min(1, scrollY / (innerHeight * (innerWidth < 900 ? .14 : .4))));
+  poserPile(1 - lisse(p));
+}
+addEventListener("scroll", fermerAuDefilement, { passive: true });
+addEventListener("resize", fermerAuDefilement);
+// à l'arrivée : la pile s'ouvre en éventail
+poserPile(0);
+setTimeout(() => {
+  const t0 = performance.now(), cible = 1 - lisse(Math.max(0, Math.min(1, scrollY / (innerHeight * (innerWidth < 900 ? .14 : .4)))));
+  (function ouvrir(t) { const k = Math.min(1, (t - t0) / 900); poserPile(lisse(k) * cible); if (k < 1) requestAnimationFrame(ouvrir); else { introFinie = true; fermerAuDefilement(); } })(t0);
+}, 350);
+
+/* ---------- compte à rebours ---------- */
+// démo : la galerie a été envoyée il y a ~14 h (?reste=heures pour tester, ?expire=1 pour la page expirée)
+const fin = finFixe ? finFixe : params.has("reste") ? Date.now() + params.get("reste") * 36e5 : Date.now() + (GALERIE.duree * 24 - 14) * 36e5 - 23 * 6e4;
+function majChrono() {
+  const r = fin - Date.now();
+  if (r <= 0 || params.has("expire")) { document.body.classList.add("perimee"); return; }
+  const j = Math.floor(r / 864e5), h = Math.floor(r % 864e5 / 36e5), m = Math.floor(r % 36e5 / 6e4);
+  $("chrono").textContent = j ? `${j} j ${h} h` : `${h} h ${String(m).padStart(2, "0")} min`;
+  $("piedExp").textContent = `Photos supprimées automatiquement le ${new Date(fin).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })}`;
+}
+majChrono(); setInterval(majChrono, 30000);
+
+/* ---------- qualité ---------- */
+function dessinerQualites() {
+  const n = GALERIE.photos.length;
+  $("choix").innerHTML = QUALITES.map(q => `
+    <button class="opt ${q.id === qualite ? "on" : ""}" data-q="${q.id}">
+      <b><i></i>${q.nom}${q.reco ? '<span class="reco">Conseillé</span>' : ""}</b>
+      <small>${q.desc}</small>
+      <span class="poids">≈ ${q.mo < 1 ? Math.round(q.mo * 1000) + " Ko" : q.mo.toString().replace(".", ",") + " Mo"} / photo</span>
+    </button>`).join("");
+  const q = QUALITES.find(x => x.id === qualite);
+  $("lbDlTxt").textContent = `Télécharger · ${q.nom}`;
+}
+$("choix").addEventListener("click", e => { const b = e.target.closest(".opt"); if (b) { qualite = b.dataset.q; dessinerQualites(); } });
+dessinerQualites();
+
+/* ---------- formats des photos d'exemple ---------- */
+const ratios = [1.25, 1.5, 1, 1.25, .75, 1.33, 1.25, 1];
+
+/* ---------- visionneuse ---------- */
+function ouvrirLb(i) { courant = i; $("lb").classList.add("on"); majLb(); }
+function majLb() {
+  const id = GALERIE.photos[courant];
+  $("lbImg").src = src(courant, 1400, Math.round(1400 * ratios[courant % ratios.length]));
+  $("lbNum").textContent = `${courant + 1} / ${GALERIE.photos.length}`;
+}
+$("lbFermer").onclick = () => $("lb").classList.remove("on");
+$("lbPrec").onclick = () => { courant = (courant - 1 + GALERIE.photos.length) % GALERIE.photos.length; majLb(); };
+$("lbSuiv").onclick = () => { courant = (courant + 1) % GALERIE.photos.length; majLb(); };
+$("lbDl").onclick = () => telechargerUne(courant);
+document.addEventListener("keydown", e => {
+  if (!$("lb").classList.contains("on")) return;
+  if (e.key === "Escape") $("lbFermer").onclick();
+  if (e.key === "ArrowLeft") $("lbPrec").onclick();
+  if (e.key === "ArrowRight") $("lbSuiv").onclick();
+});
+let tx = 0;
+$("lb").addEventListener("touchstart", e => tx = e.touches[0].clientX, { passive: true });
+$("lb").addEventListener("touchend", e => { const d = e.changedTouches[0].clientX - tx; if (Math.abs(d) > 50) (d < 0 ? $("lbSuiv") : $("lbPrec")).onclick(); });
+
+/* ---------- téléchargements ---------- */
+function toast(txt, pct) {
+  $("toastTxt").textContent = txt; $("toastBar").style.width = (pct ?? 100) + "%";
+  $("toast").classList.add("on");
+}
+const cacherToast = () => setTimeout(() => $("toast").classList.remove("on"), 2200);
+const nomFichier = (i, q) => `MagicStudio_${GALERIE.client.nom}_${String(i + 1).padStart(2, "0")}_${q}.jpg`;
+async function blobPhoto(i) {
+  const q = QUALITES.find(x => x.id === qualite), id = GALERIE.photos[i];
+  majMeta(g => g.dl = Math.min(g.nb, (g.dl || 0) + 1));
+  if (LOCAL) {
+    const img = new Image(); img.src = LOCAL[i]; await img.decode();
+    const k = Math.min(1, q.larg / Math.max(img.width, img.height));
+    const c = document.createElement("canvas"); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+    c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+    return new Promise(ok => c.toBlob(ok, "image/jpeg", qualite === "legere" ? .8 : .95));
+  }
+  const r = await fetch(url(id, q.larg, Math.round(q.larg * ratios[i % ratios.length])));
+  return r.blob();
+}
+function sauver(blob, nom) {
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = nom;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+async function telechargerUne(i) {
+  try { toast("Préparation de la photo…", 40); sauver(await blobPhoto(i), nomFichier(i, qualite)); toast("Photo téléchargée ✓", 100); }
+  catch (e) { toast("Téléchargement impossible, réessayez.", 0); }
+  cacherToast();
+}
+async function telechargerPlusieurs(indices, suffixe, fini) {
+  if (typeof JSZip !== "function" || !indices.length) return;
+  const zip = new JSZip(), n = indices.length;
+  try {
+    for (let k = 0; k < n; k++) { toast(`Préparation ${k + 1} / ${n}…`, (k / n) * 100); zip.file(nomFichier(indices[k], qualite), await blobPhoto(indices[k])); }
+    toast("Création du fichier…", 100);
+    sauver(await zip.generateAsync({ type: "blob" }), `MagicStudio_${GALERIE.client.nom}_${suffixe}_${qualite}.zip`);
+    toast(fini, 100);
+  } catch (e) { toast("Téléchargement interrompu, réessayez.", 0); }
+  cacherToast();
+}
+$("toutDl").onclick = () => telechargerPlusieurs(GALERIE.photos.map((_, i) => i), "toutes", "Toutes vos photos sont téléchargées ✓");
+
+
+/* ---------- avis ---------- */
+const ETOILE = '<svg viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.8 6.4.9-4.6 4.5 1.1 6.3L12 17.3l-5.7 3 1.1-6.3L2.8 9.5l6.4-.9z" stroke-linejoin="round"/></svg>';
+const MOTS = ["", "Décevant", "Moyen", "Bien", "Très bien", "Exceptionnel !"];
+let note = 0;
+$("etoiles").innerHTML = [1, 2, 3, 4, 5].map(n => `<button data-n="${n}" aria-label="${n} étoile${n > 1 ? "s" : ""}">${ETOILE}</button>`).join("");
+function majEtoiles(n) { document.querySelectorAll("#etoiles button").forEach(b => b.classList.toggle("on", +b.dataset.n <= n)); $("noteTxt").textContent = MOTS[n]; }
+$("etoiles").addEventListener("click", e => { const b = e.target.closest("button"); if (b) { note = +b.dataset.n; majEtoiles(note); } });
+$("etoiles").addEventListener("mouseover", e => { const b = e.target.closest("button"); if (b) majEtoiles(+b.dataset.n); });
+$("etoiles").addEventListener("mouseleave", () => majEtoiles(note));
+$("envoyerAvis").onclick = () => {
+  if (!note) { $("noteTxt").textContent = "Choisissez d'abord une note ☝️"; return; }
+  const a = lireLS("ms_avis_studio", []);
+  a.push({ code: META ? META.code : "DEMO", client: META ? META.nom : `${GALERIE.client.titre} ${GALERIE.client.nom}`, note, texte: $("avisTxt").value.trim(), date: Date.now() });
+  ecrireLS("ms_avis_studio", a);
+  $("formAvis").style.display = "none"; $("merci").style.display = "block";
+};
+
+/* ---------- réserver ---------- */
+$("reserver").href = "https://wa.me/?text=" + encodeURIComponent("Bonjour Magic Studio, je souhaite réserver une nouvelle séance photo (code MAGIC10).");
+
+/* tests : ?lb=3 ouvre la visionneuse */
+if (params.has("lb")) ouvrirLb(+params.get("lb"));
+})();
+</script>
+</body>
+</html>
